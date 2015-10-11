@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<title>Assembly Learner</title>
+		<link rel="stylesheet" href="/static/style.css">
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<div id="header">
+			<h1><a href="/list"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABsklEQVRIx71WsYrCQBDNlx33ERrBRn8hpkgaLfQrrjVNwEIJgRSHXfwCwUILi1hYCGdnEj3neAMbYtxsougNDA7jzpvdN7Oz0TSFeJ73uVgsvtfr9c%2FxePy9XC4EhQ0f%2FsMa7VGZTqcfy%2BUyul6vVCVYg7WIqQU%2Bn8%2B%2FTqcTCXD81rERg1gleBiGgQh8VoFRuvM6lNSh7O4k4O8ZWmQ2BFg3NREFrdI4jmv7gZm1Yh1qNpsNGYZx51%2BtVmRZlpQqbmH0surI5%2FOZJpMJ6bpOrVYr86dpSo7jULPZpG63e0ORsIGt4cKUUbLb7Xh3jUaD2u02%2Bb7P%2Fu12S71ej%2F3QTqcjjQe2hlspO14QBAyKHSJJFEV8i2ezWeYXihPIBNgagvK0HA4HGo1GHAhaXNdlmvb7PQ0GA%2FZj1wIcdpEiIcDmBPljIcFwOOTAYoJ%2Bv5%2FRktcyijjB2ylCIcq6CEW2bZtBikU2TbOSIi4yWkl1ufJtChX%2BJEloPB5zkjKKuE3fftGKo0J16cRIUPmFZKOiOOxeoXfD7u3juuzBUdEls5UPjuzJfJSWyifzXx79vLzis%2BUPa%2BLGUifeyi8AAAAASUVORK5CYII%3D" alt="목록으로"></a><a href="/">어셈블리를 배워서 써먹자</a><a href="/logout">[로그아웃]</a></h1>
+			<p align="right"><button id="run" onclick="runProgram();">실행 (Ctrl + Enter)</button> <button id="toList" onclick="showAnswer();">답 보기</button></p>
+		</div>
+		<div id="wrap">
+			<div id="content">
+				<div id="left">
+					<h2 id="sub">{{ problem.title }}</h2>
+					<pre id="source">
+{{ load_example(problem) }}
+</pre>
+				</div>
+				<div id="right">
+					<div id="instruction" class="darkbox">
+						<h2>Instruction</h2>
+						<pre>
+{{ load_instruction(problem) }}
+						</pre>
+					</div>
+					<div id="output_box">
+						<textarea name="output" id="output" spellcheck="false" readonly>
+Output here!
+
+Once you launch your program, the output will be shown!
+If compiler error exists, them will be shown, too!
+</textarea>
+					</div>
+				</div>
+			</div>
+			<address>Copyright 2015, all right reserved to jinmo123, special thanks to cd80!</address>
+		</div>
+    <script>
+      var lecture =
+{{ {'level': problem.directory_name} | tojson }}
+      ;
+    </script>
+    	<script src="/static/ace.js"></script>
+		<script src="/static/mode-assembly_x86.js"></script>
+		<script src="/static/jquery-2.1.4.min.js"></script>
+		<script src="/static/start.js"></script>
+	</body>
+</html>

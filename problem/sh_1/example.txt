@@ -1,0 +1,20 @@
+.intel_syntax noprefix
+
+.globl _start
+
+_start:
+
+  mov eax, 4 # __NR_write
+  mov ebx, 1 # stdout
+  mov ecx, offset notString # 문자열 (뭔가 바꿔줘야됨)
+  mov edx, 5 # ???????! 문자열 길이
+
+  int 0x80 # write(1, string, 9999999...);
+
+  mov eax, 1 # __NR_exit
+  mov ebx, 0
+
+  int 0x80 # exit(0)
+
+string: .asciz "bye world" # string + "\x00" = asciz
+                           # string = ascii

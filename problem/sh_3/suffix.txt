@@ -1,0 +1,29 @@
+.intel_syntax noprefix
+
+.globl _start
+
+.text
+
+__NoTraceHere_:
+
+nop
+_start:
+  mov edi, offset _main
+  mov ecx, offset _start
+  sub ecx, edi
+  mov eax, 0
+
+  repne scasb
+
+  cmp ecx, 0
+  jz correct
+  jnz fail
+
+  fail:
+    mov eax, 1
+    mov ebx, 0
+    int 0x80
+
+  correct:
+    call _main
+

@@ -1,0 +1,77 @@
+<html>
+	<head>
+		<title>Login</title>
+		<style>
+		body {
+			background: #333;
+			color: #fff;
+			text-shadow: -1px -1px #000;
+			font-family: Arial;
+		}
+
+		h1 {
+			font-size: 2em;
+			font-weight: normal;
+		}
+
+		#wrap {
+			width: 400px;
+			height: 300px;
+			position: absolute;
+			left: 50%;
+			margin-left: -200px;
+			top: 50%;
+			margin-top: -150px;
+		}
+
+		input {
+			width: 100%;
+			font-size: 1.5em;
+			outline: none;
+			border: 1px solid #222;
+			padding: 5px;
+			border-radius: 1px;
+		}
+
+		button {
+			width: 100%;
+			font-size: 1.5em;
+			color: #fff;
+			background: #222;
+			border: 1px solid #111;
+			border-radius: 5px;
+			line-height: 1.7em;
+		}
+
+		a {
+			color: #5cf;
+			text-shadow: none;
+			text-decoration: none;
+		}
+
+		h1 a {
+			font-size: 0.5em;
+		}
+
+		.createuser h1 a {
+			display: none;
+		}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<form action="{{ action }}" method="POST" class="{{ type }}">
+				<h1>{{ title }} <a href="/createuser" tabindex="3">Create User</a></h1>
+				<p>
+					<input type="text" name="id">
+				</p>
+				<p>
+					<input type="password" name="password">
+				</p>
+				<p>
+					<button type="submit">Submit</button>
+				</p>
+			</form>
+		</div>
+	</body>
+</html>

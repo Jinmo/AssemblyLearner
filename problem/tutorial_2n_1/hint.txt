@@ -1,0 +1,3 @@
+mov eax, ebx
+inc eax # (or... add eax, 1)
+retn
