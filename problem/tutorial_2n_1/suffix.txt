@@ -1,0 +1,43 @@
+
+.intel_syntax noprefix
+
+.globl _start
+_start:
+
+rdtsc # enough to generate a random value!
+xor eax, edx
+
+mov orig_eax, eax
+
+call myFunc
+
+mov ebx, orig_eax
+add ebx, ebx
+inc ebx
+cmp eax, ebx
+jz correct
+
+fail:
+
+jmp end
+
+correct:
+
+mov eax, 4
+mov ebx, 1
+mov ecx, offset string
+mov edx, 25
+int 0x80
+
+jmp end
+
+end:
+
+mov eax, 1
+mov ebx, 0
+int 0x80
+
+.data
+string: .asciz "OK_I_WAS_SATISFIED_^_^!\n"
+
+orig_eax: .long 0

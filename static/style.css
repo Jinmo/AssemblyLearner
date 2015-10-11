@@ -1,0 +1,257 @@
+* {
+	outline: none;
+}
+
+body {
+	margin: 0;
+	background: #eee;
+}
+
+body, pre, button, input {
+	font-family: Malgun Gothic;
+}
+
+pre {
+	font-size: 0.9em;
+}
+
+#instruction pre {
+	margin: 0px;
+	padding-left: 1em;
+	font-family: Consolas, Lucida Console, Malgun Gothic;
+}
+
+h2 {
+	font-size: 1em;
+	margin: 0px;
+	padding: 15px;
+	box-sizing: border-box;
+}
+
+h2#sub {
+	clear: both;
+	width: 100%;
+	margin-right: 5px;
+	left: 0;
+	background: #eee;
+	padding: 15px;
+	box-sizing: border-box;
+	border-bottom: 1px solid #ccc;
+	height: 50px;
+	margin: 0;
+}
+
+#instruction h2 {
+
+}
+
+div#sub h2 {
+	padding-left: 20px;
+	padding-top: 10px;
+	padding-bottom: 15px;
+	padding-right: 10px;
+	margin: 0;
+}
+
+button, input[type=submit],input[type=button] {
+	border: 1px solid #000;
+	background: #222;
+	padding: 5px 25px 5px 25px;
+	line-height: 38px;
+	font-size: 1.2em;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25); /* bootstrap */
+	box-shadow: inset 0px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	color: #fff;
+	cursor: pointer;
+	-webkit-transition: background 0.2s;
+	transition: background 0.2s;
+}
+
+button:hover, input[type=submit]:hover,input[type=button]:hover {
+	background: #111;
+}
+
+button:active, input[type=submit]:active,input[type=button]:active {
+	background: #000;
+}
+
+#output_box, pre#source {
+	box-shadow: 0px 2px 5px 0px #eee inset;
+	padding: 10px 8px 8px 8px;
+	margin-top: 0px;
+	position: absolute;
+}
+
+textarea#output, pre#source {
+	font: 13px/1.3 Consolas, Lucida Console, Malgun Gothic;
+}
+
+div#wrap {
+	width: 100%;
+	margin: 0px;
+	background: white;
+	padding: 0 15px 15px 15px;
+	box-sizing: border-box;
+	position: absolute;
+	width: 100%;
+	bottom: 0px;
+	top: 50px;
+}
+
+div#content {
+	top: 0px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 20px;
+}
+
+div#header {
+	clear: both;
+	width: 100%;
+	height: 50px;
+	background: #555;
+	color: #fff;
+}
+
+div#header h1 {
+	color: #fff;
+	font-size: 1em;
+	font-weight: normal;
+	margin: 0;
+}
+
+div#header h1 a {
+	padding-left: 20px;
+}
+
+div#header a {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	display: block;
+	float: left;
+	color: #fff;
+	text-decoration: none;
+}
+
+div#left, div#right {
+	position: absolute;
+}
+
+div#left {
+	overflow-y: auto;
+	width: 38%;
+	bottom: 0px;
+	top: 0;
+	left: 0;
+	box-sizing: border-box;
+}
+
+div#left>div {
+	padding: 0 10px 0 10px;
+}
+
+div#right {
+	width: 62%;
+	bottom: 0px;
+	right: 0;
+	top: 0;
+	box-sizing: border-box;
+}
+
+#source {
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 50px;
+	border: 1px solid #ccc;
+}
+
+.darkbox {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 10px;
+	box-sizing: border-box;
+	width: 100%;
+	height: 250px;
+	background: #222;
+	color: #eee;
+	overflow-y: auto;
+}
+
+div#output_box {
+	background: #666;
+	box-shadow: 0px 2px 5px 0px #555 inset;
+	top: 250px;
+	bottom: 0;
+	width: 100%;
+	position: absolute;
+	box-sizing: border-box;
+}
+
+textarea#output {
+	padding: 0;
+	border: 0px;
+	background: #666;
+	resize: none;
+	width: 100%;
+	color: #fefefe;
+	height: 100%;
+}
+
+#output::before {
+	content: "Output";
+	position: absolute;
+	color: #fff;
+	float: right;
+	font-size: 5em;
+}
+
+address {
+	text-align: center;
+	font-style: normal;
+	font-size: 0.8em;
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+	background: #fff;
+	height: 18px;
+	padding-top: 2px;
+}
+
+ol#list {
+	margin: 0px;
+	border-top: 1px solid #eee;
+	list-style: none;
+	background: #ececec;
+}
+
+ol#list li {
+	border-bottom: 1px solid #eee;
+	background: #fff;
+	color: #222;
+}
+
+ol#list li>a {
+	padding: 15px;
+	text-decoration: none;
+	display: block;
+	color: #222;
+}
+
+h3 {
+	font-size: 1em;
+	margin: 0px;
+	padding: 20px;
+}
+
+ol#list li.solved {
+	background: #cfc;
+	border-bottom-color: #8e8 !important;
+}
+
+.ace-tm .ace_marker-layer .ace_active-line {
+    background: rgba(100, 100, 100, 0.02) !important;
+}

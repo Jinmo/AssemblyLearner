@@ -1,0 +1,19 @@
+.intel_syntax noprefix
+
+.globl _main
+_main:
+
+  mov eax, ??
+  mov ebx, ??
+  mov ecx, ??
+  mov edx, 0  # zero! yea, zero! zero for environ!
+
+  mov DWORD PTR argv, offset path
+  mov DWORD PTR argv+4, 0
+
+  int 0x80
+
+
+.data
+path: .asciz "/bin/sh"
+argv: .long 0, 0

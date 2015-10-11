@@ -1,0 +1,31 @@
+.intel_syntax noprefix
+
+allocate: # allocate()
+  # use brk! brk! brk!!!!
+  mov eax, 45
+  mov ebx, 0
+  int 0x80
+
+  mov ecx, eax
+  mov ebx, eax
+  add ebx, 0x100
+  mov eax, 45
+  int 0x80
+
+  mov eax, ecx
+  ret
+
+itoa:
+  # int to string kk
+  call allocate # then eax: new buffer(0x100)
+  int3
+  call allocate # then eax: new buffer(0x100)
+  int3
+
+_start:
+  # TODO: your code here
+
+  # ...(exit)
+  mov eax, 1
+  mov ebx, 0
+  int 0x80

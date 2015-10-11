@@ -1,0 +1,1 @@
+realpath: /bin/dash
