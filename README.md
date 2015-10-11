@@ -31,3 +31,4 @@
 - Python 2.7 (tested)
 - Flask for Python (http://flask.pocoo.org)
 - gcc compiler
+- eventlet (동작하는지도 잘 모르겠네요..)
