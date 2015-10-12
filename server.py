@@ -1,21 +1,28 @@
 import sqlite3
-import random, os, time, subprocess, json
-from flask import Flask, session, redirect, render_template, g, request, Response
+import os
+import time
+import subprocess
+import json
 from hashlib import sha1
 from collections import OrderedDict
+from os.path import join
+
+from flask import Flask, session, redirect, render_template, g, request
 import eventlet
+from utils import make_dirs
+
 eventlet.monkey_patch()
 
 CURPATH = os.path.dirname(os.path.realpath(__file__))
 
-DATABASE = CURPATH + '/db.db'
-INIT_SQL = CURPATH + '/init.sql'
+DATABASE = join(CURPATH, 'db.db')
+INIT_SQL = join(CURPATH, 'init.sql')
 
-PROBLEM_PATH = CURPATH + '/problem/'
-OUTPUT_PATH   = CURPATH + '/output/'
-INCLUDE_PATH  = CURPATH + '/include'
+PROBLEM_PATH = join(CURPATH, 'problem')
+OUTPUT_PATH   = join(CURPATH, 'output')
+INCLUDE_PATH  = join(CURPATH, 'include')
 
-TRACER_PATH = CURPATH + '/tool/tracer'
+TRACER_PATH = join(CURPATH, 'tool/tracer')
 CC_PATH     = '/usr/bin/gcc'
 
 OBJDUMP_PATH = '/usr/bin/objdump'
@@ -306,6 +313,8 @@ if __name__ == '__main__':
     init_sql_file = open(INIT_SQL, 'rb')
     init_sql_data = init_sql_file.read()
     init_sql_file.close()
+
+    make_dirs(OUTPUT_PATH)
 
     with app.app_context():
         print ' -  Executing init.sql'
