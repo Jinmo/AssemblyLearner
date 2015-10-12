@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
   bool soft_exit = false,
        first_syscall = true;
 
-  setvbuf(stdout, 0, _IONBF, 0);
+  alarm(1); // execution time limit
 
 	if(argc < 4) {
 		return -1;
@@ -81,6 +81,8 @@ int main(int argc, char **argv) {
 
 	freopen(argv[2], "rb", stdin);
 	freopen(argv[3], "wb", stdout);
+
+  setvbuf(stdout, 0, _IONBF, 0);
 
 	pid = fork();
 	if(pid == 0) {

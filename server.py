@@ -161,7 +161,8 @@ def load_problem():
     for row in rows:
         name = row['name']
         categories[name] = row['title']
-        print ' -  category added', name, ':', row['title']
+
+    print ' -  ' + str(len(categories)) + ' categories loaded'
 
     print ' - Trying to load problems'
     probs = os.listdir(PROBLEM_PATH)
@@ -186,10 +187,11 @@ def load_problem():
         problem_info = tuple(problem_info_file.read().decode('utf8').split('\n'))
         problem_info_file.close()
         problems[category]['problems'][name] = dict(zip(('directory_name', 'name', 'category', 'title', 'order', ), (row, name, category) + problem_info))
-        print ' -  problem added', `name`, 'in category', category_title
 
     for category in problems:
         problems[category]['problems'] = OrderedDict(sorted(problems[category]['problems'].items(), key=lambda prob: prob[0], reverse=False))
+
+    print ' -  ' + str(len(probs)) + ' problems loaded'
 
 @app.route('/_load_problem')
 def _load_problem():
