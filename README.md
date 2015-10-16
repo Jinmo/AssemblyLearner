@@ -1,6 +1,13 @@
 # AssemblyLearner
 어셈블리어를 배워서 써먹자. (x86 지원)
 
+## Installation
+
+```
+$ sudo apt-get install python-dev
+$ pip install -r requirements.txt
+```
+
 ## Introduction
 이 소스코드는 어셈블리어를 배우는 사이트에 대한 소스코드입니다.
 문제도 추가할 수 있어요!
