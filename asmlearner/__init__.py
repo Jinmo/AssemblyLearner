@@ -7,7 +7,7 @@ from lib.database.sqlite import DB
 CURPATH = dirname(realpath(__file__))
 DATABASE = join(CURPATH, 'db.db')
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 app.register_blueprint(user)
 
 @app.before_request
