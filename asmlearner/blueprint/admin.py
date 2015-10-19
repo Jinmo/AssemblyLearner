@@ -11,4 +11,9 @@ def index():
 @admin.route('/problems')
 @is_admin
 def problems():
-    return render_template('admin/problems.html')
+    return render_template('admin/problems.html', now='problem')
+
+@admin.route('/users')
+@is_admin
+def users():
+    return render_template('admin/users.html', now='user')

@@ -13,17 +13,16 @@
   <body>
     <div class="ui column grid">
       <div class="ui secondary vertical pointing menu two wide column">
-        <a class="active item" href="/admin/problems">
+        <a class="{% if now == 'problem' %}active {% endif %}item" href="/admin/problems">
           Problems
         </a>
-        <a class="item">
-          Messages
-        </a>
-        <a class="item">
-          Friends
+        <a class="{% if now == 'user' %}active {% endif %}item" href="/admin/users">
+          User
         </a>
       </div>
-      {% block content %}{% endblock %}
+      <div class="ui thirteen wide column">
+        {% block content %}{% endblock %}
+      </div>  
     </div>
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/semantic.min.js"></script>
