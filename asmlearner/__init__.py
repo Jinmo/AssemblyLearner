@@ -1,15 +1,23 @@
 from os.path import join, dirname, realpath
 
-from flask import Flask, g
-from blueprint.user import user
+from flask import Flask, g, redirect, session
+from blueprint import user, problem
 from lib.database.sqlite import DB
+import config
 
-CURPATH = dirname(realpath(__file__))
-DATABASE = join(CURPATH, 'db.db')
 
 app = Flask(__name__, static_url_path='')
 app.register_blueprint(user)
+app.register_blueprint(problem)
 
 @app.before_request
 def before_req():
-    g.db = DB(DATABASE);
+    g.db = DB(config.DATABASE)
+
+
+@app.route('/')
+def index():
+    if 'user' in session:
+        return redirect('/problems')
+    else:
+        return redirect('/login')

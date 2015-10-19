@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS solved (
   id CHAR(20),
   problem CHAR(200),
   time TIMESTAMP
-)
+);
 
 REPLACE INTO category VALUES
 (
