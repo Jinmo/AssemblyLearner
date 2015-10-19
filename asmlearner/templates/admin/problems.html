@@ -1,33 +1,13 @@
-{% extends "master.html" %}
+{% extends "admin/master.html" %}
+
 
 {% block head %}
-<style type="text/css">
-  .main.ui {
-    margin-top: 7em;
-  }
-  tr { cursor: pointer; }
-</style>
 {% endblock %}
 
 
 {% block content %}
-<div class="ui fixed inverted menu">
-    <div class="ui container">
-      <div href="#" class="header item">
-        AssemblyLearner
-      </div>
-      <a href="/problems" class="item">Problems</a>
-      <div class="right menu">
-        <a class="item" href="/logout">Logout</a>
-        {% if is_admin() %}
-        <a class="item" href="/admin">admin</a>
-        {% endif %}
-      </div>
-      
-    </div>
-  </div>
 
-  <div class="ui main text container">
+  <div class="ui thirteen wide column">
     <h1 class="ui header">문제 목록</h1>
     <table class="ui selectable celled table">
         <thead>

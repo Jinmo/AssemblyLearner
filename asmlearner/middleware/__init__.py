@@ -8,3 +8,12 @@ def login_required(f):
             return f(*args,**kwargs)
         return redirect('/login')    
     return func
+
+def is_admin(f):
+    @wraps(f)
+    def func(*args, **kwargs):
+        if 'user' in session and session['user']['role'] == 'admin':
+            return f(*args, **kwargs)
+
+        return redirect('/problems')
+    return func    

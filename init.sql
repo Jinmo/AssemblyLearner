@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS user (
   id CHAR(20) PRIMARY KEY,
-  password CHAR(40)
+  password CHAR(40),
+  role CHAR(10) DEFAULT 'member'
 );
 
 CREATE TABLE IF NOT EXISTS problem (
