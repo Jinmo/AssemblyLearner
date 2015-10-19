@@ -1,0 +1,33 @@
+{% extends "admin/master.html" %}
+
+
+{% block head %}
+{% endblock %}
+
+
+{% block content %}
+    <h1>문제 추가</h1>
+    <form class="ui form" action="{{ action }}" method="post">
+        <div class="field">
+            <label>Name </label>
+            <input type="text" name="prob_name" placeholder="Problem Name">
+        </div> 
+        <div class="field">
+            <label class="popup link" data-content="문제에 대한 설명을 적는 곳입니다." data-variation="inverted">Instruction <i class="circle help icon"></i></label>
+            <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_instruction"></textarea>
+        </div> 
+        <div class="field">
+            <label class="popup link" data-content="유저의 코드 뒤에 붙어서 컴파일되는 코드입니다." data-variation="inverted">Suffix <i class="circle help icon"></i></label>
+            <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_suffix"></textarea>
+        </div> 
+        <div class="field">
+            <label class="popup link" data-content="문제에 대한 설명을 써주십시오." data-variation="inverted">Example <i class="circle help icon"></i></label>
+            <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_example"></textarea>
+        </div> 
+        <div class="field">
+            <label class="popup link" data-content="문제에 답이 출력될경우 이 값과 비교합니다." data-variation="inverted">Answer <i class="circle help icon"></i></label>
+            <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_answer"></textarea>
+        </div> 
+        <button class="ui button" tabindex="0">Add Problem</button>
+    </form>
+{% endblock %}

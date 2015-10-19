@@ -13,6 +13,11 @@ def index():
 def problems():
     return render_template('admin/problems.html', now='problem')
 
+@admin.route('/problem')
+@is_admin
+def problem_form():
+    return render_template('admin/problem_form.html', now='problem')    
+
 @admin.route('/users')
 @is_admin
 def users():
