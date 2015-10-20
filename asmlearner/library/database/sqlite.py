@@ -20,7 +20,6 @@ class DB:
     def commit(self, query, args):
         cur = self._db.execute(query, args)
         cur.close()
-
         self._db.commit()
 
     def executescript(self, path):
