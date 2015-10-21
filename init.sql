@@ -5,15 +5,15 @@ CREATE TABLE IF NOT EXISTS user (
 );
 
 CREATE TABLE IF NOT EXISTS problem (
-  name CHAR(200) PRIMARY KEY,
-  title TEXT,
+  id INTEGER PRIMARY Key AUTOINCREMENT ,
+  name CHAR(200) UNIQUE,
   instruction TEXT,
   answer_regex TEXT,
   suffix TEXT,
   example TEXT,
   status CHAR(10),
-  createdAt TIMESTAMP,
-  updatedAt TIMESTAMP
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS tag (

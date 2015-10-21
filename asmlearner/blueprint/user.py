@@ -15,7 +15,7 @@ def login_check():
     password_ = request.form['password']
     pw_hash = sha1(password_ * 10).hexdigest()
 
-    user = g.db.execute('SELECT * FROM user WHERE id=? AND password=?', (id_, pw_hash), True)
+    user = g.db.query('SELECT * FROM user WHERE id=? AND password=?', (id_, pw_hash), True)
     
     if user is None:
         return '''
@@ -47,10 +47,14 @@ def join_check():
     password_ = request.form['password']
     pw_hash = sha1(password_ * 10).hexdigest()
 
-    user = g.db.execute('SELECT 1 FROM user WHERE id=?', (id_, ), True)
+    user = g.db.query('SELECT 1 FROM user WHERE id=?', (id_, ), True)
 
     if user is None:
-        g.db.commit('INSERT INTO user (id, password) VALUES(?, ?)', (id_, pw_hash))
+        try:
+            g.db.execute('INSERT INTO user (id, password) VALUES(?, ?)', (id_, pw_hash))
+            g.db.commit()
+        except:
+            g.db.rollback()    
         return '''
             <script>
                 alert('Successfully created user!');

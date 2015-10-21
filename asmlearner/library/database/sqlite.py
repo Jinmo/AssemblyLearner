@@ -8,18 +8,24 @@ class DB:
                 for idx, value in enumerate(row))
         self._db = db
 
-    def execute(self, query, args, one=False):
-        cur = self._db.execute(query, args)
-        if one:
-            rv = cur.fetchone()
+    def query(self, query, args=None, isSingle=False):
+        if args:
+            cur = self._db.execute(query, args)
         else:
-            rv = cur.fetchall()
+            cur = self._db.execute(query)
+
+        rv = cur.fetchone() if isSingle == True else cur.fetchall()
 
         return rv
 
-    def commit(self, query, args):
+    def execute(self, query, args):
         cur = self._db.execute(query, args)
-        cur.close()
+        cur.close()    
+
+    def rollback(self):
+        self._db.rollback()    
+
+    def commit(self):
         self._db.commit()
 
     def executescript(self, path):
@@ -32,3 +38,6 @@ class DB:
 
         self._db.executescript(query)
         self._db.commit()       
+
+    def __del__(self):
+        self._db.close()
