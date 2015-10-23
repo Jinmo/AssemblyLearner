@@ -20,10 +20,12 @@ class DB:
 
     def execute(self, query, args):
         cur = self._db.execute(query, args)
-        cur.close()    
+        row_id = cur.lastrowid
+        cur.close()
+        return row_id
 
     def rollback(self):
-        self._db.rollback()    
+        self._db.rollback()
 
     def commit(self):
         self._db.commit()
@@ -37,7 +39,7 @@ class DB:
         f.close()
 
         self._db.executescript(query)
-        self._db.commit()       
+        self._db.commit()
 
     def __del__(self):
         self._db.close()

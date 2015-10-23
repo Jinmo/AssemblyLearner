@@ -18,13 +18,13 @@ CREATE TABLE IF NOT EXISTS problem (
 
 CREATE TABLE IF NOT EXISTS tag (
   name CHAR(200),
-  problem_name CHAR(200)
+  prob_id INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS solved (
   id CHAR(20),
-  problem CHAR(200),
+  problem INTEGER,
   status CHAR(10),
-  answer 
+  answer TEXT,
   time TIMESTAMP
 );

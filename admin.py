@@ -11,5 +11,5 @@ id_ = raw_input('ID: ')
 password_ = getpass.getpass('PW: ')
 pw_hash = sha1(password_ * 10).hexdigest()
 
-db.commit('INSERT INTO user (id, password, role) VALUES(?, ?, \'admin\')', (id_, pw_hash))
-
+db.execute('INSERT INTO user (id, password, role) VALUES(?, ?, \'admin\')', (id_, pw_hash))
+db.commit()
