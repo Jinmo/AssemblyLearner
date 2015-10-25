@@ -39,9 +39,9 @@
         <a class="ui green tiny button" href="/admin/problem">
             <i class="plus icon"></i>
             문제 추가
-        </a>    
+        </a>
     </div>
-    
+
     <table class="ui selectable celled table">
         <thead>
             <th>문제 이름</th>
@@ -56,7 +56,7 @@
                 <td>{{ status_code_to_string(prob.status) }}</td>
             </tr>
             {% endfor %}
-            
+
         </tbody>
     </table>
     {{ render_pagination(pagination) }}

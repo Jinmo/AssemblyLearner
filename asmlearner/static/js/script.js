@@ -3,10 +3,10 @@ jQuery(window).ready(function() {
 		$(this).closest('form').submit();
 	});
     $('.popup').popup();
-   
+
     $(".login input").keypress(function(event) {
 
-        if(event.keyCode == 13) { 
+        if(event.keyCode == 13) {
         textboxes = $(".login input");
         currentBoxNumber = textboxes.index(this);
         if (textboxes[currentBoxNumber + 1] != null) {
@@ -14,12 +14,17 @@ jQuery(window).ready(function() {
             nextBox.focus();
             nextBox.select();
             event.preventDefault();
-            return false 
+            return false
             } else {
                 $('.login').submit();
             }
         }
     });
 
-    $('#tags').tagsInput({width: 'auto'});
+		$('#autocomplete').autocomplete({
+	  	lookup: categories,
+			noSuggestionNotice: '새 카테고리를 만들어 보세요.',
+			showNoSuggestionNotice: true,
+			autoSelectFirst: true
+		});
 });

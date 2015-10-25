@@ -1,10 +1,32 @@
 {% extends "master.html" %}
 
+
+{% macro render_pagination(pagination) %}
+  <div class=pagination>
+  {%- for page in pagination.iter_pages() %}
+    {% if page %}
+      {% if page != pagination.page %}
+        <a href="{{ url_for_other_page(page) }}">{{ page }}</a>
+      {% else %}
+        <strong>{{ page }}</strong>
+      {% endif %}
+    {% else %}
+      <span class=ellipsis>…</span>
+    {% endif %}
+  {%- endfor %}
+  {% if pagination.has_next %}
+    <a href="{{ url_for_other_page(pagination.page + 1)
+      }}">Next &raquo;</a>
+  {% endif %}
+  </div>
+{% endmacro %}
+
 {% block head %}
 <style type="text/css">
   .main.ui {
     margin-top: 7em;
   }
+  .problem { margin-bottom: 25px; }
   tr { cursor: pointer; }
 </style>
 {% endblock %}
@@ -23,30 +45,18 @@
         <a class="item" href="/admin">Admin</a>
         {% endif %}
       </div>
-      
+
     </div>
   </div>
 
   <div class="ui main text container">
-    <h1 class="ui header">문제 목록</h1>
-    <table class="ui selectable celled table">
-        <thead>
-            <th>문제 이름</th>
-            <th width="100">카테고리</th>
-            <th width="70">상태</th>
-        </thead>
-        <tbody>
-            <tr class="positive">
-                <td>테스트</td>
-                <td>1</td>
-                <td>Proved</td>
-            </tr>
-            <tr class="">
-                <td>테스트</td>
-                <td>1</td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="ui segment">
+      {%- for prob in problems -%}
+        <div class="problem">
+          <a class="ui orange ribbon label">{{ prob.category }}</a>
+          <span>{{ prob.name }}</span>
+        </div>
+      {%- endfor -%}
+    </div>
   </div>
 {% endblock %}

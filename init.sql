@@ -12,13 +12,9 @@ CREATE TABLE IF NOT EXISTS problem (
   suffix TEXT,
   example TEXT,
   status CHAR(10),
+  category CHAR(50),
   createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS tag (
-  name CHAR(200),
-  prob_id INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS solved (
