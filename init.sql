@@ -1,29 +1,26 @@
 CREATE TABLE IF NOT EXISTS user (
   id CHAR(20) PRIMARY KEY,
   password CHAR(40),
-  solved TEXT
+  role CHAR(10) DEFAULT 'member'
 );
 
 CREATE TABLE IF NOT EXISTS problem (
-  name CHAR(200) PRIMARY KEY,
-  title TEXT,
+  id INTEGER PRIMARY Key AUTOINCREMENT ,
+  name CHAR(200) UNIQUE,
   instruction TEXT,
-  answer_regex TEXT
+  answer_regex TEXT,
+  suffix TEXT,
+  example TEXT,
+  status CHAR(10),
+  category CHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS category (
-  name CHAR(200) PRIMARY KEY,
-  title TEXT,
-  order_no INT
-);
-
-REPLACE INTO category VALUES
-(
-  'tutorial', '튜토리얼', 0
-),
-(
-  'sh', '쉘코드 짜기', 1
-),
-(
-  'func', '손-코딩를 해-봅시다.', 2
+CREATE TABLE IF NOT EXISTS solved (
+  id CHAR(20),
+  problem INTEGER,
+  status CHAR(10),
+  answer TEXT,
+  time TIMESTAMP
 );

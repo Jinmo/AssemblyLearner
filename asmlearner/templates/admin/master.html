@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/css/semantic.min.css">
+    <style>
+    body { margin: 2em;}
+    .ui.secondary { padding: 0 !important;}
+    </style>
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <div class="ui column grid">
+      <div class="ui secondary vertical pointing menu two wide column">
+        <a class="{% if now == 'problem' %}active {% endif %}item" href="/admin/problems">
+          Problems
+        </a>
+        <a class="{% if now == 'user' %}active {% endif %}item" href="/admin/users">
+          User
+        </a>
+      </div>
+      <div class="ui thirteen wide column">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/semantic.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.autocomplete.min.js"></script>
+    <script type="text/javascript" src="/js/script.js"></script>
+  </body>
+</html>

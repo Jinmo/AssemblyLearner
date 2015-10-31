@@ -1,0 +1,63 @@
+{% extends "admin/master.html" %}
+
+{% macro render_pagination(pagination) %}
+  <div class=pagination>
+  {%- for page in pagination.iter_pages() %}
+    {% if page %}
+      {% if page != pagination.page %}
+        <a href="{{ url_for_other_page(page) }}">{{ page }}</a>
+      {% else %}
+        <strong>{{ page }}</strong>
+      {% endif %}
+    {% else %}
+      <span class=ellipsis>…</span>
+    {% endif %}
+  {%- endfor %}
+  {% if pagination.has_next %}
+    <a href="{{ url_for_other_page(pagination.page + 1)
+      }}">Next &raquo;</a>
+  {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro status_code_to_string(status) %}
+    {% if status=='REG' %}
+        등록됨
+    {% endif %}
+{% endmacro %}
+
+{% block head %}
+{% endblock %}
+
+
+{% block content %}
+    <h2 class="ui center aligned icon header">
+      <i class="circular idea icon"></i>
+      문제목록
+    </h2>
+    <div class="ui center aligned header">
+        <a class="ui green tiny button" href="/admin/problem">
+            <i class="plus icon"></i>
+            문제 추가
+        </a>
+    </div>
+
+    <table class="ui selectable celled table">
+        <thead>
+            <th>문제 이름</th>
+            <th width="70">상태</th>
+        </thead>
+        <tbody>
+            {% for prob in problems %}
+            <tr class="">
+                <td>
+                    <a href="/admin/problem/{{prob.id}}">{{ prob.name }}</a>
+                </td>
+                <td>{{ status_code_to_string(prob.status) }}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+    {{ render_pagination(pagination) }}
+{% endblock %}
