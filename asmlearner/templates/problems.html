@@ -54,7 +54,7 @@
       {%- for prob in problems -%}
         <div class="problem">
           <a class="ui orange ribbon label">{{ prob.category }}</a>
-          <span>{{ prob.name }}</span>
+          <span><a href="/problem/{{ prob.id }}">{{ prob.name }}</a></span>
         </div>
       {%- endfor -%}
     </div>

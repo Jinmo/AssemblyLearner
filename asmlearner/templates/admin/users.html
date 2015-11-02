@@ -1,29 +1,37 @@
 {% extends "admin/master.html" %}
 
-
 {% block head %}
 {% endblock %}
 
 
 {% block content %}
-    <h1 class="ui header">유저 목록</h1>
+    <h2 class="ui center aligned icon header">
+        <i class="circular add user icon"></i>
+        사용자 목록
+    </h2>
+    <div class="ui center aligned header">
+        <a class="ui green tiny button" href="/admin/user">
+            <i class="plus icon"></i>
+            사용자 추가
+        </a>
+    </div>
     <table class="ui selectable celled table">
         <thead>
-            <th>문제 이름</th>
-            <th width="100">카테고리</th>
-            <th width="70">상태</th>
+            <th>사용자 이름</th>
+            <th width="70">권한</th>
         </thead>
         <tbody>
-            <tr class="positive">
-                <td>테스트</td>
-                <td>1</td>
-                <td>Proved</td>
-            </tr>
+            {% for user in users %}
             <tr class="">
-                <td>테스트</td>
-                <td>1</td>
-                <td></td>
+              <td>
+                <a href="/admin/user/{{ user.id }}">{{ user.id }}</a>
+              </td>
+              <td>
+                {{ user.role }}
+              </td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
+    {{ render_pagination(pagination) }}
 {% endblock %}

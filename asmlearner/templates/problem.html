@@ -1,0 +1,118 @@
+{% extends "master.html" %}
+
+
+{% block head %}
+<link href="/css/codemirror.css" rel="stylesheet" />
+<style type="text/css">
+    h2 {
+        font-weight: normal;
+        margin-top: 1em !important;
+    }
+    .main.ui {
+        padding-top: 0px !important;
+        margin-top: 0px;
+        top: 40px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+        overflow-y: auto;
+    }
+    .main.ui > .column {
+        box-sizing: border-box;
+    }
+    p.desc {
+        white-space: pre-line;
+        line-height: 180%;
+        padding: 10px;
+    }
+    textarea#codeArea, .CodeMirror {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        font-family: Consolas, Lucida Console, NanumGothic, monospace !important;
+        font-size: 0.9em;
+    }
+    .codeAreaContainer {
+        padding: 0px !important;
+    }
+
+    .instructionContainer {
+        overflow-y: auto;
+    }
+
+    #fileBox {
+        top: 20%;
+        right: 20%;
+        position: absolute;
+        z-index: 2;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0px 0px 3px 1px #eee;
+    }
+
+    #fileBox .top.menu {
+        border-radius: 4px 4px 0px 0px;
+    }
+
+    #fileBox #fileList {
+        background: #fefefe;
+        padding-bottom: 0.5em;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ui fixed inverted menu">
+    <div class="ui fixed container">
+      <div href="#" class="header item">
+        AssemblyLearner
+      </div>
+      <a href="/problems" class="item">Problems</a>
+      <div class="right menu">
+        <a class="item" href="/logout">Logout</a>
+        
+        <a class="item" href="/admin">Admin</a>
+        
+      </div>
+
+    </div>
+  </div>
+<div class="ui main stackable three column grid fixed">
+    <div class="ui six wide column instructionContainer">
+        <h2 class="ui dividing header">
+            <i class="plug circular icon"></i>
+            <div class="content">
+                {{ problem['name'] }}
+                <div class="sub header">
+                    분류&nbsp;<a>{{ problem['category'] }}</a>
+                </div>
+            </div>
+        </h2>
+        <p class="desc">{{ problem['instruction'] }}</p>
+    </div>
+    <div class="ui ten wide column codeAreaContainer">
+        <textarea id="codeArea">{{ problem['example'] }}</textarea>
+    </div>
+</div>
+<div clas="ui" id="fileBox">
+    <div class="ui inverted compact top menu">
+        <a class="item" style="width: 250px; display: block;">
+            Snipp.
+            <i class="minus icon" style="float: right;"></i>
+        </a>
+    </div>
+    <div class="ui list" id="fileList">
+        <div class="item">
+            <a>
+                <i class="code large icon"></i>
+                stdio.s
+            </a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/js/codemirror.js"></script>
+<script type="text/javascript" src="/js/mode/gas/gas.js"></script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/problem.js"></script>
+{% endblock %}
