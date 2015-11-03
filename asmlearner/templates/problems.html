@@ -23,9 +23,6 @@
 
 {% block head %}
 <style type="text/css">
-  .main.ui {
-    margin-top: 7em;
-  }
   .problem { margin-bottom: 25px; }
   tr { cursor: pointer; }
 </style>
@@ -33,21 +30,7 @@
 
 
 {% block content %}
-<div class="ui fixed inverted menu">
-    <div class="ui container">
-      <div href="#" class="header item">
-        AssemblyLearner
-      </div>
-      <a href="/problems" class="item">Problems</a>
-      <div class="right menu">
-        <a class="item" href="/logout">Logout</a>
-        {% if is_admin() %}
-        <a class="item" href="/admin">Admin</a>
-        {% endif %}
-      </div>
-
-    </div>
-  </div>
+{{ nav() }}
 
   <div class="ui main text container">
     <div class="ui segment">
@@ -56,6 +39,10 @@
           <a class="ui orange ribbon label">{{ prob.category }}</a>
           <span><a href="/problem/{{ prob.id }}">{{ prob.name }}</a></span>
         </div>
+      {%- else -%}
+      <p class="gray">
+      아직 문제가 추가되지 않았습니다.
+      </p>
       {%- endfor -%}
     </div>
   </div>

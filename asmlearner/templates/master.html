@@ -1,9 +1,36 @@
-<!DOCTYPE html>
+{% macro nav() -%}
+<div class="ui fixed inverted menu">
+    <div class="ui fixed container">
+      <div href="#" class="header item">
+        AssemblyLearner
+      </div>
+      <a href="/problems" class="item">Problems</a>
+      <a href="/snippets" class="item">Snippets</a>
+      <div class="right menu">
+        <a class="item" href="/logout">Logout</a>
+        
+        <a class="item" href="/admin">Admin</a>
+        
+      </div>
+
+    </div>
+  </div>
+{%- endmacro %}<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/css/semantic.min.css">
+    <style>
+      .main.ui {
+        margin-top: 7em;
+      }
+      p.empty {
+        color: #888;
+        padding: 10px;
+        padding-bottom: 15px;
+      }
+    </style>
     {% block head %}{% endblock %}
   </head>
   <body>
@@ -12,3 +39,4 @@
     <script type="text/javascript" src="/js/semantic.min.js"></script>
   </body>
 </html>
+
