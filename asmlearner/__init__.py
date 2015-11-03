@@ -1,7 +1,7 @@
 from os.path import join, dirname, realpath
 
 from flask import Flask, g, redirect, session, url_for, request
-from blueprint import user, problem, admin
+from blueprint import user, problem, admin, snippets
 from library.database.sqlite import DB
 import config
 
@@ -10,6 +10,7 @@ app = Flask(__name__, static_url_path='')
 
 app.register_blueprint(user)
 app.register_blueprint(problem)
+app.register_blueprint(snippets)
 app.register_blueprint(admin)
 
 

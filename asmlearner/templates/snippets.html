@@ -1,0 +1,43 @@
+{% extends "master.html" %}
+
+{% block head %}
+<style>
+    #fileBox .top.menu {
+        border-radius: 4px 4px 0px 0px;
+    }
+
+    #fileBox #fileList {
+        background: #fefefe;
+        margin-top: 0px;
+        padding-top: 0.9em;
+        padding-bottom: 0.5em;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{{ nav() }}
+<div class="ui main text container" id="fileBox">
+    <div class="ui header">
+        <a class="ui green tiny button" href="/snippet/">
+            <i class="add icon"></i>
+            코드 조각 추가하기
+        </a>
+    </div>
+    <div class="ui list segment" id="fileList">
+        {%- for snippet in snippets -%}
+        <div class="item">
+            <a href="/snippet/{{ snippet.id }}">
+                <i class="code large icon"></i>
+                {{ snippet.filename }}
+            </a>
+        </div>
+        {%- else -%}
+        <p class="empty">
+        작성한 코드 조각들이 없습니다.
+        </p>
+        {%- endfor -%}
+    </div>
+</div>
+
+{% endblock %}
