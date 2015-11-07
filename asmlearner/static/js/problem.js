@@ -47,7 +47,7 @@ function unknownError() {
     showError('warning', _unknownErrorMessage);
 };
 
-function compileCode(editor) {
+function compileCode() {
     var code = editor.getValue();
 
     $codeButtonLoader.addClass('active');
