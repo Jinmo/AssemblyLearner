@@ -28,6 +28,6 @@ CREATE TABLE IF NOT EXISTS solved (
 CREATE TABLE IF NOT EXISTS snippets (
     id INTEGER PRIMARY Key AUTOINCREMENT ,
     filename TEXT UNIQUE,
-    content TEXT,
+    code TEXT,
     owner CHAR(200)
 );

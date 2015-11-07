@@ -1,9 +1,9 @@
 {% macro nav() -%}
 <div class="ui fixed inverted menu">
     <div class="ui fixed container">
-      <div href="#" class="header item">
+      <a href="/" class="header item">
         AssemblyLearner
-      </div>
+      </a>
       <a href="/problems" class="item">Problems</a>
       <a href="/snippets" class="item">Snippets</a>
       <div class="right menu">
@@ -29,6 +29,10 @@
         color: #888;
         padding: 10px;
         padding-bottom: 15px;
+      }
+      textarea#codeArea, .CodeMirror {
+        font-family: Consolas, Lucida Console, NanumGothic, monospace !important;
+        font-size: 0.9em;
       }
     </style>
     {% block head %}{% endblock %}

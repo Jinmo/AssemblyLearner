@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, g, session, redirect
+from flask import Blueprint, render_template, abort, g, session, redirect, jsonify
 from jinja2 import TemplateNotFound
 from asmlearner.middleware import *
 from hashlib import sha1
@@ -25,3 +25,10 @@ def problem_(prob_id):
     problem = g.db.query('SELECT p.id,p.name,p.category,p.answer_regex,p.instruction,p.suffix,p.example,p.category,p.status FROM problem AS p WHERE id=?', (prob_id,), True)
 
     return render_template('problem.html', problem=problem)
+
+@problem.route('/problem/<int:prob_id>/run', methods=['POST'])
+@login_required
+def problem_run(prob_id):
+    code = request.form['code']
+    # TODO: make problem queue
+    return ''
