@@ -66,3 +66,4 @@ def runBinary(problem, solved, execFileName):
             m = re.findall(problem['answer_regex'], out)
             db.execute('UPDATE solved SET status=? where id=?',
                 ('SUCCESS' if count(m) > 0 else 'WRONG', solved['id']))
+    os.unlink(execFileName)            
