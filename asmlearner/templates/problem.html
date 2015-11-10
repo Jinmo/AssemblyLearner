@@ -1,0 +1,96 @@
+{% extends "master.html" %}
+
+
+{% block head %}
+<link href="/css/codemirror.css" rel="stylesheet" />
+<link href="/css/theme/dracula.css" rel="stylesheet" />
+<style type="text/css">
+    h2 {
+        font-weight: normal;
+        margin-top: 1em !important;
+    }
+    .main.ui {
+        padding-top: 0px !important;
+        margin-top: 0px;
+        top: 40px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+        overflow-y: auto;
+    }
+    .main.ui > .column {
+        box-sizing: border-box;
+    }
+    p.desc {
+        white-space: pre-line;
+        line-height: 180%;
+        padding: 10px;
+    }
+    .codeAreaContainer {
+        padding: 0px !important;
+    }
+
+    textarea#codeArea, .CodeMirror {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+
+    .instructionContainer {
+        overflow-y: auto;
+        border-right: 2px solid #333;
+        resize: horizontal;
+    }
+
+    #errorArea {
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        right: 20px;
+        z-index: 5;
+        box-sizing: border-box;
+        white-space: pre-line;
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{{ nav() }}
+<div class="ui main stackable three column grid fixed">
+    <div class="ui six wide column instructionContainer">
+        <h2 class="ui dividing header">
+            <i class="plug circular icon"></i>
+            <div class="content">
+                {{ problem['name'] }}
+                <div class="sub header">
+                    <a>{{ problem['category'] }}</a>
+                </div>
+            </div>
+        </h2>
+        <div class="control">
+            <button type="submit" class="ui button green" onclick="compileCode();">
+                <i class="ui play icon"></i>
+                실행 (Ctrl + Enter)
+            </button>
+            <div class="ui small inline loader" id="codeButtonLoader"></div>
+        </div>
+        <p class="desc">{{ problem['instruction'] }}</p>
+    </div>
+    <div class="ui ten wide column codeAreaContainer">
+        <div class="ui message" id="errorArea">Error message here</div>
+        <textarea id="codeArea">{{ problem['example'] }}</textarea>
+    </div>
+</div>
+<script type="text/javascript">
+var problem = {
+    id: {{ problem.id | tojson | safe }}
+};
+</script>
+<script type="text/javascript" src="/js/codemirror.js"></script>
+<script type="text/javascript" src="/js/mode/gas/gas.js"></script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/semantic.min.js"></script>
+<script type="text/javascript" src="/js/problem.js"></script>
+{% endblock %}

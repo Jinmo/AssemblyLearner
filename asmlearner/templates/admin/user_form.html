@@ -1,0 +1,40 @@
+{% extends "admin/master.html" %}
+
+
+{% block head %}
+<style type="text/css">
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 5px 5px; white-space: nowrap; overflow: hidden; font-size: 1em; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+.autocomplete-no-suggestion { padding: 10px; }
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+        <h1>{{ '사용자 수정' if user!=None else '사용자 추가' }}</h1>
+    <form class="ui form" action="{{ action }}" method="POST">
+        <div class="field">
+            <label>ID</label>
+            <input type="text" name="id" value="{{ user['id'] if user!=None }}" />
+        </div>
+        <div class="field">
+            <label>PW</label>
+            <input type="text" name="password" placeholder="{{ '{ dont modify }' if user!=None else '' }}" />
+        </div>
+        <div class="field">
+            <label>Role</label>
+            <input type="text" name="role" value="{{ user['role'] if user!=None }}" />
+        </div>
+        <button class="ui button" tabindex="0">{{ 'Modify User' if user!=None else 'Add User' }}</button>
+    </form>
+    <script>
+    {% autoescape false %}
+      var categories = {{ categories }}
+      {% endautoescape %}
+    </script>
+{% endblock %}
