@@ -6,6 +6,7 @@ import json
 from . import admin
 
 @admin.route('/')
+@is_admin
 def index():
     return redirect('/admin/problems')
 
@@ -50,7 +51,7 @@ def add_problem(prob_id=None):
 
     try:
         if prob_id:
-            g.db.execute('UPDATE problem SET name=?, instruction=?, answer_regex=?, suffix=?, example=?, category=?', (name, instr, answ, suffix, example, category))
+            g.db.execute('UPDATE problem SET name=?, instruction=?, answer_regex=?, suffix=?, example=?, category=? WHERE id=?', (name, instr, answ, suffix, example, category, prob_id))
         else:
             prob_id = g.db.execute('INSERT INTO problem (' \
                 'name, instruction, answer_regex, suffix, ' \

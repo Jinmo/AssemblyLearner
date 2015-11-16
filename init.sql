@@ -26,3 +26,10 @@ CREATE TABLE IF NOT EXISTS solved (
   errmsg TEXT,
   time TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS snippets (
+    id INTEGER PRIMARY Key AUTOINCREMENT ,
+    filename TEXT UNIQUE,
+    code TEXT,
+    owner CHAR(200)
+);
