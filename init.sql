@@ -13,15 +13,17 @@ CREATE TABLE IF NOT EXISTS problem (
   example TEXT,
   status CHAR(10),
   category CHAR(50),
+  input TEXT,
   createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS solved (
-  id CHAR(20),
+  id INTEGER PRIMARY Key AUTOINCREMENT,
   problem INTEGER,
   status CHAR(10),
   answer TEXT,
+  errmsg TEXT,
   time TIMESTAMP
 );
 
