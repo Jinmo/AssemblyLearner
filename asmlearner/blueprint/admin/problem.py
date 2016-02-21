@@ -71,3 +71,14 @@ def add_problem(prob_id=None):
                 history.back(-1);
             </script>
         '''
+
+@admin.route('/problem/<int:prob_id>/delete')
+@is_admin
+def delete_problem(prob_id):
+    try:
+        g.db.execute('DELETE FROM problem WHERE id=?', (prob_id, ))
+        g.db.commit()
+        return redirect('/admin/problems')
+    except Exception as e:
+        print e
+        g.db.rollback()
