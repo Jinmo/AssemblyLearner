@@ -8,7 +8,7 @@
  */
 
 var _failMessage = "컴파일은 잘 되었지만, 틀렸대요.",
-    _unknownErrorMessage = "사이트에 뭔가 문제가 있나봐요. 관리자에게 문의해보세요!\n만약 관리자분이시라면 http://github.com/Jinmo/AssemblyLearner에 이슈를 넣어주세요!";
+    _unknownErrorMessage = "사이트에 뭔가 문제가 있나봐요. 관리자에게 문의해보세요!\n만약 관리자분이시라면 <a href=\"http://github.com/Jinmo/AssemblyLearner\">http://github.com/Jinmo/AssemblyLearner</a> 에 이슈를 넣어주세요!";
 
 var $codeArea = $('#codeArea'),
     $errorArea = $('#errorArea'),
@@ -30,9 +30,16 @@ function showError(type, message) {
     .stop()
     .hide()
     .attr('class', 'ui ' + type + ' message')
-    .text(message)
-    .fadeIn('fast');
+    .fadeIn('fast')
+    .children('#content')
+    .html(message)
 };
+
+function hideError() {
+    $errorArea.hide();
+}
+
+closeError = hideError;
 
 function fail() {
     showError('error', _failMessage);
@@ -82,4 +89,11 @@ function compileCode() {
 editor.setOption('extraKeys', {
     'Ctrl-Enter': compileCode,
     'Command-Enter': compileCode
+});
+
+// outputArea draggable
+
+$('#outputArea').draggable({
+    handle: '.outputAreaTop',
+    containment: '.main.ui'
 });
