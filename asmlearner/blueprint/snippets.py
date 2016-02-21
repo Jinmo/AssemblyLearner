@@ -26,7 +26,7 @@ def snippet_form(snippet_id=None):
     else:
         snippet = None
 
-    return render_template('snippet_form.html', snippet=snippet)
+    return render_template('snippet_form.html', title='Snippet edit', snippet=snippet)
 
 @snippets.route('/snippet/', methods=['POST'])
 @snippets.route('/snippet/<int:snippet_id>', methods=['POST'])
