@@ -29,6 +29,7 @@
     }
     .codeAreaContainer {
         background-color: #282a36 !important;
+        padding: 0px !important;
     }
 
     textarea#codeArea, .CodeMirror {
@@ -40,6 +41,7 @@
     .instructionContainer {
         overflow-y: auto;
         border-right: 2px solid #333;
+        padding-left: 2rem !important;
     }
 
     #errorArea {
@@ -92,6 +94,10 @@
         box-sizing: border-box;
         background: #222;
         color: #ccc;
+    }
+
+    .CodeMirror-lines {
+      padding: 20px;
     }
 </style>
 {% endblock %}
