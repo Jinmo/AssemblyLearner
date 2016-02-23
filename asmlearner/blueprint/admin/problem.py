@@ -81,5 +81,5 @@ def delete_problem(prob_id):
         g.db.commit()
         return redirect('/admin/problems')
     except Exception as e:
-        print e
+        print(e)
         g.db.rollback()
