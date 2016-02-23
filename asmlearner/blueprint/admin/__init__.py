@@ -2,5 +2,5 @@ from flask import Blueprint
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
-import problem
-import user
+from .problem import *
+from .user import *

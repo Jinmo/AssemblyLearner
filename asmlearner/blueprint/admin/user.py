@@ -62,7 +62,7 @@ def add_user(user_id=None):
             g.db.commit()
         return redirect('/admin/users')
     except Exception as e:
-        print e
+        print(e)
         g.db.rollback()
         return '''
             <script>

@@ -33,7 +33,7 @@ def problem_form(prob_id=None):
     if (prob_id):
         prob = g.db.query('SELECT * FROM problem where id=?', (prob_id,), True)
 
-    categories = json.dumps(map(lambda x: x['category'] ,g.db.query('SELECT category FROM problem group by category')))
+    categories = json.dumps(list(map(lambda x: x['category'] ,g.db.query('SELECT category FROM problem group by category'))))
 
     return render_template('admin/problem_form.html', now='problem', problem=prob, categories=categories)
 
@@ -47,23 +47,24 @@ def add_problem(prob_id=None):
     example = request.form['prob_example']
     answ = request.form['prob_answer']
     category = request.form['category']
-
+    input_ = request.form['prob_input']
+    hint = request.form['prob_hint']
 
     try:
         if prob_id:
-            g.db.execute('UPDATE problem SET name=?, instruction=?, answer_regex=?, suffix=?, example=?, category=? WHERE id=?', (name, instr, answ, suffix, example, category, prob_id))
+            g.db.execute('UPDATE problem SET name=?, instruction=?, answer_regex=?, suffix=?, example=?, category=?, input=?, hint=? WHERE id=?', (name, instr, answ, suffix, example, category, input_, hint, prob_id))
         else:
             prob_id = g.db.execute('INSERT INTO problem (' \
                 'name, instruction, answer_regex, suffix, ' \
-                'example, category, status) VALUES ' \
-            '(?, ?, ?, ?, ?, ?, ?)', (name, instr, answ, suffix, example, category, 'REG'))
+                'example, category, status, input, hint) VALUES ' \
+            '(?, ?, ?, ?, ?, ?, ?, ?, ?)', (name, instr, answ, suffix, example, category, 'REG', input_, hint))
 
 
 
         g.db.commit()
         return redirect('/admin/problems')
     except Exception as e:
-        print e
+        print(e)
         g.db.rollback()
         return '''
             <script>

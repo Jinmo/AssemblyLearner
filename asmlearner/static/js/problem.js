@@ -23,10 +23,12 @@ var editor = CodeMirror.fromTextArea($codeArea[0], {
 });
 
 function solvedModal() {
-  $('#solvedModal')
-  .modal('show')
-  .children('.ui.segment:first')
-  .focus();
+    $errorArea
+        .stop()
+        .hide()
+        .attr('class', 'ui positive message')
+        .text('정답입니다!')
+        .fadeIn('fast');
 };
 
 function showError(type, message) {
@@ -58,34 +60,64 @@ function unknownError() {
     showError('warning', _unknownErrorMessage);
 };
 
+
+var timerVar;
+
 function compileCode() {
     var code = editor.getValue();
 
     $codeButtonLoader.addClass('active');
-    $.post('/problem/' + encodeURIComponent(problem.id) + '/run',
-           {
-               code: code
-           })
-           .done(function(response) {
-               $codeButtonLoader.removeClass('active');
-               //
-               // if mime type is json, it'll be parsed automatically.
-               //
-               if(response.status == 'solved') {
-                   solvedModal();
-               } else if(response.status == 'fail') {
-                   fail();
-               } else if(response.status == 'compileError') {
-                   compileError(response);
-               } else {
-                   unknownError();
-               }
-           }
-          )
-          .fail(function() {
-              unknownError();
-              $codeButtonLoader.removeClass('active');
-          });
+
+    $.post('/problem/' + encodeURIComponent(problem.id) + '/submit',
+            {
+                code: code
+            })
+            .done(function(response) {
+//                $codeButtonLoader.removeClass('active');
+
+                try {  
+                    if (typeof response == 'string')
+                        response = JSON.parse(response);
+                } catch(e) {
+                    unknownError();
+                }
+                console.log(response);
+                if (response.status == 'success') {
+                    timerVar = setInterval(checkStatus(response.sid), 1000);
+                }
+                else
+                    fail();
+
+            })
+            .fail(function() {
+                unknownError();
+                $codeButtonLoader.removeClass('active');
+            });
+}
+
+function checkStatus(id, callback) {
+    return function() {
+        $.post('/answer/' + encodeURIComponent(id) + '/status')
+            .done(function(response) {
+                $codeButtonLoader.removeClass('active');
+                try {
+                    if (typeof response == 'string')
+                        response = JSON.parse(response);
+                } catch(e) {
+                    unknownError();
+                }
+                console.log(response);
+                if (response.status == 'CORRECT') {
+                    solvedModal(); clearInterval(timerVar);
+                } else if (response.status == 'WRONG' || response.status == 'FAIL')  {
+                    fail(); clearInterval(timerVar);
+                } 
+
+            })
+            .fail(function() {
+                unknownError(); clearInterval(timerVar);
+            });
+    }
 }
 
 editor.setOption('extraKeys', {

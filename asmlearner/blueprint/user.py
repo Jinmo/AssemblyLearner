@@ -25,7 +25,6 @@ def login_check():
             </script>       
         '''
     else:
-        print user
         user = dict(user)
         session['user'] = user
         return redirect('/problems')

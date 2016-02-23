@@ -44,7 +44,7 @@ def snippet_upload(snippet_id=None):
             g.db.query('UPDATE snippets SET filename=?, code=? WHERE id=? AND owner=?', (filename, code, snippet_id, owner))
             g.db.commit()
         except Exception as e:
-            print e
+            print(e)
             g.db.rollback()
             return ''
     else:
@@ -52,7 +52,7 @@ def snippet_upload(snippet_id=None):
             g.db.query('INSERT INTO snippets(filename,code,owner) VALUES(?,?,?)', (filename, code, owner))
             g.db.commit()
         except Exception as e:
-            print e
+            print(e)
             g.db.rollback()
             return ''
 

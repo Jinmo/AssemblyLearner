@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS problem (
   status CHAR(10),
   category CHAR(50),
   input TEXT,
+  hint TEXT,
   createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -24,7 +25,7 @@ CREATE TABLE IF NOT EXISTS solved (
   status CHAR(10),
   answer TEXT,
   errmsg TEXT,
-  time TIMESTAMP
+  time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS snippets (

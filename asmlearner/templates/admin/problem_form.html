@@ -39,6 +39,14 @@
             <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_example">{{ problem.example if problem!=None }}</textarea>
         </div>
         <div class="field">
+            <label class="popup link" data-content="문제에 대한 힌트를 써주십시오." data-variation="inverted">Hint <i class="circle help icon"></i></label>
+            <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_hint">{{ problem.hint if problem!=None }}</textarea>
+        </div>
+        <div class="field">
+            <label class="popup link" data-content="문제에 대한 입력값을 써주십시오." data-variation="inverted">Input <i class="circle help icon"></i></label>
+            <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168ps;" name="prob_input">{{ problem.input if problem!=None }}</textarea>
+        </div>
+        <div class="field">
             <label class="popup link" data-content="문제에 답이 출력될경우 이 값과 비교합니다." data-variation="inverted">Answer <i class="circle help icon"></i></label>
             <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_answer">{{ problem.answer_regex if problem!=None }}</textarea>
         </div>

@@ -5,9 +5,12 @@ from jinja2 import TemplateNotFound
 from asmlearner.middleware import *
 from hashlib import sha1
 from asmlearner.library.pagination import Pagination
+from asmlearner.library.compiler.asm import compileProblem
+from redis import Redis
+from rq import Queue
 
+q = Queue(connection=Redis())
 problem = Blueprint('prob', __name__)
-
 
 @problem.route('/problems')
 @login_required
@@ -28,9 +31,32 @@ def problem_(prob_id):
 
     return render_template('problem.html', title=':: ' + problem['name'], problem=problem)
 
-@problem.route('/problem/<int:prob_id>/run', methods=['POST'])
+@problem.route('/problem/<int:prob_id>/submit', methods=['POST'])
 @login_required
 def problem_run(prob_id):
     code = request.form['code']
-    # TODO: make problem queue
-    return ''
+
+    try:
+        prob = g.db.query('SELECT * FROM problem where id = ?', (prob_id,), isSingle=True)
+        solved_id = g.db.execute('INSERT INTO solved ( ' \
+                    'problem, status, answer, errmsg) VALUES ' \
+                    '(?, ?, ?, ?)', (prob_id, 'COMPILE', code, ''))
+        g.db.commit()
+
+        solved = g.db.query('SELECT * FROM solved where id = ?', (solved_id,), isSingle=True)
+        q.enqueue(compileProblem, prob, solved)
+        return jsonify(status='success', sid=solved_id)
+    except Exception as e:
+        print(e)
+        g.db.rollback()
+        return jsonify(status='fail')
+
+@problem.route('/answer/<int:as_id>/status', methods=['POST'])
+@login_required
+def answer_status(as_id):
+    ans = g.db.query('SELECT * FROM solved where id = ?', (as_id,), isSingle=True)
+
+    if (ans == None):
+        return abort(404)
+
+    return jsonify(status=ans['status'])
