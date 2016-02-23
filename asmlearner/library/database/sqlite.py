@@ -1,5 +1,6 @@
 import sqlite3
 from os.path import isfile
+import codecs
 
 class DB:
     def __init__(self, dbPath='db.db'):
@@ -34,7 +35,7 @@ class DB:
         if path == None or isfile(path) == False:
             raise Exception('File Not Found')
 
-        f = open(path, 'rb')
+        f = codecs.open(path, 'r', 'utf8')
         query = f.read()
         f.close()
 

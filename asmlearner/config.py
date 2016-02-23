@@ -7,5 +7,5 @@ SECRET_KEY = 'lolthisissecretkeyforthisapp'
 
 CC_PATH = '/usr/bin/gcc'
 OBJDUMP_PATH = '/usr/bin/objdump'
-TRACER_PATH = join(PROJECT_DIR, 'bin/tracer')
+TRACER_PATH = join(PROJECT_DIR, 'asmlearner/bin/tracer')
 INCLUDE_PATH = join(PROJECT_DIR, 'include')

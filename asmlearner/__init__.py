@@ -1,9 +1,9 @@
 from os.path import join, dirname, realpath
 
 from flask import Flask, g, redirect, session, url_for, request
-from blueprint import user, problem, admin, snippets
-from library.database.sqlite import DB
-import config
+from asmlearner.blueprint import user, problem, admin, snippets
+from asmlearner.library.database.sqlite import DB
+import asmlearner.config
 
 
 app = Flask(__name__, static_url_path='')

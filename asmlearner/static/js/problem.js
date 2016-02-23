@@ -51,33 +51,56 @@ function compileCode() {
     var code = editor.getValue();
 
     $codeButtonLoader.addClass('active');
-    $.post('/problem/' + encodeURIComponent(problem.id) + '/run',
-           {
-               code: code
-           })
-           .done(function(response) {
-               $codeButtonLoader.removeClass('active');
-               try {
-                   response = JSON.parse(response);
-               } catch(e) {
-                   unknownError();
-               }
-               if(response.status == 'solved') {
-                   solvedModal();
-               } else if(response.status == 'fail') {
-                   fail();
-               } else if(response.status == 'compileError') {
-                   compileError(response);
-               } else {
-                   unknownError();
-               }
-           }
-          )
-          .fail(function() {
-              unknownError();
-              $codeButtonLoader.removeClass('active');
-          });
+    $.post('/problem/' + encodeURIComponent(problem.id) + '/submit',
+            {
+                code: code
+            })
+            .done(function(response) {
+                $codeButtonLoader.removeClass('active');
+
+                try {   
+                    response = JSON.parse(response);
+                } catch(e) {
+                    unknownError();
+                }
+                if (response.status == 'success')
+                    solvedModal();
+                else
+                    fail();
+
+            });
 }
+//function compileCode() {
+//    var code = editor.getValue();
+//
+//    $codeButtonLoader.addClass('active');
+//    $.post('/problem/' + encodeURIComponent(problem.id) + '/run',
+//           {
+//               code: code
+//           })
+//           .done(function(response) {
+//               $codeButtonLoader.removeClass('active');
+//               try {
+//                   response = JSON.parse(response);
+//               } catch(e) {
+//                   unknownError();
+//               }
+//               if(response.status == 'solved') {
+//                   solvedModal();
+//               } else if(response.status == 'fail') {
+//                   fail();
+//               } else if(response.status == 'compileError') {
+//                   compileError(response);
+//               } else {
+//                   unknownError();
+//               }
+//           }
+//          )
+//          .fail(function() {
+//              unknownError();
+//              $codeButtonLoader.removeClass('active');
+//          });
+//}
 
 editor.setOption('extraKeys', {
     'Ctrl-Enter': compileCode,
