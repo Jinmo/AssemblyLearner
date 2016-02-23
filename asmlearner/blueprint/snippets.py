@@ -28,6 +28,9 @@ def snippet_form(snippet_id=None):
 
     return render_template('snippet_form.html', title='Snippet edit', snippet=snippet)
 
+def save_snippet(owner, filename, code):
+    return
+
 @snippets.route('/snippet/', methods=['POST'])
 @snippets.route('/snippet/<int:snippet_id>', methods=['POST'])
 @login_required
@@ -52,4 +55,6 @@ def snippet_upload(snippet_id=None):
             print e
             g.db.rollback()
             return ''
+
+    save_snippet(owner, filename, code)
     return redirect('/snippets')

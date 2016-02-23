@@ -23,6 +23,10 @@ var editor = CodeMirror.fromTextArea($codeArea[0], {
 });
 
 function solvedModal() {
+  $('#solvedModal')
+  .modal('show')
+  .children('.ui.segment:first')
+  .focus();
 };
 
 function showError(type, message) {
@@ -64,11 +68,9 @@ function compileCode() {
            })
            .done(function(response) {
                $codeButtonLoader.removeClass('active');
-               try {
-                   response = JSON.parse(response);
-               } catch(e) {
-                   unknownError();
-               }
+               //
+               // if mime type is json, it'll be parsed automatically.
+               //
                if(response.status == 'solved') {
                    solvedModal();
                } else if(response.status == 'fail') {

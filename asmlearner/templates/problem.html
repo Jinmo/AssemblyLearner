@@ -99,6 +99,19 @@
     .CodeMirror-lines {
       padding: 20px;
     }
+
+    #solvedModal {
+    }
+
+    #solvedModal .item {
+      position: relative;
+      font-weight: 700;
+    }
+    #solvedModal .angle.right.icon {
+      right: 0px;
+      position: absolute;
+      line-height: 1.2;
+    }
 </style>
 {% endblock %}
 
@@ -141,7 +154,35 @@
             </a>
         </div>
         <pre class="ui code">출력이 나옵니다.</pre>
-    </div>
+      </div>
+      <div id="solvedModal" class="ui modal small">
+        <i class="close icon"></i>
+        <div class="header">
+          <i class="check circle icon"></i>
+          축하합니다!
+        </div>
+        <div class="content">
+          <p>다음으로 아래 문제들을 추천드려요.</p>
+          <div class="ui segment basic">
+            <div class="ui very relaxed list">
+              <div class="ui orange item segment" onclick="location='/problem/0';">
+                <div class="content">
+                  <a class="ui label ribbon orange">category</a>
+                  문제 이름
+                  <i class="angle right icon large"></i>
+                </div>
+              </div>
+              <div class="ui grey item segment" onclick="location='/problems';">
+                <div class="content">
+                  <a class="ui label ribbon grey">back</a>
+                  돌아가기
+                  <i class="angle right icon large"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 </div>
 <script type="text/javascript">
 var problem = {
