@@ -28,11 +28,12 @@
         padding: 10px;
     }
     .codeAreaContainer {
+        background-color: #282a36 !important;
         padding: 0px !important;
     }
 
     textarea#codeArea, .CodeMirror {
-        width: 100%;
+        width: 98%;
         height: 100%;
         position: absolute;
     }
@@ -40,18 +41,76 @@
     .instructionContainer {
         overflow-y: auto;
         border-right: 2px solid #333;
-        resize: horizontal;
+        padding-left: 2rem !important;
     }
 
     #errorArea {
         position: absolute;
         bottom: 5px;
         left: 5px;
-        right: 20px;
+        right: 7px;
         z-index: 5;
         box-sizing: border-box;
-        white-space: pre-line;
         display: none;
+    }
+
+    #errorArea>p#content {
+        white-space: pre-line;
+    }
+
+    #outputArea {
+        position: absolute;
+        width: 300px;
+        height: 250px;
+        top: 20%;
+        right: 20%;
+        z-index: 4;
+        background: #222;
+    }
+
+    #outputArea .outputAreaTop {
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border-bottom: 1px solid #111;
+        cursor: pointer;
+    }
+
+    #outputArea .outputAreaTop:hover {
+        background: #1c1c1c;
+    }
+
+    #outputArea .outputAreaTop:active {
+        background: #111;
+    }
+
+    #outputArea .outputTitle:before {
+        background: transparent !important;
+    }
+
+    #outputArea pre {
+        margin: 0px;
+        border-radius: 0px;
+        padding: 10px;
+        box-sizing: border-box;
+        background: #222;
+        color: #ccc;
+    }
+
+    .CodeMirror-lines {
+      padding: 20px;
+    }
+
+    #solvedModal {
+    }
+
+    #solvedModal .item {
+      position: relative;
+      font-weight: 700;
+    }
+    #solvedModal .angle.right.icon {
+      right: 0px;
+      position: absolute;
+      line-height: 1.2;
     }
 </style>
 {% endblock %}
@@ -79,9 +138,51 @@
         <p class="desc">{{ problem['instruction'] }}</p>
     </div>
     <div class="ui ten wide column codeAreaContainer">
-        <div class="ui message" id="errorArea">Error message here</div>
-        <textarea id="codeArea">{{ problem['example'] }}</textarea>
+        <div class="ui floating message" id="errorArea">
+            <p id="content">Error message here</p>
+            <i class="icon close large" onclick="closeError();"></i>
+        </div>
+        <textarea id="codeArea" class="code">{{ problem['example'] }}</textarea>
     </div>
+    <div id="outputArea" class="ui card inverted">
+        <div class="ui inverted top menu outputAreaTop">
+            <div class="item outputTitle">
+                Output
+            </div>
+            <a class="item right">
+                <i class="close icon"></i>
+            </a>
+        </div>
+        <pre class="ui code">출력이 나옵니다.</pre>
+      </div>
+      <div id="solvedModal" class="ui modal small">
+        <i class="close icon"></i>
+        <div class="header">
+          <i class="check circle icon"></i>
+          축하합니다!
+        </div>
+        <div class="content">
+          <p>다음으로 아래 문제들을 추천드려요.</p>
+          <div class="ui segment basic">
+            <div class="ui very relaxed list">
+              <div class="ui orange item segment" onclick="location='/problem/0';">
+                <div class="content">
+                  <a class="ui label ribbon orange">category</a>
+                  문제 이름
+                  <i class="angle right icon large"></i>
+                </div>
+              </div>
+              <div class="ui grey item segment" onclick="location='/problems';">
+                <div class="content">
+                  <a class="ui label ribbon grey">back</a>
+                  돌아가기
+                  <i class="angle right icon large"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 </div>
 <script type="text/javascript">
 var problem = {
@@ -91,6 +192,7 @@ var problem = {
 <script type="text/javascript" src="/js/codemirror.js"></script>
 <script type="text/javascript" src="/js/mode/gas/gas.js"></script>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/js/semantic.min.js"></script>
 <script type="text/javascript" src="/js/problem.js"></script>
 {% endblock %}

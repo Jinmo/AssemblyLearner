@@ -32,12 +32,23 @@
             <tr class="">
                 <td>
                     <a href="/admin/problem/{{prob.id}}">{{ prob.name }}</a>
+                    <a href="/admin/problem/{{prob.id}}/delete" onclick='return confirm_delete({{ prob.name|tojson|safe }});'>
+                      <i class="remove icon tiny"></i>
+                    </a>
                 </td>
-                <td>{{ status_code_to_string(prob.status) }}</td>
+                <td>
+                  {{ status_code_to_string(prob.status) }}
+                </td>
             </tr>
             {% endfor %}
 
         </tbody>
-    </table>
+      </table>
+      <script>
+        function confirm_delete(name) {
+          var result = confirm("정말 이 문제를 삭제하시겠습니까? :\n" + name) == true;
+          return result;
+        }
+    </script>
     {{ render_pagination(pagination) }}
 {% endblock %}

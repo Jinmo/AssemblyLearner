@@ -1,3 +1,5 @@
+#coding:utf8
+
 from flask import Blueprint, render_template, abort, g, session, redirect, jsonify
 from jinja2 import TemplateNotFound
 from asmlearner.middleware import *
@@ -27,7 +29,7 @@ def problem_list():
 def problem_(prob_id):
     problem = g.db.query('SELECT p.id,p.name,p.category,p.answer_regex,p.instruction,p.suffix,p.example,p.category,p.status FROM problem AS p WHERE id=?', (prob_id,), True)
 
-    return render_template('problem.html', problem=problem)
+    return render_template('problem.html', title=':: ' + problem['name'], problem=problem)
 
 @problem.route('/problem/<int:prob_id>/submit', methods=['POST'])
 @login_required

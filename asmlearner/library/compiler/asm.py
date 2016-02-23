@@ -12,7 +12,7 @@ def compileProblem(problem, solved):
     answerFile = NamedTemporaryFile(mode= 'w', prefix='asm_tmp_',
                     suffix='.s', delete=False)
     answerFile.write(solved['answer'] + \
-        "\n.globl __NoTraceHere__\nnop\n__NoTraceHere__:" + \
+        u"\n.globl __NoTraceHere__\nnop\n__NoTraceHere__:" + \
         problem['suffix'])
     
 
