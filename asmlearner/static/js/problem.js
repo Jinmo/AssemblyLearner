@@ -23,6 +23,12 @@ var editor = CodeMirror.fromTextArea($codeArea[0], {
 });
 
 function solvedModal() {
+    $errorArea
+        .stop()
+        .hide()
+        .attr('class', 'ui positive message')
+        .text('정답입니다!')
+        .fadeIn('fast');
 };
 
 function showError(type, message) {
@@ -47,6 +53,9 @@ function unknownError() {
     showError('warning', _unknownErrorMessage);
 };
 
+
+var timerVar;
+
 function compileCode() {
     var code = editor.getValue();
 
@@ -56,20 +65,54 @@ function compileCode() {
                 code: code
             })
             .done(function(response) {
-                $codeButtonLoader.removeClass('active');
+//                $codeButtonLoader.removeClass('active');
 
-                try {   
-                    response = JSON.parse(response);
+                try {  
+                    if (typeof response == 'string')
+                        response = JSON.parse(response);
                 } catch(e) {
                     unknownError();
                 }
-                if (response.status == 'success')
-                    solvedModal();
+                console.log(response);
+                if (response.status == 'success') {
+                    timerVar = setInterval(checkStatus(response.sid), 1000);
+                }
                 else
                     fail();
 
+            })
+            .fail(function() {
+                unknownError();
+                $codeButtonLoader.removeClass('active');
             });
 }
+
+function checkStatus(id, callback) {
+    return function() {
+        $.post('/answer/' + encodeURIComponent(id) + '/status')
+            .done(function(response) {
+                $codeButtonLoader.removeClass('active');
+                try {
+                    if (typeof response == 'string')
+                        response = JSON.parse(response);
+                } catch(e) {
+                    unknownError();
+                }
+                console.log(response);
+                if (response.status == 'CORRECT') {
+                    solvedModal(); clearInterval(timerVar);
+                } else if (response.status == 'WRONG' || response.status == 'FAIL')  {
+                    fail(); clearInterval(timerVar);
+                } 
+
+            })
+            .fail(function() {
+                unknownError(); clearInterval(timerVar);
+            });
+    }
+}
+
+
 //function compileCode() {
 //    var code = editor.getValue();
 //

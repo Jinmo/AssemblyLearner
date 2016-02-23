@@ -43,8 +43,18 @@ def problem_run(prob_id):
 
         solved = g.db.query('SELECT * FROM solved where id = ?', (solved_id,), isSingle=True)
         q.enqueue(compileProblem, prob, solved)
-        return jsonify(status='success')
+        return jsonify(status='success', sid=solved_id)
     except Exception as e:
         print(e)
         g.db.rollback()
         return jsonify(status='fail')
+
+@problem.route('/answer/<int:as_id>/status', methods=['POST'])
+@login_required
+def answer_status(as_id):
+    ans = g.db.query('SELECT * FROM solved where id = ?', (as_id,), isSingle=True)
+
+    if (ans == None):
+        return abort(404)
+
+    return jsonify(status=ans['status'])
