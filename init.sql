@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS problem (
 CREATE TABLE IF NOT EXISTS solved (
   id INTEGER PRIMARY Key AUTOINCREMENT,
   problem INTEGER,
+  owner CHAR(200),
+  /* FAIL, CORRECT */
   status CHAR(10),
   answer TEXT,
   errmsg TEXT,
