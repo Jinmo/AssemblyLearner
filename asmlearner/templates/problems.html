@@ -38,6 +38,9 @@
         <div class="problem">
           <a class="ui orange ribbon label">{{ prob.category }}</a>
           <span><a href="/problem/{{ prob.id }}">{{ prob.name }}</a></span>
+          {%- if prob.solved -%}
+          <i class="check circle olive outline icon"></i>
+          {%- endif -%}
         </div>
       {%- else -%}
       <p class="empty">

@@ -8,9 +8,9 @@
       <a href="/snippets" class="item">Snippets</a>
       <div class="right menu">
         <a class="item" href="/logout">Logout</a>
-        
+        {% if is_admin() %}
         <a class="item" href="/admin">Admin</a>
-        
+        {% endif %}
       </div>
 
     </div>
