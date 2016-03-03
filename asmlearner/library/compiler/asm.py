@@ -40,10 +40,15 @@ def compileProblem(problem, solved):
         runBinary(problem, solved, execFileName)
 
 def runBinary(problem, solved, execFileName):
-    tracerArgv = (config.TRACER_PATH, execFileName, problem['input'], '/dev/fd/1')
+    inputFile = NamedTemporaryFile(mode='w', prefix='asm_input_tmp_', delete=False)
+    inputFile.write(problem['input'])
+    inputFile.close()
+    inputFilePath = inputFile.name
+    print(open(inputFilePath, 'rb').read())
+    tracerArgv = (config.TRACER_PATH, execFileName, inputFilePath, '/dev/fd/1')
     p = subprocess.Popen((config.OBJDUMP_PATH, '-M', 'intel', '-d', execFileName),
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
+    print(tracerArgv)
     code = p.wait()
     err = p.stderr.read()
 
@@ -53,10 +58,9 @@ def runBinary(problem, solved, execFileName):
         ('FAIL', err, solved['id']))
         db.commit()
     else:
-        p = subprocess.Popen(tracerArgv, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdin_wrapper = io.TextIOWrapper(p.stdin, 'utf-8')
-        stdin_wrapper.write(problem['input'])
-        #p.stdin.write(problem['input'].encode().decode())
+        inputFileRead = open(inputFilePath, 'rb')
+
+        p = subprocess.Popen(tracerArgv, stdout=subprocess.PIPE, stdin=inputFileRead, stderr=subprocess.PIPE)
         out = p.stdout.read()
         err = p.stderr.read()
         code = p.wait()
@@ -71,4 +75,5 @@ def runBinary(problem, solved, execFileName):
             db.execute('UPDATE solved SET status=? where id=?',
                 ('CORRECT' if len(m) > 0 else 'WRONG', solved['id']))
     db.commit()        
-    os.unlink(execFileName)            
+    os.unlink(execFileName) 
+    os.unlink(inputFilePath)
