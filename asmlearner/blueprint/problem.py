@@ -21,7 +21,7 @@ def problem_list():
 
     problem_count = g.db.query('SELECT count(*) as count FROM problem', isSingle=True)['count']
     problems = g.db.query('SELECT p.id,p.name,p.category FROM problem as p limit ?,?', ((page-1)*div, div))
-    solved = g.db.query('SELECT s.problem FROM solved as s WHERE owner=? AND status="CORRECT"', user_id)
+    solved = g.db.query('SELECT s.problem FROM solved as s WHERE owner=? AND status="CORRECT"', (user_id, ))
 
     problems_map = {}
 
