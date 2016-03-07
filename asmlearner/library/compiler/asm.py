@@ -53,10 +53,10 @@ def runBinary(problem, solved, execFileName):
     print(open(inputFilePath, 'rb').read())
     tracerArgv = (config.TRACER_PATH, execFileName, inputFilePath, '/dev/fd/1')
     p = subprocess.Popen((config.OBJDUMP_PATH, '-M', 'intel', '-d', execFileName),
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     print(tracerArgv)
     code = p.wait()
-    err = p.stderr.read()
+    err = p.stdout.read()
 
     db = DB(config.DATABASE)
     if code != 0:
@@ -67,8 +67,7 @@ def runBinary(problem, solved, execFileName):
         inputFileRead = open(inputFilePath, 'rb')
 
         p = subprocess.Popen(tracerArgv, stdout=subprocess.PIPE, stdin=inputFileRead, stderr=subprocess.PIPE)
-        out = p.stdout.read()
-        err = p.stderr.read()
+        err = out = p.stdout.read()
         code = p.wait()
 
         if code != 0:
@@ -78,8 +77,8 @@ def runBinary(problem, solved, execFileName):
             print(out)
             m = re.findall(problem['answer_regex'].encode(), out)
             print(len(m))
-            db.execute('UPDATE solved SET status=? where id=?',
-                ('CORRECT' if len(m) > 0 else 'WRONG', solved['id']))
+            db.execute('UPDATE solved SET status=?, errmsg=? where id=?',
+                ('CORRECT' if len(m) > 0 else 'WRONG', out, solved['id']))
     db.commit()
     os.unlink(execFileName)
     os.unlink(inputFilePath)
