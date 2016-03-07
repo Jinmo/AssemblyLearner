@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from asmlearner import config
 from asmlearner.library.database.sqlite import DB
 from os.path import join
