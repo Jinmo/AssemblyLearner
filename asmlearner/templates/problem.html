@@ -10,14 +10,14 @@
         margin-top: 1em !important;
     }
     .main.ui {
-        padding-top: 0px !important;
-        margin-top: 0px;
+        margin: 0px;
+        padding: 0px !important;
         top: 40px;
         bottom: 0;
         left: 0;
         right: 0;
         position: absolute;
-        overflow-y: auto;
+        overflow: inherit;
     }
     .main.ui > .column {
         box-sizing: border-box;
@@ -39,9 +39,15 @@
     }
 
     .instructionContainer {
-        overflow-y: auto;
         border-right: 2px solid #333;
         padding-left: 2rem !important;
+        position: absolute;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .instructionContainer .instruction {
+        overflow: visible;
     }
 
     #errorArea {
@@ -59,38 +65,31 @@
     }
 
     #outputArea {
-        position: absolute;
-        width: 300px;
-        height: 250px;
-        top: 20%;
-        right: 20%;
+        height: 200px;
         z-index: 4;
         background: #222;
+        box-sizing: border-box;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
     }
 
     #outputArea .outputAreaTop {
-        border-bottom-left-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
         border-bottom: 1px solid #111;
-        cursor: pointer;
-    }
-
-    #outputArea .outputAreaTop:hover {
         background: #1c1c1c;
     }
 
-    #outputArea .outputAreaTop:active {
-        background: #111;
-    }
-
-    #outputArea .outputTitle:before {
-        background: transparent !important;
+    #outputArea .outputTitle {
+      color: #eee;
+      line-height: 2;
+      font-size: 1.2em;
+      padding-left: 1rem;
     }
 
     #outputArea pre {
         margin: 0px;
         border-radius: 0px;
-        padding: 10px;
+        padding: 1rem;
         box-sizing: border-box;
         background: #222;
         color: #ccc;
@@ -112,6 +111,9 @@
       position: absolute;
       line-height: 1.2;
     }
+    .CodeMirror-focused div.CodeMirror-selected {
+      background-color: rgba(255, 255, 255, 0.2) !important;
+    }
 </style>
 {% endblock %}
 
@@ -119,41 +121,45 @@
 {{ nav() }}
 <div class="ui main stackable three column grid fixed">
     <div class="ui six wide column instructionContainer">
+      <div class="instruction">
         <h2 class="ui dividing header">
             <i class="plug circular icon"></i>
             <div class="content">
                 {{ problem['name'] }}
                 <div class="sub header">
                     <a>{{ problem['category'] }}</a>
+                    {%- if is_admin() -%}
+                    <a href="/admin/problem/{{ problem['id'] }}">
+                      <i class="write icon"></i>
+                    </a>
+                    {%- endif -%}
                 </div>
             </div>
         </h2>
         <div class="control">
-            <button type="submit" class="ui button green" onclick="compileCode();">
+            <button type="submit" class="ui button green" onclick="compileCode();" id="codeButton">
                 <i class="ui play icon"></i>
                 실행 (Ctrl + Enter)
             </button>
             <div class="ui small inline loader" id="codeButtonLoader"></div>
         </div>
         <p class="desc">{{ problem['instruction'] }}</p>
-    </div>
-    <div class="ui ten wide column codeAreaContainer">
+        </div>
+      </div>
+      <div class="ui ten wide column codeAreaContainer">
         <div class="ui floating message" id="errorArea">
-            <p id="content">Error message here</p>
-            <i class="icon close large" onclick="closeError();"></i>
+          <p id="content">Error message here</p>
+          <i class="icon close large" onclick="closeError();"></i>
         </div>
         <textarea id="codeArea" class="code">{{ problem['example'] }}</textarea>
-    </div>
-    <div id="outputArea" class="ui card inverted">
-        <div class="ui inverted top menu outputAreaTop">
-            <div class="item outputTitle">
+        <div id="outputArea" class="ui inverted">
+          <div class="ui inverted content outputAreaTop">
+            <div class="header outputTitle">
                 Output
             </div>
-            <a class="item right">
-                <i class="close icon"></i>
-            </a>
+          </div>
+          <pre class="ui code" id="outputContent">출력이 나옵니다.</pre>
         </div>
-        <pre class="ui code">출력이 나옵니다.</pre>
       </div>
       <div id="solvedModal" class="ui modal small">
         <i class="close icon"></i>
@@ -183,16 +189,16 @@
           </div>
         </div>
       </div>
-</div>
-<script type="text/javascript">
-var problem = {
-    id: {{ problem.id | tojson | safe }}
-};
-</script>
-<script type="text/javascript" src="/js/codemirror.js"></script>
-<script type="text/javascript" src="/js/mode/gas/gas.js"></script>
-<script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/js/semantic.min.js"></script>
-<script type="text/javascript" src="/js/problem.js"></script>
-{% endblock %}
+    </div>
+    <script type="text/javascript">
+      var problem = {
+        id: {{ problem.id | tojson | safe }}
+      };
+    </script>
+    <script type="text/javascript" src="/js/codemirror.js"></script>
+    <script type="text/javascript" src="/js/mode/gas/gas.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/semantic.min.js"></script>
+    <script type="text/javascript" src="/js/problem.js"></script>
+    {% endblock %}

@@ -70,4 +70,4 @@ def answer_status(as_id):
     if (ans == None):
         return abort(404)
 
-    return jsonify(status=ans['status'])
+    return jsonify(status=ans['status'], errmsg=ans['errmsg'].decode('utf8'))
