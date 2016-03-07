@@ -23,10 +23,7 @@ def compileProblem(problem, solved):
     answerFile.close()
     execFileName = answerFile.name[0:-2]
 
-    p = subprocess.Popen((
-        'strace',
-        '-f',
-        config.CC_PATH,
+    p = subprocess.Popen((config.CC_PATH,
         answerFile.name,
         '-o', execFileName,
         '-I', config.INCLUDE_PATH,
