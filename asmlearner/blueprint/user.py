@@ -13,7 +13,7 @@ def login():
 def login_check():
     id_ = request.form['id']
     password_ = request.form['password']
-    pw_hash = sha1(password_ * 10).hexdigest()
+    pw_hash = sha1(password_.encode('utf8') * 10).hexdigest()
 
     user = g.db.query('SELECT * FROM user WHERE id=? AND password=?', (id_, pw_hash), True)
     
@@ -44,7 +44,7 @@ def join():
 def join_check():
     id_ = request.form['id']
     password_ = request.form['password']
-    pw_hash = sha1(password_ * 10).hexdigest()
+    pw_hash = sha1(password_.encode('utf8') * 10).hexdigest()
 
     user = g.db.query('SELECT 1 FROM user WHERE id=?', (id_, ), True)
 
