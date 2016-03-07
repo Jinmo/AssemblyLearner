@@ -3,32 +3,41 @@ from tempfile import NamedTemporaryFile
 from asmlearner import config
 from asmlearner.library.database.sqlite import DB
 import io
+import binascii
 
 def compileProblem(problem, solved):
     db = DB(config.DATABASE)
     db.execute('UPDATE solved SET status=? where id=?', ('COMPILING', solved['id']))
     db.commit()
 
+    snippet_dir = os.path.join( 'data/snippets', binascii.hexlify( bytes(solved['owner'], 'utf-8') ).decode('utf-8') )
+
+    code = solved['answer'] + \
+        u"\n.globl __NoTraceHere__\nnop\n__NoTraceHere__:" + \
+        problem['suffix']
+
     answerFile = NamedTemporaryFile(mode= 'w', prefix='asm_tmp_',
                     suffix='.s', delete=False)
-    answerFile.write(solved['answer'] + \
-        u"\n.globl __NoTraceHere__\nnop\n__NoTraceHere__:" + \
-        problem['suffix'])
-    
+    answerFile.write(code)
 
     answerFile.close()
     execFileName = answerFile.name[0:-2]
 
-    p = subprocess.Popen((config.CC_PATH,
+    p = subprocess.Popen((
+        'strace',
+        '-f',
+        config.CC_PATH,
         answerFile.name,
         '-o', execFileName,
         '-I', config.INCLUDE_PATH,
+        '-I', snippet_dir,
         '-m32', '-nostdlib', '-fno-stack-protector'), stderr=subprocess.PIPE)
 
     code = p.wait()
     err = p.stderr.read()
 
     if code != 0:
+        print(err)
         db.execute('UPDATE solved SET status=?, errmsg=? where id=?',
             ('FAIL', err, solved['id']))
         db.commit()
@@ -74,6 +83,6 @@ def runBinary(problem, solved, execFileName):
             print(len(m))
             db.execute('UPDATE solved SET status=? where id=?',
                 ('CORRECT' if len(m) > 0 else 'WRONG', solved['id']))
-    db.commit()        
-    os.unlink(execFileName) 
+    db.commit()
+    os.unlink(execFileName)
     os.unlink(inputFilePath)

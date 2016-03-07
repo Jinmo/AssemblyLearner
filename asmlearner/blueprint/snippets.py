@@ -2,6 +2,9 @@ from flask import Blueprint, render_template, g
 from asmlearner.middleware import *
 from asmlearner.library.pagination import Pagination
 
+import os
+import codecs, binascii
+
 snippets = Blueprint('snippets', __name__)
 
 
@@ -29,6 +32,14 @@ def snippet_form(snippet_id=None):
     return render_template('snippet_form.html', title='Snippet edit', snippet=snippet)
 
 def save_snippet(owner, filename, code):
+    owner_encoded = binascii.hexlify( bytes(owner, 'utf-8') ).decode('utf-8')
+    snippet_dir = 'data/snippets/' + owner_encoded
+    snippet_path = os.path.join(snippet_dir, filename)
+
+    if os.path.isdir(snippet_dir) == False:
+        os.makedirs(snippet_dir)
+    with open(snippet_path, 'wb') as f:
+        f.write(bytes(code, 'utf-8'))
     return
 
 @snippets.route('/snippet/', methods=['POST'])
@@ -39,22 +50,25 @@ def snippet_upload(snippet_id=None):
     code = request.form['code']
 
     owner = session['user']['id']
+
+    filename = os.path.basename(filename)
     if snippet_id is not None:
         try:
             g.db.query('UPDATE snippets SET filename=?, code=? WHERE id=? AND owner=?', (filename, code, snippet_id, owner))
             g.db.commit()
+            save_snippet(owner, filename, code)
         except Exception as e:
             print(e)
             g.db.rollback()
             return ''
     else:
         try:
-            g.db.query('INSERT INTO snippets(filename,code,owner) VALUES(?,?,?)', (filename, code, owner))
+            g.db.query('REPLACE INTO snippets(filename,code,owner) VALUES(?,?,?)', (filename, code, owner))
             g.db.commit()
+            save_snippet(owner, filename, code)
         except Exception as e:
             print(e)
             g.db.rollback()
             return ''
 
-    save_snippet(owner, filename, code)
     return redirect('/snippets')
