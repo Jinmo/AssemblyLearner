@@ -14,8 +14,10 @@ def snippet_list():
     page = int(request.args.get('p')) if 'p' in request.args else 1
     div = 20
 
-    snippet_count = g.db.query('SELECT count(*) as count FROM snippets WHERE owner=?', (session['user']['id'],), isSingle=True)['count']
-    snippets = g.db.query('SELECT * FROM snippets limit ?,?', ((page-1)*div, div))
+    owner = session['user']['id']
+
+    snippet_count = g.db.query('SELECT count(*) as count FROM snippets WHERE owner=?', (owner,), isSingle=True)['count']
+    snippets = g.db.query('SELECT * FROM snippets WHERE owner=? limit ?,?', (owner, (page-1)*div, div))
 
     pagination = Pagination(page, div, snippet_count)
     return render_template('snippets.html', title='Snippets', pagination=pagination, snippets=snippets)
