@@ -72,7 +72,7 @@ def runBinary(problem, solved, execFileName):
 
         if code != 0:
             db.execute('UPDATE solved SET status=?, errmsg=? where id=?',
-                ('FAIL', err, solved['id']))
+                ('WRONG', err, solved['id']))
         else:
             print(out)
             m = re.findall(problem['answer_regex'].encode(), out)
