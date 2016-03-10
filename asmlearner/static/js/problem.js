@@ -24,7 +24,8 @@ var editor = CodeMirror.fromTextArea($codeArea[0], {
         name: 'gas',
         architecture: 'x86'
     },
-    theme: 'dracula'
+    theme: 'dracula',
+    tabSize: 2
 });
 
 var usingSolvedModal = false;
@@ -125,7 +126,9 @@ function checkStatus(id, callback) {
                 if (typeof response == 'string')
                     response = JSON.parse(response);
             } catch(e) {
+                doneLoading();
                 unknownError();
+                clearInterval(timerVar);
             }
             console.log(response);
             $outputContent.text(response.errmsg);
@@ -140,7 +143,8 @@ function checkStatus(id, callback) {
         })
         .fail(function() {
             doneLoading();
-            unknownError(); clearInterval(timerVar);
+            unknownError();
+            clearInterval(timerVar);
         });
     }
 }
