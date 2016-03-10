@@ -1,5 +1,5 @@
 {% macro render_pagination(pagination) %}
-  <div class=pagination>
+<div class=pagination>
   {%- for page in pagination.iter_pages() %}
     {% if page %}
       {% if page != pagination.page %}
@@ -12,10 +12,9 @@
     {% endif %}
   {%- endfor %}
   {% if pagination.has_next %}
-    <a href="{{ url_for_other_page(pagination.page + 1)
-      }}">Next &raquo;</a>
+    <a href="{{ url_for_other_page(pagination.page + 1)}}">Next &raquo;</a>
   {% endif %}
-  </div>
+</div>
 {% endmacro %}
 
 <!DOCTYPE html>
@@ -25,8 +24,8 @@
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/css/semantic.min.css">
     <style>
-    body { margin: 2em; height: auto;}
-    .ui.secondary { padding: 0 !important;}
+      body { margin: 2em; height: auto;}
+      .ui.secondary { padding: 0 !important;}
     </style>
     {% block head %}{% endblock %}
   </head>

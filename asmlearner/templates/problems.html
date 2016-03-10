@@ -2,7 +2,7 @@
 
 
 {% macro render_pagination(pagination) %}
-  <div class=pagination>
+<div class=pagination>
   {%- for page in pagination.iter_pages() %}
     {% if page %}
       {% if page != pagination.page %}
@@ -15,10 +15,9 @@
     {% endif %}
   {%- endfor %}
   {% if pagination.has_next %}
-    <a href="{{ url_for_other_page(pagination.page + 1)
-      }}">Next &raquo;</a>
+  <a href="{{ url_for_other_page(pagination.page + 1) }}">Next &raquo;</a>
   {% endif %}
-  </div>
+</div>
 {% endmacro %}
 
 {% block head %}
@@ -32,21 +31,21 @@
 {% block content %}
 {{ nav() }}
 
-  <div class="ui main text container">
-    <div class="ui segment">
-      {%- for prob in problems -%}
-        <div class="problem">
-          <a class="ui orange ribbon label">{{ prob.category }}</a>
-          <span><a href="/problem/{{ prob.id }}">{{ prob.name }}</a></span>
-          {%- if prob.solved -%}
+<div class="ui main text container">
+  <div class="ui segment">
+    {%- for prob in problems -%}
+      <div class="problem">
+        <a class="ui orange ribbon label">{{ prob.category }}</a>
+        <span><a href="/problem/{{ prob.id }}">{{ prob.name }}</a></span>
+        {%- if prob.solved -%}
           <i class="check circle green icon"></i>
-          {%- endif -%}
-        </div>
-      {%- else -%}
-      <p class="empty">
+        {%- endif -%}
+      </div>
+    {%- else -%}
+    <p class="empty">
       아직 문제가 추가되지 않았습니다.
-      </p>
-      {%- endfor -%}
-    </div>
+    </p>
+    {%- endfor -%}
   </div>
+</div>
 {% endblock %}

@@ -1,20 +1,20 @@
 {% macro nav() -%}
 <div class="ui fixed inverted menu">
-    <div class="ui fixed container">
-      <a href="/" class="header item">
-        AssemblyLearner
-      </a>
-      <a href="/problems" class="item">Problems</a>
-      <a href="/snippets" class="item">Snippets</a>
-      <div class="right menu">
-        <a class="item" href="/logout">Logout</a>
-        {% if is_admin() %}
-        <a class="item" href="/admin">Admin</a>
-        {% endif %}
-      </div>
-
+  <div class="ui fixed container">
+    <a href="/" class="header item">
+      AssemblyLearner
+    </a>
+    <a href="/problems" class="item">Problems</a>
+    <a href="/snippets" class="item">Snippets</a>
+    <div class="right menu">
+      <a class="item" href="/logout">Logout</a>
+      {% if is_admin() %}
+      <a class="item" href="/admin">Admin</a>
+      {% endif %}
     </div>
+
   </div>
+</div>
 {%- endmacro %}<!DOCTYPE html>
 <html>
   <head>
