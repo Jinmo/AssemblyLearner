@@ -33,9 +33,11 @@
     }
 
     textarea#codeArea, .CodeMirror {
-        width: 98%;
-        height: 100%;
+        width: 100%;
+        top: 0px;
+        bottom: 200px;
         position: absolute;
+        height: auto;
     }
 
     .instructionContainer {
@@ -121,7 +123,7 @@
 {% block content %}
 {{ nav() }}
 <div class="ui main stackable three column grid fixed">
-  <div class="ui six wide column instructionContainer">
+  <div class="ui eight wide column instructionContainer">
     <div class="instruction">
       <h2 class="ui dividing header">
           <i class="plug circular icon"></i>
@@ -147,7 +149,7 @@
       <p class="desc">{{ problem['instruction'] }}</p>
     </div>
   </div>
-  <div class="ui ten wide column codeAreaContainer">
+  <div class="ui eight wide column codeAreaContainer">
     <div class="ui floating message" id="errorArea">
       <p id="content">Error message here</p>
       <i class="icon close large" onclick="closeError();"></i>
