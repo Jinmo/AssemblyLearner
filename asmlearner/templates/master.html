@@ -1,0 +1,48 @@
+{% macro nav() -%}
+<div class="ui fixed inverted menu">
+  <div class="ui fixed container">
+    <a href="/" class="header item">
+      AssemblyLearner
+    </a>
+    <a href="/problems" class="item">Problems</a>
+    <a href="/snippets" class="item">Snippets</a>
+    <div class="right menu">
+      <a class="item" href="/logout">Logout</a>
+      {% if is_admin() %}
+      <a class="item" href="/admin">Admin</a>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{%- endmacro %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/css/semantic.min.css">
+    <style>
+      .main.ui {
+        margin-top: 7em;
+      }
+      p.empty {
+        color: #888;
+        padding: 10px;
+        padding-bottom: 15px;
+      }
+      textarea.code, .CodeMirror, pre.code {
+        font-family: Consolas, Lucida Console, NanumGothic, monospace !important;
+        font-size: 0.9em;
+      }
+    </style>
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/semantic.min.js"></script>
+  </body>
+</html>
+

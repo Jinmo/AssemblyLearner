@@ -1,0 +1,47 @@
+{% extends 'master.html' %}
+
+{% block head %}
+<link href="/css/codemirror.css" rel="stylesheet" />
+<link href="/css/theme/dracula.css" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+{{ nav() }}
+<div class="ui main text container">
+  <h2 class="ui dividing header">
+    <i class="code circular icon"></i>
+    <div class="content">
+      Snippet 작성
+      <div class="sub header">
+        나만의 라이브러리를 만들어보세요!
+      </div>
+    </div>
+  </h2>
+  <form method="POST" class="ui form">
+    <div class="field">
+      <label>Name</label>
+      <input type="text" name="filename" value="{{ snippet['filename'] if snippet!=None }}" placeholder="[code name].s  (ex: stdio.s, ...)" />
+    </div>
+    <div class="field">
+      <label>Code</label>
+      <textarea name="code" id="codeArea">{{ snippet['code'] if snippet!=None }}</textarea>
+    </div>
+    <button type="submit" class="ui button green tiny">Submit</button>
+  </form>
+</div>
+
+<script type="text/javascript" src="/js/codemirror.js"></script>
+<script type="text/javascript" src="/js/mode/gas/gas.js"></script>
+<script src="/js/jquery.min.js" type="text/javascript"></script>
+<script>
+  var $codeArea = $('#codeArea');
+  var editor = CodeMirror.fromTextArea($codeArea[0], {
+    lineNumbers: true,
+    mode: {
+      name: 'gas',
+      architecture: 'x86'
+    },
+    theme: 'dracula'
+  });
+</script>
+{% endblock %}
