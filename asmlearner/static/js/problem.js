@@ -12,7 +12,8 @@ var _wrongMessage = "컴파일은 잘 되었지만, 틀렸대요.",
     _unknownErrorMessage = "사이트에 뭔가 문제가 있나봐요. 관리자에게 문의해보세요!\n만약 관리자분이시라면 <a href=\"http://github.com/Jinmo/AssemblyLearner\">http://github.com/Jinmo/AssemblyLearner</a> 에 이슈를 넣어주세요!";
 
 var $codeArea = $('#codeArea'),
-    $errorArea = $('#errorArea'),
+    $allCodeAreas,
+$errorArea = $('#errorArea'),
     $codeButtonLoader = $('#codeButtonLoader'),
     $codeButton = $('#codeButton'),
     $outputArea = $('#outputArea'),
@@ -28,6 +29,8 @@ var editor = CodeMirror.fromTextArea($codeArea[0], {
     tabSize: 2
 });
 
+$allCodeAreas = $('#codeArea, .CodeMirror');
+
 var usingSolvedModal = false;
 
 function solvedModal() {
@@ -36,11 +39,11 @@ function solvedModal() {
         .modal('show');
     } else {
         $errorArea
-            .stop()
-            .hide()
-            .attr('class', 'ui positive message')
-            .text('정답입니다!')
-            .fadeIn('fast');
+        .stop()
+        .hide()
+        .attr('class', 'ui positive message')
+        .text('정답입니다!')
+        .fadeIn('fast');
     }
 };
 
@@ -136,7 +139,7 @@ function checkStatus(id, callback) {
                 solvedModal(); clearInterval(timerVar);
             } else if (response.status == 'WRONG' || response.status == 'FAIL')  {
                 fail(response.status); clearInterval(timerVar);
-            } 
+            }
             else { return; }
             doneLoading();
 
@@ -162,9 +165,11 @@ editor.setOption('extraKeys', {
 
 // outputArea draggable
 
-function resizer(target) {
-    target.className = target.className + ' resizable';
+function resizer(target, options) {
+    var options = options || {};
     var resizer = document.createElement('div');
+
+    target.className = target.className + ' resizable';
     resizer.className = 'resizer';
     resizer.style.cssText = 'width: 100%; height: 3px; background: #555; border: 0px solid #222; border-width: 1px 0 1px 0; position:absolute; left: 0; top: -2px; cursor: s-resize; box-sizing: border-box;';
     target.appendChild(resizer);
@@ -182,7 +187,12 @@ function resizer(target) {
     }
 
     function doDrag(e) {
-        target.style.height = (startHeight - e.clientY + startY) + 'px';
+        var newHeight = (startHeight - e.clientY + startY);
+        target.style.height = newHeight + 'px';
+
+        if(options.resize) {
+            options.resize(newHeight);
+        }
     }
 
     function stopDrag(e) {
@@ -195,4 +205,8 @@ function resizer(target) {
     }
 }
 
-resizer($outputArea[0]);
+resizer($outputArea[0], {
+    resize: function(newHeight) {
+        $allCodeAreas.css('bottom', newHeight);
+    }
+});
