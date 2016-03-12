@@ -37,7 +37,7 @@ syscallDesc syscallDescs[] = {
 int pid = -1;
 
 void line() {
-//  puts("-----------------------------\n");
+    puts("");
 }
 
 void dump_regs(struct user_regs_struct *_user) {
@@ -218,6 +218,9 @@ int main(int argc, char **argv) {
                                     case __NR_setreuid:
                                     case __NR_setregid:
                                     case __NR_futex:
+                                        pass = true;
+                                        break;
+                                    case __NR_brk:
                                         pass = true;
                                         break;
                                     default:
