@@ -39,7 +39,7 @@ $ pip install -r requirements.txt
 - 답 정규식 (Answer)
 해답을 적으면 됩니다.
 
-### suffix.txt 관련
+### suffix 관련
 보통 문제 만들 때 검증 코드를 넣을 때가 있잖아요?
 그럴 때는 예제 코드에다가 _start가 아닌 다른 함수를 정의하게 한 다음 _start에서 그 함수를 호출해서 결과를 비교하는 방식으로 짤 수 있어요.
 
