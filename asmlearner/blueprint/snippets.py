@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, g
 from asmlearner.middleware import *
 from asmlearner.library.pagination import Pagination
+from asmlearner.library.snippets import save_snippet
 
 import os
 import codecs, binascii
@@ -32,17 +33,6 @@ def snippet_form(snippet_id=None):
         snippet = None
 
     return render_template('snippet_form.html', title='Snippet edit', snippet=snippet)
-
-def save_snippet(owner, filename, code):
-    owner_encoded = binascii.hexlify( bytes(owner, 'utf-8') ).decode('utf-8')
-    snippet_dir = 'data/snippets/' + owner_encoded
-    snippet_path = os.path.join(snippet_dir, filename)
-
-    if os.path.isdir(snippet_dir) == False:
-        os.makedirs(snippet_dir)
-    with open(snippet_path, 'wb') as f:
-        f.write(bytes(code, 'utf-8'))
-    return
 
 @snippets.route('/snippet/', methods=['POST'])
 @snippets.route('/snippet/<int:snippet_id>', methods=['POST'])

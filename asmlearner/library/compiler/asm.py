@@ -2,6 +2,7 @@ import os, subprocess, re
 from tempfile import NamedTemporaryFile
 from asmlearner import config
 from asmlearner.library.database.sqlite import DB
+from asmlearner.library.snippets import save_snippet
 import io
 import binascii
 
@@ -12,19 +13,22 @@ def compileProblem(problem, solved):
 
     snippet_dir = os.path.join( 'data/snippets', binascii.hexlify( bytes(solved['owner'], 'utf-8') ).decode('utf-8') )
 
-    code = solved['answer'] + \
-        u"\n.globl __NoTraceHere__\nnop\n__NoTraceHere__:" + \
-        problem['suffix']
+    code = solved['answer']
 
-    answerFile = NamedTemporaryFile(mode= 'w', prefix='asm_tmp_',
-                    suffix='.s', delete=False)
-    answerFile.write(code)
+    suffix = problem['suffix']
+    suffix = bytes(suffix.encode('utf-8'))
 
-    answerFile.close()
+    answerFile = save_snippet(solved['owner'], '_' + str(problem['id']) + '.s', code)
+
+    suffixFile = open(os.path.join( 'data/suffixes', '_' + str(solved['problem']) + '.s'), 'wb')
+    suffixFile.write(suffix)
+
+    suffixFile.close()
     execFileName = answerFile.name[0:-2]
 
     p = subprocess.Popen((config.CC_PATH,
         answerFile.name,
+        suffixFile.name,
         '-o', execFileName,
         '-I', config.INCLUDE_PATH,
         '-I', snippet_dir,
@@ -40,8 +44,6 @@ def compileProblem(problem, solved):
         db.commit()
 
 
-    os.unlink(answerFile.name)
-
     if code == 0:
         runBinary(problem, solved, execFileName)
 
@@ -56,12 +58,12 @@ def runBinary(problem, solved, execFileName):
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     print(tracerArgv)
     code = p.wait()
-    err = p.stdout.read()
+    dump_out = p.stdout.read()
 
     db = DB(config.DATABASE)
     if code != 0:
         db.execute('UPDATE solved SET status=?, errmsg=? where id=?',
-        ('FAIL', err, solved['id']))
+        ('FAIL', dump_out, solved['id']))
         db.commit()
     else:
         inputFileRead = open(inputFilePath, 'rb')
@@ -74,6 +76,7 @@ def runBinary(problem, solved, execFileName):
             db.execute('UPDATE solved SET status=?, errmsg=? where id=?',
                 ('WRONG', err, solved['id']))
         else:
+            out = out + b'\n\n$ objdump -d [binary_file]\n' + dump_out
             print(out)
             m = re.findall(problem['answer_regex'].encode(), out)
             print(len(m))

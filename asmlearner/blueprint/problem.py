@@ -1,16 +1,19 @@
 #coding:utf8
 
-from flask import Blueprint, render_template, abort, g, session, redirect, jsonify
+from flask import Blueprint, render_template, abort, g, session, redirect, jsonify, Markup
 from jinja2 import TemplateNotFound
 from asmlearner.middleware import *
 from hashlib import sha1
 from asmlearner.library.pagination import Pagination
-from asmlearner.library.compiler.asm import compileProblem
-from redis import Redis
-from rq import Queue
+from asmlearner.library.markdown import markdown
+from asmlearner.library.jobqueue import Queue
 
-q = Queue(connection=Redis())
+import os
+import string
+import binascii
+
 problem = Blueprint('prob', __name__)
+q = Queue()
 
 @problem.route('/problems')
 @login_required
@@ -20,8 +23,8 @@ def problem_list():
     user_id = session['user']['id']
 
     problem_count = g.db.query('SELECT count(*) as count FROM problem', isSingle=True)['count']
-    problems = g.db.query('SELECT p.id,p.name,p.category FROM problem as p limit ?,?', ((page-1)*div, div))
-    solved = g.db.query('SELECT s.problem FROM solved as s WHERE owner=? AND status="CORRECT"', (user_id, ))
+    problems = g.db.query('SELECT p.id,p.name,p.category FROM problem as p order by p.category desc, p.name asc limit ?,?', ((page-1)*div, div))
+    solved = g.db.query('SELECT DISTINCT s.problem FROM solved as s WHERE owner=? AND status="CORRECT"', (user_id, ))
 
     problems_map = {}
 
@@ -29,7 +32,9 @@ def problem_list():
         problems_map[problem['id']] = problem
 
     for item in solved:
-        problems_map[item['problem']]['solved'] = True
+        if item['problem'] in problems_map:
+            # TODO: needs garbage collection, then
+            problems_map[item['problem']]['solved'] = True
 
     pagination = Pagination(page, div, problem_count)
     return render_template('problems.html', title='Problems', pagination=pagination, problems=problems)
@@ -38,6 +43,18 @@ def problem_list():
 @login_required
 def problem_(prob_id):
     problem = g.db.query('SELECT p.id,p.name,p.category,p.answer_regex,p.instruction,p.suffix,p.example,p.category,p.status FROM problem AS p WHERE id=?', (prob_id,), True)
+
+    user_id = session['user']['id']
+    snippet_dir = os.path.join( 'data/snippets', binascii.hexlify( bytes(user_id, 'utf-8') ).decode('utf-8') )
+    saved_code_path = os.path.join(snippet_dir, '_' + str(prob_id) + '.s')
+
+    if os.path.isfile(saved_code_path):
+        with open(saved_code_path, 'rb') as saved_code:
+            problem['saved_code'] = saved_code.read().decode('utf-8')
+    else:
+        problem['saved_code'] = ''
+
+    problem['instruction'] = Markup(markdown(problem['instruction']))
 
     return render_template('problem.html', title=':: ' + problem['name'], problem=problem)
 
@@ -55,7 +72,7 @@ def problem_run(prob_id):
         g.db.commit()
 
         solved = g.db.query('SELECT * FROM solved where id = ?', (solved_id,), isSingle=True)
-        q.enqueue(compileProblem, prob, solved)
+        q.enqueue('asmlearner.library.compiler.asm.compileProblem', (prob, solved))
         return jsonify(status='success', sid=solved_id)
     except Exception as e:
         print(e)
@@ -72,6 +89,13 @@ def answer_status(as_id):
 
     errmsg = ans['errmsg']
     if type(errmsg) == bytes:
-        errmsg = errmsg.decode('utf8')
+        errmsg_s = ''
+        for b in errmsg:
+            if chr(b) not in string.printable:
+                b = (chr(b).encode('unicode-escape').decode('utf8'))
+            else:
+                b = chr(b)
+            errmsg_s += b
+        errmsg = errmsg_s
 
     return jsonify(status=ans['status'], errmsg=errmsg)

@@ -136,7 +136,10 @@ CodeMirror.defineMode("gas", function(_config, parserConfig) {
     ".warning" : "builtin",
     ".weak" : "builtin",
     ".weakref" : "builtin",
-    ".word" : "builtin"
+    ".word" : "builtin",
+    ".globl" : "builtin",
+    ".intel_syntax" : "builtin",
+    ".att_syntax" : "builtin"
   };
 
   var registers = {};

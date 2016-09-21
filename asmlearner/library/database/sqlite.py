@@ -1,5 +1,6 @@
 import sqlite3
 from os.path import isfile
+import time
 import codecs
 
 class DB:
@@ -10,10 +11,15 @@ class DB:
         self._db = db
 
     def query(self, query, args=None, isSingle=False):
-        if args:
-            cur = self._db.execute(query, args)
-        else:
-            cur = self._db.execute(query)
+        while True:
+            try:
+                if args:
+                    cur = self._db.execute(query, args)
+                else:
+                    cur = self._db.execute(query)
+                break
+            except:
+                time.sleep(0.01)
 
         rv = cur.fetchone() if isSingle == True else cur.fetchall()
 
@@ -29,7 +35,13 @@ class DB:
         self._db.rollback()
 
     def commit(self):
-        self._db.commit()
+        while True:
+            try:
+                self._db.commit()
+                break
+            except:
+                time.sleep(0.01)
+                continue
 
     def executescript(self, path):
         if path == None or isfile(path) == False:
@@ -43,4 +55,7 @@ class DB:
         self._db.commit()
 
     def __del__(self):
-        self._db.close()
+        try:
+            self._db.close()
+        except:
+            pass
