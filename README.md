@@ -27,7 +27,7 @@ $ pip install -r requirements.txt
 - 문제 이름 (Name)
 문제로 표시될 이름이에요.
 - 분류 (Category)
-분류는 입력하는대로 추가되요.
+분류는 입력하는대로 추가돼요.
 - 문제 설명 (Instruction)
 문제에 대한 내용을 채워넣으시면 됩니다.
 - 사용자가 작성한 코드 뒤에 추가될 코드 (Suffix)
