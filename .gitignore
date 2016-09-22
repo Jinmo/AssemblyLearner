@@ -1,3 +1,6 @@
+# Ignore IDE file
+.idea/
+
 db.db
 output/*
 
