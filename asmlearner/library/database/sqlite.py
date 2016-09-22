@@ -2,11 +2,12 @@ import sqlite3
 from os.path import isfile
 import codecs
 
+
 class DB:
     def __init__(self, dbPath='db.db'):
         db = sqlite3.connect(dbPath)
         db.row_factory = lambda cursor, row: dict((cursor.description[idx][0], value)
-                for idx, value in enumerate(row))
+                                                  for idx, value in enumerate(row))
         self._db = db
 
     def query(self, query, args=None, isSingle=False):
