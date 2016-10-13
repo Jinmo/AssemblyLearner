@@ -8,6 +8,11 @@ $ sudo apt-get install python3-dev # 필요에 따라 redis-server 설치
 $ pip install -r requirements.txt
 ```
 
+Docker
+```
+docker run -d -p 3333:<외부에서 연결하기를 원하는 포트> bunseokbot/jinmo-asm-learner:latest
+```
+
 ## Introduction
 이 소스코드는 어셈블리어를 배우는 사이트에 대한 소스코드입니다.
 문제도 추가할 수 있어요!
