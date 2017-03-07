@@ -8,11 +8,6 @@ $ sudo apt-get install python3-dev # 필요에 따라 redis-server 설치
 $ pip install -r requirements.txt
 ```
 
-Docker
-```
-docker run -d -p 3333:<외부에서 연결하기를 원하는 포트> bunseokbot/jinmo-asm-learner:latest
-```
-
 ## Introduction
 이 소스코드는 어셈블리어를 배우는 사이트에 대한 소스코드입니다.
 문제도 추가할 수 있어요!
@@ -32,7 +27,7 @@ docker run -d -p 3333:<외부에서 연결하기를 원하는 포트> bunseokbot
 - 문제 이름 (Name)
 문제로 표시될 이름이에요.
 - 분류 (Category)
-분류는 입력하는대로 추가돼요.
+분류는 입력하는대로 추가되요.
 - 문제 설명 (Instruction)
 문제에 대한 내용을 채워넣으시면 됩니다.
 - 사용자가 작성한 코드 뒤에 추가될 코드 (Suffix)
@@ -44,7 +39,7 @@ docker run -d -p 3333:<외부에서 연결하기를 원하는 포트> bunseokbot
 - 답 정규식 (Answer)
 해답을 적으면 됩니다.
 
-### suffix 관련
+### suffix.txt 관련
 보통 문제 만들 때 검증 코드를 넣을 때가 있잖아요?
 그럴 때는 예제 코드에다가 _start가 아닌 다른 함수를 정의하게 한 다음 _start에서 그 함수를 호출해서 결과를 비교하는 방식으로 짤 수 있어요.
 

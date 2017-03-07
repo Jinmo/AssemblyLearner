@@ -255,6 +255,12 @@ int main(int argc, char **argv) {
                         kill(pid, 9);
                         soft_exit = 1;
                         break;
+                    case SIGFPE:
+                        puts("Floating point exception");
+                        dump_regs(&_user);
+                        kill(pid, 9);
+                        soft_exit = 1;
+                        break;
                     default:
                         printf("Unsupported signal: %d\n", WSTOPSIG(status));
                         kill(pid, 9);

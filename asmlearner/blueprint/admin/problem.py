@@ -19,8 +19,7 @@ def problems():
     div = 20
 
     problem_count = g.db.query('SELECT count(*) as count FROM problem', isSingle=True)['count']
-    problems = g.db.query('SELECT p.id,p.name,p.status FROM problem as p group by p.name limit ?,?',
-                          ((page - 1) * div, div))
+    problems = g.db.query('SELECT p.id,p.name,p.status FROM problem as p order by p.category desc, p.name asc limit ?,?', ((page-1)*div, div))
 
     pagination = Pagination(page, div, problem_count)
 
@@ -67,7 +66,7 @@ def add_problem(prob_id=None):
                                    (name, instr, answ, suffix, example, category, 'REG', input_, hint))
 
         g.db.commit()
-        return redirect('/admin/problems')
+        return redirect('/admin/problem/' + str(prob_id))
     except Exception as e:
         print(e)
         g.db.rollback()

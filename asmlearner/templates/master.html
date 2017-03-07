@@ -2,20 +2,42 @@
 <div class="ui fixed inverted menu">
   <div class="ui fixed container">
     <a href="/" class="header item">
-      AssemblyLearner
+      AssemblyLearner (공사중)
     </a>
-    <a href="/problems" class="item">Problems</a>
-    <a href="/snippets" class="item">Snippets</a>
+    <a href="/problems" class="item">문제</a>
+    <a href="/snippets" class="item">코드 조각</a>
+    <a href="/histories" class="item">내 제출현황</a>
     <div class="right menu">
-      <a class="item" href="/logout">Logout</a>
+      <a class="item" href="/logout">로그아웃</a>
       {% if is_admin() %}
-      <a class="item" href="/admin">Admin</a>
+      <a class="item" href="/admin">사이트 관리</a>
       {% endif %}
     </div>
 
   </div>
 </div>
 {%- endmacro %}
+
+{% macro render_pagination(pagination) %}
+<div class=pagination>
+  {%- for page in pagination.iter_pages() %}
+    {% if page %}
+      {% if page != pagination.page %}
+        <a href="{{ url_for_other_page(page) }}">{{ page }}</a>
+      {% else %}
+        <strong>{{ page }}</strong>
+      {% endif %}
+    {% else %}
+      <span class=ellipsis>…</span>
+    {% endif %}
+  {%- endfor %}
+  {% if pagination.has_next %}
+  <a href="{{ url_for_other_page(pagination.page + 1) }}">Next &raquo;</a>
+  {% endif %}
+</div>
+{% endmacro %}
+
+
 
 <!DOCTYPE html>
 <html>
@@ -33,8 +55,16 @@
         padding-bottom: 15px;
       }
       textarea.code, .CodeMirror, pre.code {
-        font-family: Consolas, Lucida Console, NanumGothic, monospace !important;
-        font-size: 0.9em;
+        font-family: Consolas, Menlo, Lucida Console, NanumGothic, monospace !important;
+        font-size: 1.0em;
+        line-height: 180%;
+      }
+      .pagination {
+        text-align: center;
+        padding: 15px 0px 15px 0px;
+      }
+      .pagination a {
+        padding: 0px 15px 0px 15px;
       }
     </style>
     {% block head %}{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "master.html" %}
+
+
+{% block head %}
+<style type="text/css">
+  .history { margin-bottom: 10px; line-height: 100%; }
+  .history span.label {
+    float: right;
+  }
+</style>
+
+{% endblock %}
+
+{% block content %}
+{{ nav() }}
+
+<div class="ui main text container">
+  <table class="ui striped celled table">
+    <thead>
+      <tr>
+        <th>문제 번호, 문제 이름, 결과</th>
+      </tr>
+    </thead>
+    {%- for item in histories -%}
+    <tr class="history">
+      <td>
+        <a href="/history/{{ item.id }}">#{{ item.id }} {{ item.probname }}</a>
+        <span class="ui label horizontal {{ 'green' if item.status == 'CORRECT' else 'red' if item.status == 'WRONG' else 'gray' }}">{{ {'CORRECT': 'O', 'WRONG': 'X', 'FAIL': '???'}[item.status] }}</span>
+      </td>
+    </tr>
+    {%- else -%}
+    <p class="empty">
+      아직 문제를 풀어보지 않았습니다.
+    </p>
+    {%- endfor -%}
+  </table>
+  {{ render_pagination(pagination) }}
+</div>
+{% endblock %}

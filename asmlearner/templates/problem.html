@@ -4,6 +4,7 @@
 {% block head %}
 <link href="/css/codemirror.css" rel="stylesheet" />
 <link href="/css/theme/dracula.css" rel="stylesheet" />
+<link href="/css/theme/scroll_simple.css" rel="stylesheet" />
 <style type="text/css">
     h2 {
         font-weight: normal;
@@ -22,11 +23,36 @@
     .main.ui > .column {
         box-sizing: border-box;
     }
-    p.desc {
-        white-space: pre-line;
-        line-height: 180%;
+    div.desc {
         padding: 10px;
+        padding-top: 20px;
     }
+    div.desc * {
+        font-size: 18px;
+        line-height: 180%;
+    }
+
+    div.desc h1 { font-size: 30px; }
+    div.desc h2 { font-size: 26px; }
+
+    div.desc code {
+        font-family: Consolas;
+        background: #eee;
+        padding: 5px;
+    }
+
+    div.desc pre>code {
+        background: #282a36;
+        color: #eee;
+        display: block;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    div.desc img {
+        max-width: 100%;
+    }
+
     .codeAreaContainer {
         background-color: #282a36 !important;
         padding: 0px !important;
@@ -38,8 +64,17 @@
         left: 0;
         right: 0;
         top: 0px;
-        bottom: 200px;
+        bottom: 250px;
         position: absolute;
+    }
+
+    textarea#codeArea {
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        background: #282a36 !important;
+        border: none;
+        padding: 20px;
     }
 
     .instructionContainer {
@@ -48,6 +83,7 @@
         position: absolute;
         height: 100%;
         overflow-y: auto;
+        padding: 3rem !important;
     }
 
     .instructionContainer .instruction {
@@ -69,13 +105,14 @@
     }
 
     #outputArea {
-        height: 200px;
+        height: 250px;
         z-index: 4;
         background: #222;
         box-sizing: border-box;
         position: absolute;
         bottom: 0;
         width: 100%;
+        overflow: hidden;
     }
 
     #outputArea .outputAreaTop {
@@ -90,14 +127,15 @@
       padding-left: 1rem;
     }
 
-    #outputArea pre {
+    #outputArea pre#outputContent {
         margin: 0px;
         border-radius: 0px;
         padding: 1rem;
         box-sizing: border-box;
         background: #222;
         color: #ccc;
-        overflow: auto;
+        overflow-y: auto;
+        white-space: pre-wrap;
     }
 
     .CodeMirror-lines {
@@ -118,6 +156,16 @@
     }
     .CodeMirror-focused div.CodeMirror-selected {
       background-color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .codeMenu {
+      position: relative;
+      z-index: 10;
+      right: 8px;
+    }
+
+    .codeMenu button {
+      border-top-right-radius: 0px !important;
     }
 </style>
 {% endblock %}
@@ -148,7 +196,7 @@
           </button>
           <div class="ui small inline loader" id="codeButtonLoader"></div>
       </div>
-      <p class="desc">{{ problem['instruction'] }}</p>
+      <div class="desc">{{ problem['instruction'] }}</div>
     </div>
   </div>
   <div class="ui eight wide column codeAreaContainer">
@@ -156,7 +204,13 @@
       <p id="content">Error message here</p>
       <i class="icon close large" onclick="closeError();"></i>
     </div>
-    <textarea id="codeArea" class="code">{{ problem['example'] }}</textarea>
+    <div class="codeMenu">
+      <button class="ui label green top right attached" onclick="resetCode();">
+        <i class="ui icon refresh"></i>
+        원래 코드 보기
+      </button>
+    </div>
+    <textarea id="codeArea" class="code">{%- if problem['saved_code'] != '' -%}{{ problem['saved_code'] }}{%- else -%}{{ problem['example'] }}{%- endif -%}</textarea>
     <div id="outputArea" class="ui inverted">
       <div class="ui inverted content outputAreaTop">
         <div class="header outputTitle">
@@ -197,10 +251,12 @@
 </div>
 <script type="text/javascript">
   var problem = {
-    id: {{ problem.id | tojson | safe }}
+    id: {{ problem.id | tojson | safe }},
+    example: {{ problem.example | tojson | safe }}
   };
 </script>
 <script type="text/javascript" src="/js/codemirror.js"></script>
+<script type="text/javascript" src="/js/codemirror_addon_simplescrollbars.js"></script>
 <script type="text/javascript" src="/js/mode/gas/gas.js"></script>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>

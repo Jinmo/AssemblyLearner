@@ -1,7 +1,8 @@
 from os.path import join, dirname, realpath
+from time import time
 
 from flask import Flask, g, redirect, session, url_for, request
-from asmlearner.blueprint import user, problem, admin, snippets
+from asmlearner.blueprint import user, problem, admin, snippets, history
 from asmlearner.library.database.sqlite import DB
 import asmlearner.config
 
@@ -11,7 +12,10 @@ app.register_blueprint(user)
 app.register_blueprint(problem)
 app.register_blueprint(snippets)
 app.register_blueprint(admin)
+app.register_blueprint(history)
 
+with app.app_context():
+    g.updated_time = time()
 
 @app.before_request
 def before_req():
@@ -32,7 +36,7 @@ def is_admin():
 
 def url_for_other_page(page):
     args = request.view_args.copy()
-    args['page'] = page
+    args['p'] = page
     return url_for(request.endpoint, **args)
 
 

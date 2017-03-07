@@ -8,7 +8,8 @@ user = Blueprint('user', __name__)
 
 @user.route('/login')
 def login():
-    return render_template('login.html', title='AL User Login', action='/login', submit='Login')
+    return render_template('login.html', title='AL User Login', action='/login', submit='Login', next_link='/join',
+            next='Create User')
 
 
 @user.route('/login', methods=['POST'])
@@ -41,7 +42,8 @@ def logout():
 
 @user.route('/join')
 def join():
-    return render_template('login.html', title="AL User Create", action="/join", submit='Join')
+    return render_template('login.html', title="AL User Create", action="/join", submit='Join', next_link='/login',
+            next='Login As User')
 
 
 @user.route('/join', methods=['POST'])

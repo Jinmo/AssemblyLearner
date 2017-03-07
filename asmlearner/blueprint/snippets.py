@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, g
 from asmlearner.middleware import *
 from asmlearner.library.pagination import Pagination
+from asmlearner.library.snippets import save_snippet
 
 import os
 import codecs, binascii
