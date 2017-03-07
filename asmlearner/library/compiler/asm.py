@@ -6,12 +6,13 @@ from asmlearner.library.snippets import save_snippet
 import io
 import binascii
 
+
 def compileProblem(problem, solved):
     db = DB(config.DATABASE)
     db.execute('UPDATE solved SET status=? where id=?', ('COMPILING', solved['id']))
     db.commit()
 
-    snippet_dir = os.path.join( 'data/snippets', binascii.hexlify( bytes(solved['owner'], 'utf-8') ).decode('utf-8') )
+    snippet_dir = os.path.join('data/snippets', binascii.hexlify(bytes(solved['owner'], 'utf-8')).decode('utf-8'))
 
     code = solved['answer']
 
@@ -40,12 +41,14 @@ def compileProblem(problem, solved):
     if code != 0:
         print(err)
         db.execute('UPDATE solved SET status=?, errmsg=? where id=?',
-            ('FAIL', err, solved['id']))
+                   ('FAIL', err, solved['id']))
         db.commit()
 
+    os.unlink(answerFile.name)
 
     if code == 0:
         runBinary(problem, solved, execFileName)
+
 
 def runBinary(problem, solved, execFileName):
     inputFile = NamedTemporaryFile(mode='w', prefix='asm_input_tmp_', delete=False)
@@ -55,7 +58,7 @@ def runBinary(problem, solved, execFileName):
     print(open(inputFilePath, 'rb').read())
     tracerArgv = (config.TRACER_PATH, execFileName, inputFilePath, '/dev/fd/1')
     p = subprocess.Popen((config.OBJDUMP_PATH, '-M', 'intel', '-d', execFileName),
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     print(tracerArgv)
     code = p.wait()
     dump_out = p.stdout.read()
@@ -74,14 +77,14 @@ def runBinary(problem, solved, execFileName):
 
         if code != 0:
             db.execute('UPDATE solved SET status=?, errmsg=? where id=?',
-                ('WRONG', err, solved['id']))
+                       ('WRONG', err, solved['id']))
         else:
             out = out + b'\n\n$ objdump -d [binary_file]\n' + dump_out
             print(out)
             m = re.findall(problem['answer_regex'].encode(), out)
             print(len(m))
             db.execute('UPDATE solved SET status=?, errmsg=? where id=?',
-                ('CORRECT' if len(m) > 0 else 'WRONG', out, solved['id']))
+                       ('CORRECT' if len(m) > 0 else 'WRONG', out, solved['id']))
     db.commit()
     os.unlink(execFileName)
     os.unlink(inputFilePath)

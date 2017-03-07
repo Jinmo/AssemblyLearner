@@ -3,11 +3,12 @@ from os.path import isfile
 import time
 import codecs
 
+
 class DB:
     def __init__(self, dbPath='db.db'):
         db = sqlite3.connect(dbPath)
         db.row_factory = lambda cursor, row: dict((cursor.description[idx][0], value)
-                for idx, value in enumerate(row))
+                                                  for idx, value in enumerate(row))
         self._db = db
 
     def query(self, query, args=None, isSingle=False):
@@ -21,7 +22,7 @@ class DB:
             except:
                 time.sleep(0.01)
 
-        rv = cur.fetchone() if isSingle == True else cur.fetchall()
+        rv = cur.fetchone() if isSingle is True else cur.fetchall()
 
         return rv
 
@@ -44,7 +45,7 @@ class DB:
                 continue
 
     def executescript(self, path):
-        if path == None or isfile(path) == False:
+        if path is None or isfile(path) is False:
             raise Exception('File Not Found')
 
         f = codecs.open(path, 'r', 'utf8')

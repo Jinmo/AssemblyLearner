@@ -6,7 +6,6 @@ from asmlearner.blueprint import user, problem, admin, snippets, history
 from asmlearner.library.database.sqlite import DB
 import asmlearner.config
 
-
 app = Flask(__name__, static_url_path='')
 
 app.register_blueprint(user)
@@ -30,13 +29,16 @@ def index():
     else:
         return redirect('/login')
 
+
 def is_admin():
     return ('user' in session) and (session['user']['role'] == 'admin')
+
 
 def url_for_other_page(page):
     args = request.view_args.copy()
     args['p'] = page
     return url_for(request.endpoint, **args)
+
 
 app.jinja_env.globals.update(url_for_other_page=url_for_other_page)
 app.jinja_env.globals.update(is_admin=is_admin)

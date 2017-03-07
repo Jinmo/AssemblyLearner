@@ -5,11 +5,11 @@ from asmlearner.library.pagination import Pagination
 import json
 from . import admin
 
+
 @admin.route('/')
 @is_admin
 def index():
     return redirect('/admin/problems')
-
 
 
 @admin.route('/problems')
@@ -25,17 +25,20 @@ def problems():
 
     return render_template('admin/problems.html', now='problem', pagination=pagination, problems=problems)
 
+
 @admin.route('/problem')
 @admin.route('/problem/<int:prob_id>')
 @is_admin
 def problem_form(prob_id=None):
-    prob=None
+    prob = None
     if (prob_id):
         prob = g.db.query('SELECT * FROM problem where id=?', (prob_id,), True)
 
-    categories = json.dumps(list(map(lambda x: x['category'] ,g.db.query('SELECT category FROM problem group by category'))))
+    categories = json.dumps(
+        list(map(lambda x: x['category'], g.db.query('SELECT category FROM problem group by category'))))
 
     return render_template('admin/problem_form.html', now='problem', problem=prob, categories=categories)
+
 
 @admin.route('/problem', methods=['POST'])
 @admin.route('/problem/<int:prob_id>', methods=['POST'])
@@ -52,14 +55,15 @@ def add_problem(prob_id=None):
 
     try:
         if prob_id:
-            g.db.execute('UPDATE problem SET name=?, instruction=?, answer_regex=?, suffix=?, example=?, category=?, input=?, hint=? WHERE id=?', (name, instr, answ, suffix, example, category, input_, hint, prob_id))
+            g.db.execute(
+                'UPDATE problem SET name=?, instruction=?, answer_regex=?, suffix=?, example=?, category=?, input=?, hint=? WHERE id=?',
+                (name, instr, answ, suffix, example, category, input_, hint, prob_id))
         else:
             prob_id = g.db.execute('INSERT INTO problem (' \
-                'name, instruction, answer_regex, suffix, ' \
-                'example, category, status, input, hint) VALUES ' \
-            '(?, ?, ?, ?, ?, ?, ?, ?, ?)', (name, instr, answ, suffix, example, category, 'REG', input_, hint))
-
-
+                                   'name, instruction, answer_regex, suffix, ' \
+                                   'example, category, status, input, hint) VALUES ' \
+                                   '(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                                   (name, instr, answ, suffix, example, category, 'REG', input_, hint))
 
         g.db.commit()
         return redirect('/admin/problem/' + str(prob_id))
@@ -73,11 +77,12 @@ def add_problem(prob_id=None):
             </script>
         '''
 
+
 @admin.route('/problem/<int:prob_id>/delete')
 @is_admin
 def delete_problem(prob_id):
     try:
-        g.db.execute('DELETE FROM problem WHERE id=?', (prob_id, ))
+        g.db.execute('DELETE FROM problem WHERE id=?', (prob_id,))
         g.db.commit()
         return redirect('/admin/problems')
     except Exception as e:
