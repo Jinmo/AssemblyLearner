@@ -1,18 +1,18 @@
+from asmlearner.config import config
+
 import os
-import binascii
+
 
 def save_snippet(owner, filename, code):
-    owner_encoded = binascii.hexlify( bytes(owner, 'utf-8') ).decode('utf-8')
-    snippet_dir = 'data/snippets/' + owner_encoded
+    owner_encoded = str(owner.id)
+    snippet_dir = os.path.join(config.SNIPPET_PATH, owner_encoded)
     snippet_path = os.path.join(snippet_dir, filename)
 
-    if os.path.isdir(snippet_dir) == False:
+    if not os.path.isdir(snippet_dir):
         os.makedirs(snippet_dir)
     f = open(snippet_path, 'wb')
-    f.write(bytes(code, 'utf-8'))
+    f.write(code)
 
     f.close()
 
     return f
-
-

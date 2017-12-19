@@ -1,5 +1,12 @@
 Flask==0.10.1
 eventlet==0.18.4
 markupsafe==0.23
-rq==0.5.6
 markdown==2.6.6
+flask_sqlalchemy
+sqlalchemy
+flask-wtf
+flask-login
+wtforms
+celery
+boto
+sqlalchemy_utils

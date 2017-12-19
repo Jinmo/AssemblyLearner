@@ -1,19 +1,16 @@
 from functools import wraps
-from flask import request, session, redirect
+from flask import session, redirect
+from flask_login import login_required, current_user
 
-def login_required(f):
+login_required = login_required
+
+
+def admin_required(f):
     @wraps(f)
     def func(*args, **kwargs):
-        if 'user' in session:
-            return f(*args,**kwargs)
-        return redirect('/login')    
-    return func
-
-def is_admin(f):
-    @wraps(f)
-    def func(*args, **kwargs):
-        if 'user' in session and session['user']['role'] == 'admin':
+        if current_user.is_authenticated and current_user.role == 'admin':
             return f(*args, **kwargs)
 
         return redirect('/problems')
-    return func    
+
+    return func

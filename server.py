@@ -1,14 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-from asmlearner import app, config
-from asmlearner.library.database.sqlite import DB
-
-from os.path import join
+from asmlearner import app, create_db
 
 if __name__ == '__main__':
-    DB(config.DATABASE).executescript(join(config.PROJECT_DIR, 'init.sql'))
+    create_db()
 
-    app.secret_key = config.SECRET_KEY
-
-    app.debug = True
-    app.run(host='0.0.0.0', port=3333)
+    app.run(host='0.0.0.0', port=8080, debug=True)

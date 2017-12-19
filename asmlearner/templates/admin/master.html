@@ -1,54 +1,60 @@
 {% macro render_pagination(pagination) %}
-<div class=pagination>
-  {%- for page in pagination.iter_pages() %}
-    {% if page %}
-      {% if page != pagination.page %}
-        <a href="{{ url_for_other_page(page) }}">{{ page }}</a>
-      {% else %}
-        <strong>{{ page }}</strong>
-      {% endif %}
-    {% else %}
-      <span class=ellipsis>…</span>
-    {% endif %}
-  {%- endfor %}
-  {% if pagination.has_next %}
-    <a href="{{ url_for_other_page(pagination.page + 1)}}">Next &raquo;</a>
-  {% endif %}
-</div>
+    <div class=pagination>
+        {%- for page in pagination.iter_pages() %}
+            {% if page %}
+                {% if page != pagination.page %}
+                    <a href="{{ url_for_other_page(page) }}">{{ page }}</a>
+                {% else %}
+                    <strong>{{ page }}</strong>
+                {% endif %}
+            {% else %}
+                <span class=ellipsis>…</span>
+            {% endif %}
+        {%- endfor %}
+        {% if pagination.has_next %}
+            <a href="{{ url_for_other_page(pagination.page + 1) }}">Next &raquo;</a>
+        {% endif %}
+    </div>
 {% endmacro %}
 
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="/css/semantic.min.css">
+    <link rel="stylesheet" href="/static/css/semantic.min.css">
     <style>
-      body { margin: 2em; height: auto;}
-      .ui.secondary { padding: 0 !important;}
+        body {
+            margin: 2em;
+            height: auto;
+        }
+
+        .ui.secondary {
+            padding: 0 !important;
+        }
     </style>
     {% block head %}{% endblock %}
-  </head>
-  <body>
-    <div class="ui column grid">
-      <div class="ui secondary vertical pointing menu two wide column">
+</head>
+<body>
+<div class="ui column grid">
+    <div class="ui secondary vertical pointing menu two wide column">
         <a class="item" href="/">
-          Return to site
+            Return to site
         </a>
         <a class="{% if now == 'problem' %}active {% endif %}item" href="/admin/problems">
-          Problems
+            Problems
         </a>
         <a class="{% if now == 'user' %}active {% endif %}item" href="/admin/users">
-          User
+            User
         </a>
-      </div>
-      <div class="ui thirteen wide column">
-        {% block content %}{% endblock %}
-      </div>
     </div>
-    <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/semantic.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="/js/script.js"></script>
-  </body>
+    <div class="ui thirteen wide column">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/semantic.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.autocomplete.min.js"></script>
+<script type="text/javascript" src="/static/js/script.js"></script>
+</body>
 </html>

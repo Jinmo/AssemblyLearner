@@ -1,27 +1,27 @@
-from flask import Blueprint, render_template, abort, g, session, redirect
-from jinja2 import TemplateNotFound
-from asmlearner.middleware import *
-from asmlearner.library.pagination import Pagination
 from hashlib import sha1
-import json
+
+from flask import render_template, g, request
+
+from asmlearner.library.pagination import Pagination
+from asmlearner.middleware import *
 from . import admin
+from ...db.models import User
 
 
 @admin.route('/')
-@is_admin
+@admin_required
 def user_index():
     return redirect('/admin/users')
 
 
 @admin.route('/users')
-@is_admin
+@admin_required
 def users():
-    page = int(request.args.get('p')) if 'p' in request.args else 1
+    page = int(request.args.get('p', 1))
     div = 20
 
-    user_count = g.db.query('SELECT count(*) as count FROM user', isSingle=True)['count']
-    users = g.db.query('SELECT u.id, u.password, u.role FROM user as u group by u.id limit ?,?',
-                       ((page - 1) * div, div))
+    user_count = User.query.count()
+    users = User.query.offset((page - 1) * div).limit(div)
 
     pagination = Pagination(page, div, user_count)
 
@@ -30,18 +30,18 @@ def users():
 
 @admin.route('/user')
 @admin.route('/user/<user_id>')
-@is_admin
+@admin_required
 def user_form(user_id=None):
     user = None
     if (user_id):
-        user = g.db.query('SELECT * FROM user where id=?', (user_id,), True)
+        user = User.get(user_id)
 
     return render_template('admin/user_form.html', now='user', user=user)
 
 
 @admin.route('/user', methods=['POST'])
 @admin.route('/user/<user_id>', methods=['POST'])
-@is_admin
+@admin_required
 def add_user(user_id=None):
     id_ = request.form['id']
     password_ = request.form['password']

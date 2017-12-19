@@ -1,12 +1,14 @@
 {% extends 'code_form.html' %}
 
 {% block form_header %}
-<style>
-  .submitButton { display: none; }
-</style>
-<h2 class="ui dividing header">
-  기록 중 #{{snippet['id']}} 번째
-</h2>
+    <style>
+        .submitButton {
+            display: none;
+        }
+    </style>
+    <h2 class="ui dividing header">
+        기록 중 #{{ history['id'] }} 번째
+    </h2>
 {% endblock %}
 
 {% block script_area %}

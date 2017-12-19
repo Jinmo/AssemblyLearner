@@ -1,78 +1,86 @@
-{% macro nav() -%}
-<div class="ui fixed inverted menu">
-  <div class="ui fixed container">
-    <a href="/" class="header item">
-      AssemblyLearner (공사중)
-    </a>
-    <a href="/problems" class="item">문제</a>
-    <a href="/snippets" class="item">코드 조각</a>
-    <a href="/histories" class="item">내 제출현황</a>
-    <div class="right menu">
-      <a class="item" href="/logout">로그아웃</a>
-      {% if is_admin() %}
-      <a class="item" href="/admin">사이트 관리</a>
-      {% endif %}
-    </div>
+{% macro use_recaptcha() -%}
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+{%- endmacro %}
 
-  </div>
-</div>
+{% macro nav() -%}
+    <div class="ui fixed inverted menu">
+        <div class="ui fixed container">
+            <a href="/" class="header item">
+                0e1
+            </a>
+            <a href="/problems" class="item">문제</a>
+            <a href="/snippets" class="item">코드 조각</a>
+            <a href="/histories" class="item">내 제출현황</a>
+            <div class="right menu">
+                <a class="item" href="/logout">로그아웃</a>
+                {% if current_user.role == 'admin' %}
+                    <a class="item" href="/admin">사이트 관리</a>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
 {%- endmacro %}
 
 {% macro render_pagination(pagination) %}
-<div class=pagination>
-  {%- for page in pagination.iter_pages() %}
-    {% if page %}
-      {% if page != pagination.page %}
-        <a href="{{ url_for_other_page(page) }}">{{ page }}</a>
-      {% else %}
-        <strong>{{ page }}</strong>
-      {% endif %}
-    {% else %}
-      <span class=ellipsis>…</span>
-    {% endif %}
-  {%- endfor %}
-  {% if pagination.has_next %}
-  <a href="{{ url_for_other_page(pagination.page + 1) }}">Next &raquo;</a>
-  {% endif %}
-</div>
+    <div class=pagination>
+        {%- for page in pagination.iter_pages() %}
+            {% if page %}
+                {% if page != pagination.page %}
+                    <a href="{{ url_for_other_page(page) }}">{{ page }}</a>
+                {% else %}
+                    <strong>{{ page }}</strong>
+                {% endif %}
+            {% else %}
+                <span class=ellipsis>…</span>
+            {% endif %}
+        {%- endfor %}
+        {% if pagination.has_next %}
+            <a href="{{ url_for_other_page(pagination.page + 1) }}">Next &raquo;</a>
+        {% endif %}
+    </div>
 {% endmacro %}
 
 
 
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="/css/semantic.min.css">
+    <link rel="stylesheet" href="/static/css/semantic.min.css">
     <style>
-      .main.ui {
-        margin-top: 7em;
-      }
-      p.empty {
-        color: #888;
-        padding: 10px;
-        padding-bottom: 15px;
-      }
-      textarea.code, .CodeMirror, pre.code {
-        font-family: Consolas, Menlo, Lucida Console, NanumGothic, monospace !important;
-        font-size: 1.0em;
-        line-height: 180%;
-      }
-      .pagination {
-        text-align: center;
-        padding: 15px 0px 15px 0px;
-      }
-      .pagination a {
-        padding: 0px 15px 0px 15px;
-      }
+        .main.ui {
+            margin-top: 7em;
+        }
+
+        p.empty {
+            color: #888;
+            padding: 10px;
+            padding-bottom: 15px;
+        }
+
+        textarea.code, .CodeMirror, pre.code {
+            font-family: Consolas, Menlo, Lucida Console, NanumGothic, monospace !important;
+            font-size: 1.0em;
+            line-height: 180%;
+        }
+
+        .pagination {
+            text-align: center;
+            padding: 15px 0px 15px 0px;
+        }
+
+        .pagination a {
+            padding: 0px 15px 0px 15px;
+        }
     </style>
     {% block head %}{% endblock %}
-  </head>
-  <body>
-    {% block content %}{% endblock %}
-    <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/semantic.min.js"></script>
-  </body>
+</head>
+<body>
+{% block content %}{% endblock %}
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/semantic.min.js"></script>
+</body>
 </html>
 

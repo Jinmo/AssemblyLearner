@@ -2,264 +2,276 @@
 
 
 {% block head %}
-<link href="/css/codemirror.css" rel="stylesheet" />
-<link href="/css/theme/dracula.css" rel="stylesheet" />
-<link href="/css/theme/scroll_simple.css" rel="stylesheet" />
-<style type="text/css">
-    h2 {
-        font-weight: normal;
-        margin-top: 1em !important;
-    }
-    .main.ui {
-        margin: 0px;
-        padding: 0px !important;
-        top: 40px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        position: absolute;
-        overflow: inherit;
-    }
-    .main.ui > .column {
-        box-sizing: border-box;
-    }
-    div.desc {
-        padding: 10px;
-        padding-top: 20px;
-    }
-    div.desc * {
-        font-size: 18px;
-        line-height: 180%;
-    }
+    <link href="/static/css/codemirror.css" rel="stylesheet"/>
+    <link href="/static/css/theme/dracula.css" rel="stylesheet"/>
+    <link href="/static/css/theme/scroll_simple.css" rel="stylesheet"/>
+    <style type="text/css">
+        h2 {
+            font-weight: normal;
+            margin-top: 1em !important;
+        }
 
-    div.desc h1 { font-size: 30px; }
-    div.desc h2 { font-size: 26px; }
+        .main.ui {
+            margin: 0px;
+            padding: 0px !important;
+            top: 40px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            position: absolute;
+            overflow: inherit;
+        }
 
-    div.desc code {
-        font-family: Consolas;
-        background: #eee;
-        padding: 5px;
-    }
+        .main.ui > .column {
+            box-sizing: border-box;
+        }
 
-    div.desc pre>code {
-        background: #282a36;
-        color: #eee;
-        display: block;
-        padding: 10px;
-        box-sizing: border-box;
-    }
+        div.desc {
+            padding: 10px;
+            padding-top: 20px;
+        }
 
-    div.desc img {
-        max-width: 100%;
-    }
+        div.desc * {
+            font-size: 18px;
+            line-height: 180%;
+        }
 
-    .codeAreaContainer {
-        background-color: #282a36 !important;
-        padding: 0px !important;
-    }
+        div.desc h1 {
+            font-size: 30px;
+        }
 
-    textarea#codeArea, .CodeMirror {
-        width: auto;
-        height: auto;
-        left: 0;
-        right: 0;
-        top: 0px;
-        bottom: 250px;
-        position: absolute;
-    }
+        div.desc h2 {
+            font-size: 26px;
+        }
 
-    textarea#codeArea {
-        width: 100%;
-        height: 100%;
-        color: #fff;
-        background: #282a36 !important;
-        border: none;
-        padding: 20px;
-    }
+        div.desc code {
+            font-family: Consolas;
+            background: #eee;
+            padding: 5px;
+        }
 
-    .instructionContainer {
-        border-right: 2px solid #333;
-        padding-left: 2rem !important;
-        position: absolute;
-        height: 100%;
-        overflow-y: auto;
-        padding: 3rem !important;
-    }
+        div.desc pre > code {
+            background: #282a36;
+            color: #eee;
+            display: block;
+            padding: 10px;
+            box-sizing: border-box;
+        }
 
-    .instructionContainer .instruction {
-        overflow: visible;
-    }
+        div.desc img {
+            max-width: 100%;
+        }
 
-    #errorArea {
-        position: absolute;
-        bottom: 5px;
-        left: 5px;
-        right: 7px;
-        z-index: 5;
-        box-sizing: border-box;
-        display: none;
-    }
+        .codeAreaContainer {
+            background-color: #282a36 !important;
+            padding: 0px !important;
+        }
 
-    #errorArea>p#content {
-        white-space: pre-line;
-    }
+        textarea#codeArea, .CodeMirror {
+            width: auto;
+            height: auto;
+            left: 0;
+            right: 0;
+            top: 0px;
+            bottom: 250px;
+            position: absolute;
+        }
 
-    #outputArea {
-        height: 250px;
-        z-index: 4;
-        background: #222;
-        box-sizing: border-box;
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        overflow: hidden;
-    }
+        textarea#codeArea {
+            width: 100%;
+            height: 100%;
+            color: #fff;
+            background: #282a36 !important;
+            border: none;
+            padding: 20px;
+        }
 
-    #outputArea .outputAreaTop {
-        border-bottom: 1px solid #111;
-        background: #1c1c1c;
-    }
+        .instructionContainer {
+            border-right: 2px solid #333;
+            padding-left: 2rem !important;
+            position: absolute;
+            height: 100%;
+            overflow-y: auto;
+            padding: 3rem !important;
+        }
 
-    #outputArea .outputTitle {
-      color: #eee;
-      line-height: 2;
-      font-size: 1.2em;
-      padding-left: 1rem;
-    }
+        .instructionContainer .instruction {
+            overflow: visible;
+        }
 
-    #outputArea pre#outputContent {
-        margin: 0px;
-        border-radius: 0px;
-        padding: 1rem;
-        box-sizing: border-box;
-        background: #222;
-        color: #ccc;
-        overflow-y: auto;
-        white-space: pre-wrap;
-    }
+        #errorArea {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            right: 7px;
+            z-index: 5;
+            box-sizing: border-box;
+            display: none;
+        }
 
-    .CodeMirror-lines {
-      padding: 20px;
-    }
+        #errorArea > p#content {
+            white-space: pre-line;
+        }
 
-    #solvedModal {
-    }
+        #outputArea {
+            height: 250px;
+            z-index: 4;
+            background: #222;
+            box-sizing: border-box;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            overflow: hidden;
+        }
 
-    #solvedModal .item {
-      position: relative;
-      font-weight: 700;
-    }
-    #solvedModal .angle.right.icon {
-      right: 0px;
-      position: absolute;
-      line-height: 1.2;
-    }
-    .CodeMirror-focused div.CodeMirror-selected {
-      background-color: rgba(255, 255, 255, 0.2) !important;
-    }
+        #outputArea .outputAreaTop {
+            border-bottom: 1px solid #111;
+            background: #1c1c1c;
+        }
 
-    .codeMenu {
-      position: relative;
-      z-index: 10;
-      right: 8px;
-    }
+        #outputArea .outputTitle {
+            color: #eee;
+            line-height: 2;
+            font-size: 1.2em;
+            padding-left: 1rem;
+        }
 
-    .codeMenu button {
-      border-top-right-radius: 0px !important;
-    }
-</style>
+        #outputArea pre#outputContent {
+            margin: 0px;
+            border-radius: 0px;
+            padding: 1rem;
+            box-sizing: border-box;
+            background: #222;
+            color: #ccc;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .CodeMirror-lines {
+            padding: 20px;
+        }
+
+        #solvedModal {
+        }
+
+        #solvedModal .item {
+            position: relative;
+            font-weight: 700;
+        }
+
+        #solvedModal .angle.right.icon {
+            right: 0px;
+            position: absolute;
+            line-height: 1.2;
+        }
+
+        .CodeMirror-focused div.CodeMirror-selected {
+            background-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        .codeMenu {
+            position: relative;
+            z-index: 10;
+            right: 8px;
+        }
+
+        .codeMenu button {
+            border-top-right-radius: 0px !important;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
-{{ nav() }}
-<div class="ui main stackable three column grid fixed">
-  <div class="ui eight wide column instructionContainer">
-    <div class="instruction">
-      <h2 class="ui dividing header">
-          <i class="plug circular icon"></i>
-          <div class="content">
-              {{ problem['name'] }}
-              <div class="sub header">
-                  <a>{{ problem['category'] }}</a>
-                  {%- if is_admin() -%}
-                  <a href="/admin/problem/{{ problem['id'] }}">
-                    <i class="write icon"></i>
-                  </a>
-                  {%- endif -%}
-              </div>
-          </div>
-      </h2>
-      <div class="control">
-          <button type="submit" class="ui button green" onclick="compileCode();" id="codeButton">
-              <i class="ui play icon"></i>
-              실행 (Ctrl + Enter)
-          </button>
-          <div class="ui small inline loader" id="codeButtonLoader"></div>
-      </div>
-      <div class="desc">{{ problem['instruction'] }}</div>
-    </div>
-  </div>
-  <div class="ui eight wide column codeAreaContainer">
-    <div class="ui floating message" id="errorArea">
-      <p id="content">Error message here</p>
-      <i class="icon close large" onclick="closeError();"></i>
-    </div>
-    <div class="codeMenu">
-      <button class="ui label green top right attached" onclick="resetCode();">
-        <i class="ui icon refresh"></i>
-        원래 코드 보기
-      </button>
-    </div>
-    <textarea id="codeArea" class="code">{%- if problem['saved_code'] != '' -%}{{ problem['saved_code'] }}{%- else -%}{{ problem['example'] }}{%- endif -%}</textarea>
-    <div id="outputArea" class="ui inverted">
-      <div class="ui inverted content outputAreaTop">
-        <div class="header outputTitle">
-            Output
-        </div>
-      </div>
-      <pre class="ui code" id="outputContent">출력이 나옵니다.</pre>
-    </div>
-  </div>
-  <div id="solvedModal" class="ui modal small">
-    <i class="close icon"></i>
-    <div class="header">
-      <i class="check circle icon"></i>
-      축하합니다!
-    </div>
-    <div class="content">
-      <p>다음으로 아래 문제들을 추천드려요.</p>
-      <div class="ui segment basic">
-        <div class="ui very relaxed list">
-          <div class="ui orange item segment" onclick="location='/problem/0';">
-            <div class="content">
-              <a class="ui label ribbon orange">category</a>
-              문제 이름
-              <i class="angle right icon large"></i>
+    {{ nav() }}
+    <div class="ui main stackable three column grid fixed">
+        <div class="ui eight wide column instructionContainer">
+            <div class="instruction">
+                <h2 class="ui dividing header">
+                    <i class="plug circular icon"></i>
+                    <div class="content">
+                        {{ chal['name'] }}
+                        <div class="sub header">
+                            <a>{{ chal['category'] }}</a>
+                            {%- if current_user.role == 'admin' -%}
+                                <a href="/admin/problem/{{ chal['id'] }}">
+                                    <i class="write icon"></i>
+                                </a>
+                            {%- endif -%}
+                        </div>
+                    </div>
+                </h2>
+                <div class="control">
+                    <button type="submit" class="ui button green" onclick="compileCode();" id="codeButton">
+                        <i class="ui play icon"></i>
+                        실행 (Ctrl + Enter)
+                    </button>
+                    <div class="ui small inline loader" id="codeButtonLoader"></div>
+                </div>
+                <div class="desc">{{ chal['instruction'] }}</div>
             </div>
-          </div>
-          <div class="ui grey item segment" onclick="location='/problems';">
-            <div class="content">
-              <a class="ui label ribbon grey">back</a>
-              돌아가기
-              <i class="angle right icon large"></i>
-            </div>
-          </div>
         </div>
-      </div>
+        <div class="ui eight wide column codeAreaContainer">
+            <div class="ui floating message" id="errorArea">
+                <p id="content">Error message here</p>
+                <i class="icon close large" onclick="closeError();"></i>
+            </div>
+            <div class="codeMenu">
+                <button class="ui label green top right attached" onclick="resetCode();">
+                    <i class="ui icon refresh"></i>
+                    원래 코드 보기
+                </button>
+            </div>
+            <textarea id="codeArea" class="code">{%- if saved_code != '' -%}
+                {{ saved_code.decode('utf-8') }}{%- else -%}{{ chal.example }}{%- endif -%}</textarea>
+            <div id="outputArea" class="ui inverted">
+                <div class="ui inverted content outputAreaTop">
+                    <div class="header outputTitle">
+                        Output
+                    </div>
+                </div>
+                <pre class="ui code" id="outputContent">출력이 나옵니다.</pre>
+            </div>
+        </div>
+        <div id="solvedModal" class="ui modal small">
+            <i class="close icon"></i>
+            <div class="header">
+                <i class="check circle icon"></i>
+                축하합니다!
+            </div>
+            <div class="content">
+                <p>다음으로 아래 문제들을 추천드려요.</p>
+                <div class="ui segment basic">
+                    <div class="ui very relaxed list">
+                        <div class="ui orange item segment" onclick="location='/problem/0';">
+                            <div class="content">
+                                <a class="ui label ribbon orange">category</a>
+                                문제 이름
+                                <i class="angle right icon large"></i>
+                            </div>
+                        </div>
+                        <div class="ui grey item segment" onclick="location='/problems';">
+                            <div class="content">
+                                <a class="ui label ribbon grey">back</a>
+                                돌아가기
+                                <i class="angle right icon large"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-<script type="text/javascript">
-  var problem = {
-    id: {{ problem.id | tojson | safe }},
-    example: {{ problem.example | tojson | safe }}
-  };
-</script>
-<script type="text/javascript" src="/js/codemirror.js"></script>
-<script type="text/javascript" src="/js/codemirror_addon_simplescrollbars.js"></script>
-<script type="text/javascript" src="/js/mode/gas/gas.js"></script>
-<script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/js/semantic.min.js"></script>
-<script type="text/javascript" src="/js/problem.js"></script>
+    <script type="text/javascript">
+        var problem = {
+            id: {{ chal.id | tojson | safe }},
+            example: {{ chal.example | tojson | safe }}
+        };
+    </script>
+    <script type="text/javascript" src="/static/js/codemirror.js"></script>
+    <script type="text/javascript" src="/static/js/codemirror_addon_simplescrollbars.js"></script>
+    <script type="text/javascript" src="/static/js/mode/gas/gas.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/static/js/semantic.min.js"></script>
+    <script type="text/javascript" src="/static/js/problem.js"></script>
 {% endblock %}

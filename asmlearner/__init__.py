@@ -1,37 +1,34 @@
-from os.path import join, dirname, realpath
-from time import time
+import time
 
-from flask import Flask, g, redirect, session, url_for, request
-from asmlearner.blueprint import user, problem, admin, snippets, history
-from asmlearner.library.database.sqlite import DB
-import asmlearner.config
+from flask import Flask, g, request, url_for
+from flask_login import LoginManager
 
-app = Flask(__name__, static_url_path='')
+from .blueprint import user, problem, admin, snippets, history, index
+from .config import config
+from .db import db_session, Base, engine
+from .db.models import User
+
+from urllib import quote
+
+app = Flask(__name__)
+app.config.from_object(config)
+app.debug = True
+
+login_manager = LoginManager(app)
+login_manager.login_view = 'user.login'
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(int(user_id))
+
 
 app.register_blueprint(user)
 app.register_blueprint(problem)
 app.register_blueprint(snippets)
 app.register_blueprint(admin)
 app.register_blueprint(history)
-
-with app.app_context():
-    g.updated_time = time()
-
-@app.before_request
-def before_req():
-    g.db = DB(config.DATABASE)
-
-
-@app.route('/')
-def index():
-    if 'user' in session:
-        return redirect('/problems')
-    else:
-        return redirect('/login')
-
-
-def is_admin():
-    return ('user' in session) and (session['user']['role'] == 'admin')
+app.register_blueprint(index)
 
 
 def url_for_other_page(page):
@@ -40,5 +37,21 @@ def url_for_other_page(page):
     return url_for(request.endpoint, **args)
 
 
-app.jinja_env.globals.update(url_for_other_page=url_for_other_page)
-app.jinja_env.globals.update(is_admin=is_admin)
+app.jinja_env.globals['url_for_other_page'] = url_for_other_page
+app.jinja_env.globals['quote'] = quote
+
+with app.app_context():
+    g.updated_time = time.time()
+
+
+@app.teardown_request
+def teardown(ctx):
+    try:
+        db_session.commit()
+    finally:
+        db_session.remove()
+
+
+def create_db():
+    Base.metadata.bind = engine
+    return Base.metadata.create_all()

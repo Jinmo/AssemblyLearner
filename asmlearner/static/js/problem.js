@@ -13,17 +13,17 @@ var _wrongMessage = "컴파일은 잘 되었지만, 틀렸대요.",
 
 var _wrongMessages = ["컴파일은 잘 되었지만, 틀렸대요.",
 //  "너틀림ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
-  "아이고.. 틀렸어요..",
+    "아이고.. 틀렸어요..",
 //  "진용휘님이 이 코드를 싫어합니다.",
-  "틀렸어요",
-  // "프로그래밍에 정답은 없습니다. 하지만 오답은 있단다. (퍽퍽)",
-  // "틀렸고요~ 인정? 어 인정. 앙 어셈띠!",
-  // "오답 각 인정? 앙 기모띠",
-  "아, 없네요~ 답이 없네요~"];
+    "틀렸어요",
+    // "프로그래밍에 정답은 없습니다. 하지만 오답은 있단다. (퍽퍽)",
+    // "틀렸고요~ 인정? 어 인정. 앙 어셈띠!",
+    // "오답 각 인정? 앙 기모띠",
+    "아, 없네요~ 답이 없네요~"];
 
 var $codeArea = $('#codeArea'),
     $allCodeAreas,
-$errorArea = $('#errorArea'),
+    $errorArea = $('#errorArea'),
     $codeButtonLoader = $('#codeButtonLoader'),
     $codeButton = $('#codeButton'),
     $outputArea = $('#outputArea'),
@@ -45,28 +45,28 @@ $allCodeAreas = $('#codeArea, .CodeMirror');
 var usingSolvedModal = false;
 
 function solvedModal() {
-    if(usingSolvedModal) {
+    if (usingSolvedModal) {
         $('#solvedModal')
-        .modal('show');
+            .modal('show');
     } else {
         $errorArea
-        .stop()
-        .hide()
-        .attr('class', 'ui positive message')
-        .fadeIn('fast')
-        .children('#content')
-        .html('정답입니다!');
+            .stop()
+            .hide()
+            .attr('class', 'ui positive message')
+            .fadeIn('fast')
+            .children('#content')
+            .html('정답입니다!');
     }
 };
 
 function showError(type, message) {
     $errorArea
-    .stop()
-    .hide()
-    .attr('class', 'ui ' + type + ' message')
-    .fadeIn('fast')
-    .children('#content')
-    .html(message);
+        .stop()
+        .hide()
+        .attr('class', 'ui ' + type + ' message')
+        .fadeIn('fast')
+        .children('#content')
+        .html(message);
 };
 
 function hideError() {
@@ -78,9 +78,9 @@ closeError = hideError;
 function fail(status) {
     _wrongMessage = _wrongMessages[Math.floor(Math.random() * _wrongMessages.length)];
     var message = _unknownErrorMessage;
-    if(status == 'FAIL')
+    if (status == 'FAIL')
         message = _failMessage;
-    else if(status == 'WRONG')
+    else if (status == 'WRONG')
         message = _wrongMessage;
     showError('error', message);
 };
@@ -108,61 +108,65 @@ function compileCode() {
     $codeButton.addClass('disabled');
 
     $.post('/problem/' + encodeURIComponent(problem.id) + '/submit',
-           {
-               code: code
-           })
-           .done(function(response) {
-               //                $codeButtonLoader.removeClass('active');
+        {
+            code: code
+        })
+        .done(function (response) {
+            //                $codeButtonLoader.removeClass('active');
 
-               try {
-                   if (typeof response == 'string')
-                       response = JSON.parse(response);
-               } catch(e) {
-                   unknownError();
-                   doneLoading();
-               }
-               console.log(response);
-               if (response.status == 'success') {
-                   timerVar = setInterval(checkStatus(response.sid), 1000);
-               }
-               else
-                   fail();
-
-           })
-           .fail(function() {
-               unknownError();
-               doneLoading();
-           });
-}
-
-function checkStatus(id, callback) {
-    return function() {
-        $.post('/answer/' + encodeURIComponent(id) + '/status')
-        .done(function(response) {
             try {
                 if (typeof response == 'string')
                     response = JSON.parse(response);
-            } catch(e) {
+            } catch (e) {
+                unknownError();
+                doneLoading();
+            }
+            console.log(response);
+            if (response.status == 'success') {
+                timerVar = setInterval(checkStatus(response.sid), 1000);
+            }
+            else
+                fail();
+
+        })
+        .fail(function () {
+            unknownError();
+            doneLoading();
+        });
+}
+
+function checkStatus(id, callback) {
+    return function () {
+        $.post('/answer/' + encodeURIComponent(id) + '/status')
+            .done(function (response) {
+                try {
+                    if (typeof response == 'string')
+                        response = JSON.parse(response);
+                } catch (e) {
+                    doneLoading();
+                    unknownError();
+                    clearInterval(timerVar);
+                }
+                console.log(response);
+                if (response.status == 'CORRECT') {
+                    solvedModal();
+                    clearInterval(timerVar);
+                } else if (response.status == 'WRONG' || response.status == 'FAIL') {
+                    fail(response.status);
+                    clearInterval(timerVar);
+                }
+                else {
+                    return;
+                }
+                $outputContent.text(atob(response.errmsg));
+                doneLoading();
+
+            })
+            .fail(function () {
                 doneLoading();
                 unknownError();
                 clearInterval(timerVar);
-            }
-            console.log(response);
-            if (response.status == 'CORRECT') {
-                solvedModal(); clearInterval(timerVar);
-            } else if (response.status == 'WRONG' || response.status == 'FAIL')  {
-                fail(response.status); clearInterval(timerVar);
-            }
-            else { return; }
-            $outputContent.text(response.errmsg);
-            doneLoading();
-
-        })
-        .fail(function() {
-            doneLoading();
-            unknownError();
-            clearInterval(timerVar);
-        });
+            });
     }
 }
 
@@ -208,13 +212,14 @@ function resizer(target, options) {
         var newHeight = (startHeight - e.clientY + startY);
         target.style.height = newHeight + 'px';
 
-        if(options.resize) {
+        if (options.resize) {
             options.resize(newHeight);
         }
     }
 
     function stopDrag(e) {
-        document.documentElement.removeEventListener('mousemove', doDrag, false);    document.documentElement.removeEventListener('mouseup', stopDrag, false);
+        document.documentElement.removeEventListener('mousemove', doDrag, false);
+        document.documentElement.removeEventListener('mouseup', stopDrag, false);
     }
 
     function doSelectStart(e) {
@@ -224,7 +229,7 @@ function resizer(target, options) {
 }
 
 resizer($outputArea[0], {
-    resize: function(newHeight) {
+    resize: function (newHeight) {
         $allCodeAreas.css('bottom', newHeight);
     }
 });
@@ -233,18 +238,18 @@ var commands = {};
 
 commands['history'] = function loadHistory(id) {
     var id = parseInt(id).toString();
-    $.get('/api/history/' + id, function(data) {
+    $.get('/api/history/' + id, function (data) {
         editor.getDoc().setValue(data.answer);
     });
 }
 
 function runCommand(cmd, params) {
     console.log(cmd, params);
-    if(commands.hasOwnProperty(cmd))
+    if (commands.hasOwnProperty(cmd))
         commands[cmd].apply(this, params);
 }
 
-function removeUrlHash () {
+function removeUrlHash() {
     var scrollV, scrollH, loc = window.location;
     if ("pushState" in history)
         history.pushState("", document.title, loc.pathname + loc.search);
@@ -262,9 +267,9 @@ function removeUrlHash () {
 }
 
 var urlHash = location.hash[0] == '#' ? location.hash.substr(1) : location.hash;
-if(urlHash != '') {
+if (urlHash != '') {
     var params = urlHash.split('/');
-    if(params.shift(0) == '!') {
+    if (params.shift(0) == '!') {
         var cmd = params.shift(0);
 
         runCommand(cmd, params);

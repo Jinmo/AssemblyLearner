@@ -1,63 +1,85 @@
 {% extends "admin/master.html" %}
 
 
+{% macro render_field(field) %}
+    <div class="field">
+        <label>{{ field.description }} </label>
+        {{ field(**kwargs)|safe }}
+        {% if field.errors %}
+            <ul class=errors>
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endmacro %}
+
 {% block head %}
-<style type="text/css">
-  .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
-  .autocomplete-suggestion { padding: 5px 5px; white-space: nowrap; overflow: hidden; font-size: 1em; }
-  .autocomplete-selected { background: #F0F0F0; }
-  .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
-  .autocomplete-group { padding: 2px 5px; }
-  .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
-  .autocomplete-no-suggestion { padding: 10px; }
-</style>
+    <style type="text/css">
+        .autocomplete-suggestions {
+            border: 1px solid #999;
+            background: #FFF;
+            overflow: auto;
+        }
+
+        .autocomplete-suggestion {
+            padding: 5px 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 1em;
+        }
+
+        .autocomplete-selected {
+            background: #F0F0F0;
+        }
+
+        .autocomplete-suggestions strong {
+            font-weight: normal;
+            color: #3399FF;
+        }
+
+        .autocomplete-group {
+            padding: 2px 5px;
+        }
+
+        .autocomplete-group strong {
+            display: block;
+            border-bottom: 1px solid #000;
+        }
+
+        .autocomplete-no-suggestion {
+            padding: 10px;
+        }
+        textarea {
+            margin-top: 0px; margin-bottom: 0px; height: 168px;
+        }
+    </style>
 
 {% endblock %}
 
 
 {% block content %}
 <h1>
-  {{ '문제 수정' if problem!=None else '문제 추가' }}
-  <a href="/problem/{{ problem['id'] }}"><i class="ui right angle icon"></i></a>
+    {{ '문제 수정' if problem!=None else '문제 추가' }}
+    <a href="/problem/{{ problem['id'] }}"><i class="ui right angle icon"></i></a>
 </h1>
 <form class="ui form" action="{{ action }}" method="POST">
-  <div class="field">
-    <label>Name </label>
-    <input type="text" name="prob_name" placeholder="Problem Name" value="{{ problem['name'] if problem!=None }}">
-  </div>
-  <div class="field">
-    <label>Category</label>
-    <input type="text"  name="category" value="{{ problem['category'] if problem!=None }}" id="autocomplete">
-  </div>
-  <div class="field">
-    <label class="popup link" data-content="문제에 대한 설명을 적는 곳입니다." data-variation="inverted">Instruction <i class="circle help icon"></i></label>
-    <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_instruction">{{ problem.instruction if problem!=None }}</textarea>
-  </div>
-  <div class="field">
-    <label class="popup link" data-content="유저의 코드 뒤에 붙어서 컴파일되는 코드입니다." data-variation="inverted">Suffix <i class="circle help icon"></i></label>
-    <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_suffix">{{ problem.suffix if problem!=None }}</textarea>
-  </div>
-  <div class="field">
-    <label class="popup link" data-content="문제에 대한 설명을 써주십시오." data-variation="inverted">Example <i class="circle help icon"></i></label>
-    <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_example">{{ problem.example if problem!=None }}</textarea>
-  </div>
-  <div class="field">
-    <label class="popup link" data-content="문제에 대한 힌트를 써주십시오." data-variation="inverted">Hint <i class="circle help icon"></i></label>
-    <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_hint">{{ problem.hint if problem!=None }}</textarea>
-  </div>
-  <div class="field">
-    <label class="popup link" data-content="문제에 대한 입력값을 써주십시오." data-variation="inverted">Input <i class="circle help icon"></i></label>
-    <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168ps;" name="prob_input">{{ problem.input if problem!=None }}</textarea>
-  </div>
-  <div class="field">
-    <label class="popup link" data-content="문제에 답이 출력될경우 이 값과 비교합니다." data-variation="inverted">Answer <i class="circle help icon"></i></label>
-    <textarea style="margin-top: 0px; margin-bottom: 0px; height: 168px;" name="prob_answer">{{ problem.answer_regex if problem!=None }}</textarea>
-  </div>
-  <button class="ui button" tabindex="0">{{ 'Modify Problem' if problem!=None else 'Add Problem' }}</button>
+    {{ render_field(form.name) }}
+    {{ render_field(form.category) }}
+    {{ render_field(form.instruction) }}
+    {{ render_field(form.suffix) }}
+    {{ render_field(form.example) }}
+    {{ render_field(form.hint) }}
+    {{ render_field(form.input) }}
+    {{ render_field(form.answer_regex) }}
+    {{ form.csrf_token }}
+    <button class="ui button" tabindex="0">{{ 'Modify Problem' if problem!=None else 'Add Problem' }}</button>
 </form>
 <script>
-  {% autoescape false %}
-  var categories = {{ categories }}
-  {% endautoescape %}
+    {% autoescape false %}
+    var categories =
+    {{ categories }}
+    {% endautoescape %}
 </script>
 {% endblock %}

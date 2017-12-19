@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 tests = [
-        'compiler'
+    'compiler'
 ]
 
 print('Running tests...')

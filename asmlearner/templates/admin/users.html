@@ -5,33 +5,33 @@
 
 
 {% block content %}
-<h2 class="ui center aligned icon header">
-  <i class="circular user icon"></i>
-  사용자목록
-</h2>
-<div class="ui center aligned header">
-  <a class="ui green tiny button" href="/admin/user">
-    <i class="plus icon"></i>
-    사용자 추가
-  </a>
-</div>
-<table class="ui selectable celled table">
-  <thead>
-    <th>사용자 이름</th>
-    <th width="70">권한</th>
-  </thead>
-  <tbody>
-    {% for user in users %}
-      <tr class="">
-        <td>
-          <a href="/admin/user/{{ user.id }}">{{ user.id }}</a>
-        </td>
-        <td>
-          {{ user.role }}
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{{ render_pagination(pagination) }}
+    <h2 class="ui center aligned icon header">
+        <i class="circular user icon"></i>
+        사용자목록
+    </h2>
+    <div class="ui center aligned header">
+        <a class="ui green tiny button" href="/admin/user">
+            <i class="plus icon"></i>
+            사용자 추가
+        </a>
+    </div>
+    <table class="ui selectable celled table">
+        <thead>
+        <th>사용자 이름</th>
+        <th width="70">권한</th>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr class="">
+                <td>
+                    <a href="/admin/user/{{ user.id }}">{{ user.name }}</a>
+                </td>
+                <td>
+                    {{ user.role }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {{ render_pagination(pagination) }}
 {% endblock %}

@@ -1,5 +1,5 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
-from asmlearner.library import jobqueue
+import os
 
-jobqueue.cli()
+os.system('celery -A asmlearner.tasks worker')

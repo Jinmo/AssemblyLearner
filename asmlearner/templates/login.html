@@ -1,54 +1,67 @@
 {% extends "master.html" %}
 {% block head %}
-<style type="text/css">
-  body {
-    background-color: #DADADA;
-  }
-  body > .grid {
-    height: 100%;
-  }
-  .image {
-    margin-top: -100px;
-  }
-  .column {
-    max-width: 450px;
-  }
-</style>
+    <style type="text/css">
+        body {
+            background-color: #DADADA;
+        }
+
+        body > .grid {
+            height: 100%;
+        }
+
+        .image {
+            margin-top: -100px;
+        }
+
+        .column {
+            max-width: 450px;
+        }
+    </style>
 
 {% endblock %}
 
 {% block content %}
-<div class="ui middle aligned center aligned grid">
-  <div class="column">
-    <h2 class="ui teal header">
-      <div class="content">
-        {{ title }}
-      </div>
-    </h2>
-    <form class="ui large form login" action="{{ action }}" method="POST">
-      <div class="ui stacked segment">
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="user icon"></i>
-            <input type="text" name="id" placeholder="ID">
-          </div>
-        </div>
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="lock icon"></i>
-            <input type="password" name="password" placeholder="Password">
-          </div>
-        </div>
-        <button type="submit" class="ui fluid large teal submit button">{{ submit }}</button>
-      </div>
+    <div class="ui middle aligned center aligned grid">
+        <div class="column">
+            <h2 class="ui teal header">
+                <div class="content">
+                    {{ title }}
+                </div>
+            </h2>
+            <form class="ui large form login" action="{{ action }}" method="POST">
+                {{ form.csrf_token }}
+                <div class="ui stacked segment">
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="ui tiny message">
+                                {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="name" placeholder="ID">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" name="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <button type="submit" class="ui fluid large teal submit button">{{ submit }}</button>
+                </div>
 
-      <div class="ui error message"></div>
+                <div class="ui error message"></div>
 
-    </form>
-    <div class="ui message">
-      <a href="{{ next_link }}">{{ next }}</a>
+            </form>
+            <div class="ui message">
+                <a href="{{ next_link }}">{{ next }}</a>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 {% endblock %}
