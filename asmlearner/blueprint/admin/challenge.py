@@ -1,13 +1,12 @@
 import json
 
 import sqlalchemy
-from flask import render_template, abort, request
+from flask import render_template, abort, request, jsonify
 
 from . import admin
 from ...db import db_session
 from ...db.models import Challenge
 from ...forms import ChallengeForm
-from ...library.pagination import Pagination
 from ...middleware import *
 
 
@@ -20,21 +19,14 @@ def index():
 @admin.route('/challenges')
 @admin_required
 def challenges():
-    page = int(request.args.get('p', 1))
-    div = 20
-
-    problem_count = Challenge.query.count()
-    problems = Challenge.list()
-
-    pagination = Pagination(page, div, problem_count)
-
-    return render_template('admin/problems.html', now='problem', pagination=pagination, problems=problems)
+    challenges = Challenge.list()
+    return render_template('admin/challenges.html', now='challenge', challenges=challenges)
 
 
 @admin.route('/challenge')
 @admin.route('/challenge/<int:prob_id>')
 @admin_required
-def problem_form(prob_id=None, form=None):
+def challenge_form(prob_id=None, form=None):
     prob = None
     if (prob_id):
         prob = Challenge.get(prob_id)
@@ -43,14 +35,14 @@ def problem_form(prob_id=None, form=None):
     categories = json.dumps(
         db_session.query(sqlalchemy.distinct(Challenge.category)).all())
 
-    return render_template('admin/problem_form.html', now='problem', problem=prob, categories=categories,
+    return render_template('admin/challenge_form.html', now='challenge', challenge=prob, categories=categories,
                            form=form if form else ChallengeForm())
 
 
 @admin.route('/challenge', methods=['POST'])
 @admin.route('/challenge/<int:prob_id>', methods=['POST'])
 @admin_required
-def add_problem(prob_id=None):
+def add_challenge(prob_id=None):
     form = ChallengeForm()
     if form.validate_on_submit():
         try:
@@ -73,22 +65,35 @@ def add_problem(prob_id=None):
             print(e)
             return '''
                 <script>
-                    alert("Fail to add problems");
+                    alert("Fail to add challenges");
                     history.back(-1);
                 </script>
             '''
     else:
-        return problem_form(form=form)
+        return challenge_form(form=form)
 
 
-@admin.route('/problem/<int:prob_id>/delete')
+@admin.route('/challenge/<int:prob_id>/delete')
 @admin_required
-def delete_problem(prob_id):
+def delete_challenge(prob_id):
     try:
         chal = Challenge.get(prob_id)
         if chal is None:
             return abort(404)
         chal.delete()
-        return redirect('/admin/problems')
+        return redirect('/admin/challenges')
     except Exception as e:
         print(e)
+
+
+@admin.route('/challenges/save_order', methods=['POST'])
+@admin_required
+def save_challenge_order():
+    data = request.get_json(force=True)
+    for cid, order_key in data:
+        cid = int(cid)
+        item = Challenge.get(cid)
+        if item is None:
+            continue
+        item.update(orderKey=order_key)
+    return jsonify(success=True)

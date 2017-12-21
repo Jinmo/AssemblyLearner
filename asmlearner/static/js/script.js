@@ -21,10 +21,11 @@ jQuery(window).ready(function () {
         }
     });
 
-    $('#autocomplete').autocomplete({
-        lookup: categories,
-        noSuggestionNotice: '새 카테고리를 만들어 보세요.',
-        showNoSuggestionNotice: true,
-        autoSelectFirst: true
-    });
+    if(window.autocomplete)
+        $('#autocomplete').autocomplete({
+            lookup: categories,
+            noSuggestionNotice: '새 카테고리를 만들어 보세요.',
+            showNoSuggestionNotice: true,
+            autoSelectFirst: true
+        });
 });

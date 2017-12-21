@@ -7,4 +7,4 @@ index = Blueprint('index', __name__)
 @index.route('/')
 @login_required
 def index_():
-    return redirect('/problems')
+    return redirect('/challenges')

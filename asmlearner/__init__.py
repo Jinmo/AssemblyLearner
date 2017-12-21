@@ -3,7 +3,7 @@ import time
 from flask import Flask, g, request, url_for
 from flask_login import LoginManager
 
-from .blueprint import user, problem, admin, snippets, history, index
+from .blueprint import user, challenge, admin, snippets, history, index
 from .config import config
 from .db import db_session, Base, engine
 from .db.models import User
@@ -24,7 +24,7 @@ def load_user(user_id):
 
 
 app.register_blueprint(user)
-app.register_blueprint(problem)
+app.register_blueprint(challenge)
 app.register_blueprint(snippets)
 app.register_blueprint(admin)
 app.register_blueprint(history)

@@ -18,10 +18,12 @@ class Challenge(Base, IdMixin):
     hint = Column(Text)
     createdAt = Column(DateTime, default=datetime.datetime.utcnow)
     updatedAt = Column(DateTime, default=datetime.datetime.utcnow)
+    orderKey = Column(String(200), default='', unique=True)
 
     @classmethod
     def list(cls):
-        return cls.query.order_by(cls.id.asc())
+        return cls.query.order_by(cls.orderKey.asc())
 
+    @property
     def instruction_formatted(self):
-        return Markup(asmlearner.library.markdown.markdown(self.instruction))
+        return Markup(asmlearner.library.markdown.render(self.instruction))

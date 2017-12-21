@@ -9,20 +9,32 @@
     {{ nav() }}
     <div class="ui main text container">
         {% block form_header %}{% endblock %}
-        <form method="POST" class="ui form">
+        <form method="POST" class="ui form" id="code-form">
+        {% if not code_only %}
             <div class="field">
                 <label>Name</label>
                 <input type="text" name="filename" value="{{ snippet['name'] if snippet!=None }}"
-                       placeholder="[code name].s  (ex: stdio.s, ...)"/>
+                       placeholder="[code name].s  (ex: stdio.s, ...)" {{ additional_properties }}/>
             </div>
+        {% endif %}
             <div class="field">
                 <label>Code</label>
                 <textarea name="code" id="codeArea"></textarea>
                 <script>
-                    codeArea.value = decodeURIComponent("{{ quote(snippet['data']) if snippet!=None }}");
+                    codeArea.value = decodeURIComponent("{{ quote(snippet['data'] if snippet!=None else '# You can include a snippet like:\n# .include "name.s". Cool right?\n')|safe }}");
                 </script>
             </div>
-            <button type="submit" class="ui button green tiny submitButton">Submit</button>
+        {% if code_only %}
+            <div class="field">
+                <label for="output">Output</label>
+                <textarea name="Output" id="output" cols="30" rows="10" class="code"></textarea>
+                <script>
+                    output.value = decodeURIComponent("{{ quote(snippet.output) }}");
+                </script>
+            </div>
+        {% endif %}
+            {% block footer %}
+            {% endblock %}
         </form>
     </div>
 

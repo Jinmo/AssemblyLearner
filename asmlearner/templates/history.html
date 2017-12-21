@@ -28,9 +28,9 @@
             {%- for item in histories -%}
                 <tr class="history">
                     <td>
-                        <a href="/history/{{ item.id }}">#{{ item.id }} {{ item.probname }}</a>
+                        <a href="/history/{{ item.id }}">#{{ item.id }} on {{ item.chal.name }}</a>
                         <span class="ui label horizontal
-                                {{ 'green' if item.status == 'CORRECT' else 'red' if item.status == 'WRONG' else 'gray' }}">{{ {'CORRECT': 'O', 'WRONG': 'X', 'FAIL': '???'}[item.status] }}</span>
+                                {{ 'green' if item.status == 'CORRECT' else 'red' if item.status == 'WRONG' else 'yellow' if item.status == 'FAIL' else 'gray' }}">{{ {'CORRECT': 'O', 'WRONG': 'FAILED', 'FAIL': 'COMPILE ERROR'}.get(item.status, 'READY') }}</span>
                     </td>
                 </tr>
             {%- else -%}

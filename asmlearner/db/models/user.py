@@ -1,6 +1,6 @@
 from asmlearner.db import Base, IdMixin
 from sqlalchemy_utils import PasswordType
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, String, Boolean
 
 ID_LEN = 256
 ROLE_LEN = 256
@@ -46,6 +46,7 @@ class User(Base, IdMixin):
 
     def solved(cls, chal):
         from .history import History
-        return History.query.filter(History.chal_id == chal.id, History.owner_id == cls.id).count() != 0
+        return History.query.filter(History.chal_id == chal.id, History.owner_id == cls.id,
+                                    History.status == 'CORRECT').count() != 0
 
     pass

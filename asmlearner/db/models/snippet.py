@@ -1,14 +1,19 @@
+import os
+
+from sqlalchemy import String, Column
+
+from .user import User
 from .. import Base, IdMixin, ForeignMixin
 from ...config import config
-from sqlalchemy import Integer, String, Column
-from .user import User
 from ...library.snippets import save_snippet
-
-import os
 
 
 class Snippet(Base, IdMixin, ForeignMixin('owner', User)):
     name = Column(String(256), unique=True)
+
+    @classmethod
+    def find(cls, idx, who):
+        return Snippet.query.filter(Snippet.id == idx, Snippet.owner_id == who.id).first()
 
     @property
     def data(self):

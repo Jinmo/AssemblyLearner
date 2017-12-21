@@ -1,0 +1,37 @@
+{% extends "master.html" %}
+
+
+{% block head %}
+<style type="text/css">
+    .challenge {
+        margin-bottom: 25px;
+    }
+
+    tr {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+{{ nav() }}
+
+<div class="ui main text container">
+    <div class="ui segment">
+        {%- for prob in challenges -%}
+        <div class="challenge">
+            <a class="ui orange ribbon label">{{ prob.category }}</a>
+            <span><a href="{{ url_for('challenge.view_challenge', prob_id=prob.id) }}">{{ prob.name }}</a></span>
+            {%- if current_user.solved(prob) -%}
+            <i class="check circle green icon"></i>
+            {%- endif -%}
+        </div>
+        {%- else -%}
+        <p class="empty">
+            아직 문제가 추가되지 않았습니다.
+        </p>
+        {%- endfor -%}
+    </div>
+</div>
+{% endblock %}

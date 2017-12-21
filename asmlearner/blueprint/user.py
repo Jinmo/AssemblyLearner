@@ -21,7 +21,7 @@ def login_check():
         return login()
     else:
         login_user(form.user)
-        return redirect('/problems')
+        return redirect('/challenges')
 
 
 @user.route('/logout')

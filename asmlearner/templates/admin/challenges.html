@@ -1,0 +1,75 @@
+{% extends "admin/master.html" %}
+
+{% macro status_code_to_string(status) %}
+    {% if status=='REG' %}
+        등록됨
+    {% endif %}
+{% endmacro %}
+
+{% block head %}
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.6.1/Sortable.min.js"></script>
+{% endblock %}
+
+
+{% block content %}
+    <h2 class="ui center aligned icon header">
+        <i class="circular idea icon"></i>
+        문제목록
+    </h2>
+    <div class="ui center aligned header">
+        <a class="ui green tiny button" href="/admin/challenge">
+            <i class="plus icon"></i>
+            문제 추가
+        </a>
+    </div>
+
+    <table class="ui selectable celled table" id="challenges_table">
+        <thead>
+        <th>문제 이름</th>
+        <th width="70">상태</th>
+        </thead>
+        <tbody>
+        {% for chal in challenges %}
+            <tr class="" data-id="{{chal.id}}">
+                <td>
+                    <a href="/admin/challenge/{{ chal.id }}">{{ chal.name }}</a>
+                    <a href="/admin/challenge/{{ chal.id }}/delete"
+                       onclick='return confirm_delete({{ chal.name|tojson|safe }});'>
+                        <i class="remove icon tiny"></i>
+                    </a>
+                </td>
+                <td>
+                    {{ status_code_to_string(chal.status) }}
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <div class="ui message">
+        <div class="header">Tip</div>
+        <p>You can drag a challenge to adjust the order.</p>
+    </div>
+    <script>
+        function confirm_delete(name) {
+            var result = confirm("정말 이 문제를 삭제하시겠습니까? :\n" + name) == true;
+            return result;
+        }
+        var keyData = [];
+        var sortable = new Sortable(challenges_table.tBodies[0], {
+            onUpdate: function(evt) {
+                var item = evt.item;
+                var array = sortable.toArray();
+                keyData.length = 0;
+                for(var i = 0; i < array.length; i++) {
+                    keyData.push([array[i], i]);
+                }
+                $.post('/admin/challenges/save_order', JSON.stringify(keyData), function() {
+                    console.log('order updated');
+                }, 'json');
+            },
+            animation: 150
+        });
+    </script>
+{% endblock %}

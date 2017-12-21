@@ -7,9 +7,23 @@
         }
     </style>
     <h2 class="ui dividing header">
-        기록 중 #{{ history['id'] }} 번째
+        {{ history.chal.name }}: #{{ history['id'] }}
     </h2>
 {% endblock %}
 
 {% block script_area %}
+    <script>
+        var form = $('#code-form')[0];
+        form.onsubmit = function resubmit() {
+            console.log($('#codeArea').val());
+            return false;
+        }
+    </script>
+{% endblock %}
+
+{% block footer %}
+    <button type="submit" class="ui primary tiny labeled icon button">
+        <i class="fire icon"></i>
+        Re-submit
+    </button>
 {% endblock %}

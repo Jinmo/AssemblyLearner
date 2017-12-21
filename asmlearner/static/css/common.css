@@ -1,0 +1,6 @@
+textarea.code, .CodeMirror, pre.code, .highlight pre, code {
+    font-family: Consolas, Menlo, Ubuntu Mono, Lucida Console, NanumGothic, monospace !important;
+    font-size: 1.0em;
+    line-height: 180%;
+}
+

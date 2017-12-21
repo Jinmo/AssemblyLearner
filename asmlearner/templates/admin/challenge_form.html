@@ -16,6 +16,8 @@
 {% endmacro %}
 
 {% block head %}
+    <link href="/static/css/codemirror.css" rel="stylesheet"/>
+    <link href="/static/css/theme/dracula.css" rel="stylesheet"/>
     <style type="text/css">
         .autocomplete-suggestions {
             border: 1px solid #999;
@@ -55,14 +57,17 @@
             margin-top: 0px; margin-bottom: 0px; height: 168px;
         }
     </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
 
 {% endblock %}
 
 
 {% block content %}
 <h1>
-    {{ '문제 수정' if problem!=None else '문제 추가' }}
-    <a href="/problem/{{ problem['id'] }}"><i class="ui right angle icon"></i></a>
+    {{ '문제 수정' if challenge!=None else '문제 추가' }}
+    <a href="/challenge/{{ challenge['id'] }}"><i class="ui right angle icon"></i></a>
 </h1>
 <form class="ui form" action="{{ action }}" method="POST">
     {{ render_field(form.name) }}
@@ -74,12 +79,26 @@
     {{ render_field(form.input) }}
     {{ render_field(form.answer_regex) }}
     {{ form.csrf_token }}
-    <button class="ui button" tabindex="0">{{ 'Modify Problem' if problem!=None else 'Add Problem' }}</button>
+    <button class="ui button" tabindex="0">{{ 'Modify Challenge' if challenge!=None else 'Add Challenge' }}</button>
 </form>
+<script type="text/javascript" src="/static/js/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/codemirror_addon_simplescrollbars.js"></script>
+<script type="text/javascript" src="/static/js/mode/gas/gas.js"></script>
 <script>
     {% autoescape false %}
-    var categories =
-    {{ categories }}
+    var categories = {{ categories }};
     {% endautoescape %}
+    var simplemde = new SimpleMDE({ element: instruction, spellChecker: false });
+    var editors = [example, suffix], editor = {};
+    for(var i = 0; i < editors.length; i++) {
+        var object = editors[i], name = i;
+        editor[name] = CodeMirror.fromTextArea(object, {
+            theme: 'dracula',
+            mode: {
+                'name': 'gas',
+                'architecture': 'x86'
+            }
+        });
+    }
 </script>
 {% endblock %}

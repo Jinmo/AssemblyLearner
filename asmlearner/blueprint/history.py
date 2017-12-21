@@ -11,8 +11,8 @@ history = Blueprint('history', __name__)
 def history_list():
     page = int(request.args.get('p', 1))
     div = 20
-    histories = History.query.filter(History.owner_id == current_user.id).offset((page - 1) * div).limit(div)
-    pagination = Pagination(page, div, History.query.count())
+    histories = History.query.filter(History.owner_id == current_user.id).order_by(History.id.desc()).offset((page - 1) * div).limit(div)
+    pagination = Pagination(page, div, histories.count())
 
     return render_template('history.html', histories=histories, pagination=pagination)
 
@@ -27,12 +27,11 @@ def get_history(history_id):
 @history.route('/api/history/<int:history_id>')
 @login_required
 def history_api(history_id):
-    user_id = session['user']['id']
-    history = get_history(history_id)
-    if history is None and history['owner'] != user_id:
-        history = None
+    hist = get_history(history_id)
+    if hist is None and hist.owner_id != current_user.id:
+        return abort(404)
 
-    return jsonify(history)
+    return jsonify(hist)
 
 
 @history.route('/history/<int:history_id>')
@@ -45,5 +44,6 @@ def history_(history_id):
 
     return render_template('history_form.html', history=history, snippet={
         'data': history.code,
-        'name': '#%d-%d' % (history.chal_id, history.id)
-    })
+        'name': '#%d-%d' % (history.chal_id, history.id),
+        'output': history.errmsg
+    }, additional_properties='readonly', code_only=True)

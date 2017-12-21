@@ -31,7 +31,7 @@ def compiler(id):
             suffix_path.name,
             '-o', exec_path,
             '-I', config.INCLUDE_PATH,
-            '-I', os.path.join(config.SNIPPET_PATH),
+            '-I', os.path.join(config.SNIPPET_PATH, str(history.owner_id)),
             '-m32', '-nostdlib', '-fno-stack-protector')
     p = subprocess.Popen(argv, stderr=subprocess.PIPE)
 

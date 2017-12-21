@@ -1,9 +1,9 @@
 /*
- * problem.js for problem editor
+ * challenge.js for challenge editor
  *
  * requires:
- * var problem = {
- *  id: <problem id>
+ * var challenge = {
+ *  id: <challenge id>
  * };
  */
 
@@ -11,15 +11,7 @@ var _wrongMessage = "컴파일은 잘 되었지만, 틀렸대요.",
     _failMessage = "컴파일이 잘 안됬대요. 코드에 오류가 없는지 잘 보세요. 에러 메세지를 드렸어요.",
     _unknownErrorMessage = "사이트에 뭔가 문제가 있나봐요. 관리자에게 문의해보세요!\n만약 관리자분이시라면 <a href=\"http://github.com/Jinmo/AssemblyLearner\">http://github.com/Jinmo/AssemblyLearner</a> 에 이슈를 넣어주세요!";
 
-var _wrongMessages = ["컴파일은 잘 되었지만, 틀렸대요.",
-//  "너틀림ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
-    "아이고.. 틀렸어요..",
-//  "진용휘님이 이 코드를 싫어합니다.",
-    "틀렸어요",
-    // "프로그래밍에 정답은 없습니다. 하지만 오답은 있단다. (퍽퍽)",
-    // "틀렸고요~ 인정? 어 인정. 앙 어셈띠!",
-    // "오답 각 인정? 앙 기모띠",
-    "아, 없네요~ 답이 없네요~"];
+var _wrongMessages = ["컴파일은 잘 되었지만, 틀렸대요."];
 
 var $codeArea = $('#codeArea'),
     $allCodeAreas,
@@ -57,7 +49,7 @@ function solvedModal() {
             .children('#content')
             .html('정답입니다!');
     }
-};
+}
 
 function showError(type, message) {
     $errorArea
@@ -67,7 +59,7 @@ function showError(type, message) {
         .fadeIn('fast')
         .children('#content')
         .html(message);
-};
+}
 
 function hideError() {
     $errorArea.hide();
@@ -83,17 +75,16 @@ function fail(status) {
     else if (status == 'WRONG')
         message = _wrongMessage;
     showError('error', message);
-};
+}
 
 function compileError(response) {
     var error = response.error;
     showError('warning', error);
-};
+}
 
 function unknownError() {
     showError('warning', _unknownErrorMessage);
-};
-
+}
 
 var timerVar;
 var isLoading = false;
@@ -107,7 +98,7 @@ function compileCode() {
     isLoading = true;
     $codeButton.addClass('disabled');
 
-    $.post('/problem/' + encodeURIComponent(problem.id) + '/submit',
+    $.post('/challenge/' + encodeURIComponent(challenge.id) + '/submit',
         {
             code: code
         })
@@ -115,14 +106,14 @@ function compileCode() {
             //                $codeButtonLoader.removeClass('active');
 
             try {
-                if (typeof response == 'string')
+                if (typeof response === 'string')
                     response = JSON.parse(response);
             } catch (e) {
                 unknownError();
                 doneLoading();
             }
             console.log(response);
-            if (response.status == 'success') {
+            if (response.status === 'success') {
                 timerVar = setInterval(checkStatus(response.sid), 1000);
             }
             else
@@ -140,7 +131,7 @@ function checkStatus(id, callback) {
         $.post('/answer/' + encodeURIComponent(id) + '/status')
             .done(function (response) {
                 try {
-                    if (typeof response == 'string')
+                    if (typeof response === 'string')
                         response = JSON.parse(response);
                 } catch (e) {
                     doneLoading();
@@ -148,10 +139,10 @@ function checkStatus(id, callback) {
                     clearInterval(timerVar);
                 }
                 console.log(response);
-                if (response.status == 'CORRECT') {
+                if (response.status === 'CORRECT') {
                     solvedModal();
                     clearInterval(timerVar);
-                } else if (response.status == 'WRONG' || response.status == 'FAIL') {
+                } else if (response.status === 'WRONG' || response.status === 'FAIL') {
                     fail(response.status);
                     clearInterval(timerVar);
                 }
@@ -177,7 +168,7 @@ function doneLoading() {
 }
 
 function resetCode() {
-    editor.setValue(problem.example);
+    editor.setValue(challenge.example);
 }
 
 editor.setOption('extraKeys', {
@@ -188,13 +179,23 @@ editor.setOption('extraKeys', {
 // outputArea draggable
 
 function resizer(target, options) {
-    var options = options || {};
     var resizer = document.createElement('div');
+    var localStorage = window.localStorage || {};
+    var saveKey = target.id + '_height';
+
+    options = options || {};
+
+    if (localStorage[saveKey]) {
+        var savedHeight = parseFloat(localStorage[saveKey]);
+        target.style.height = savedHeight + 'px';
+        if (options.resize)
+            options.resize(savedHeight);
+    }
 
     target.className = target.className + ' resizable';
     resizer.className = 'resizer';
-    resizer.style.cssText = 'width: 100%; height: 5px; background: #555; border: 0px solid #222; border-width: 1px 0 1px 0; position:absolute; left: 0; top: -4px; cursor: s-resize; box-sizing: border-box;';
     target.appendChild(resizer);
+    resizer.innerHTML = '<div class="trigger"><i class="icon"></i></div>';
     resizer.addEventListener('mousedown', initDrag, false);
     resizer.addEventListener('selectstart', doSelectStart, false);
 
@@ -210,6 +211,7 @@ function resizer(target, options) {
 
     function doDrag(e) {
         var newHeight = (startHeight - e.clientY + startY);
+        localStorage[saveKey] = newHeight;
         target.style.height = newHeight + 'px';
 
         if (options.resize) {
@@ -241,7 +243,7 @@ commands['history'] = function loadHistory(id) {
     $.get('/api/history/' + id, function (data) {
         editor.getDoc().setValue(data.answer);
     });
-}
+};
 
 function runCommand(cmd, params) {
     console.log(cmd, params);

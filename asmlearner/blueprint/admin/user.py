@@ -1,5 +1,3 @@
-from hashlib import sha1
-
 from flask import render_template, g, request
 
 from asmlearner.library.pagination import Pagination
@@ -43,29 +41,30 @@ def user_form(user_id=None):
 @admin.route('/user/<user_id>', methods=['POST'])
 @admin_required
 def add_user(user_id=None):
-    id_ = request.form['id']
-    password_ = request.form['password']
+    name = request.form['name']
+    password = request.form['password']
     role = request.form['role']
 
-    pw_hashobj = sha1(password_ * 10)
-    pw_hash = pw_hashobj.hexdigest()
-    del password_, pw_hashobj
-
     try:
-        assert (user_id is None or user_id and user_id == id_)
+        assert (user_id is None or user_id and user_id == name)
 
         if user_id:
-            g.db.execute('UPDATE user SET password=?, role=? WHERE id=?', (pw_hash, role, user_id))
+            user = User.get(user_id)
+            user.update(
+                True,
+                password=password,
+                role=role
+            )
         else:
-            user_id = g.db.execute('INSERT INTO user (' \
-                                   'id, user, role) VALUES ' \
-                                   '(?, ?, ?)', (id_, pw_hash, ''))
+            user = User.create(
+                name=name,
+                password=password,
+                role=role
+            )
+            user.save(True)
 
-            g.db.commit()
-        return redirect('/admin/users')
+        return redirect('/admin/user/%d' % user.id)
     except Exception as e:
-        print(e)
-        g.db.rollback()
         return '''
             <script>
                 alert("Fail to add user");

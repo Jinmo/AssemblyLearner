@@ -12,8 +12,8 @@
         }
 
         .main.ui {
-            margin: 0px;
-            padding: 0px !important;
+            margin: 0;
+            padding: 0 !important;
             top: 40px;
             bottom: 0;
             left: 0;
@@ -27,12 +27,11 @@
         }
 
         div.desc {
-            padding: 10px;
-            padding-top: 20px;
+            padding: 20px 10px 10px;
         }
 
         div.desc * {
-            font-size: 18px;
+            font-size: 16px;
             line-height: 180%;
         }
 
@@ -45,7 +44,6 @@
         }
 
         div.desc code {
-            font-family: Consolas;
             background: #eee;
             padding: 5px;
         }
@@ -64,7 +62,7 @@
 
         .codeAreaContainer {
             background-color: #282a36 !important;
-            padding: 0px !important;
+            padding: 0 !important;
         }
 
         textarea#codeArea, .CodeMirror {
@@ -88,7 +86,6 @@
 
         .instructionContainer {
             border-right: 2px solid #333;
-            padding-left: 2rem !important;
             position: absolute;
             height: 100%;
             overflow-y: auto;
@@ -121,7 +118,7 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            overflow: hidden;
+            padding-top: 20px;
         }
 
         #outputArea .outputAreaTop {
@@ -178,6 +175,62 @@
         .codeMenu button {
             border-top-right-radius: 0px !important;
         }
+
+        /*Custom Composer Bar Tweak by Arc*/
+        .resizer .trigger i:before {
+            font-family: Icons;
+            content: "\f0c9";
+            cursor: n-resize;
+        }
+
+        .composer.maximized .resizer .trigger i:before {
+            content: "\f0c9";
+            cursor: n-resize;
+        }
+
+        .resizer {
+            position: absolute;
+            width: 100%;
+            top: 10px;
+            height: 0;
+            cursor: n-resize;
+        }
+
+        .resizer .trigger i {
+            position: relative;
+            color: #FFF;
+            font-size: 14px;
+        }
+
+        .resizer .trigger {
+            position: relative;
+            display: block;
+            height: 20px;
+            top: -10px;
+            background: #1c1c1c;
+            border: 0px solid #E4E4E4;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+            border-radius: 0%;
+            line-height: 20px;
+            -o-transition: .3s ease-in-out;
+            -ms-transition: .3 ease-in-outs;
+            -moz-transition: .3s ease-in-out;
+            -webkit-transition: .3s ease-in-out;
+            transition: .3s ease-in-out;
+            text-align: center;
+        }
+
+        .resizer .trigger:hover {
+            background: rgba(255, 255, 255, 0.01);
+            -o-transition: .3s ease-in-out;
+            -ms-transition: .3 ease-in-outs;
+            -moz-transition: .3s ease-in-out;
+            -webkit-transition: .3s ease-in-out;
+            transition: .3s ease-in-out;
+        }
     </style>
 {% endblock %}
 
@@ -193,7 +246,7 @@
                         <div class="sub header">
                             <a>{{ chal['category'] }}</a>
                             {%- if current_user.role == 'admin' -%}
-                                <a href="/admin/problem/{{ chal['id'] }}">
+                                <a href="/admin/challenge/{{ chal['id'] }}">
                                     <i class="write icon"></i>
                                 </a>
                             {%- endif -%}
@@ -207,7 +260,7 @@
                     </button>
                     <div class="ui small inline loader" id="codeButtonLoader"></div>
                 </div>
-                <div class="desc">{{ chal['instruction'] }}</div>
+                <div class="desc">{{ chal['instruction_formatted'] }}</div>
             </div>
         </div>
         <div class="ui eight wide column codeAreaContainer">
@@ -242,14 +295,14 @@
                 <p>다음으로 아래 문제들을 추천드려요.</p>
                 <div class="ui segment basic">
                     <div class="ui very relaxed list">
-                        <div class="ui orange item segment" onclick="location='/problem/0';">
+                        <div class="ui orange item segment" onclick="location='/challenge/0';">
                             <div class="content">
                                 <a class="ui label ribbon orange">category</a>
                                 문제 이름
                                 <i class="angle right icon large"></i>
                             </div>
                         </div>
-                        <div class="ui grey item segment" onclick="location='/problems';">
+                        <div class="ui grey item segment" onclick="location='/challenges';">
                             <div class="content">
                                 <a class="ui label ribbon grey">back</a>
                                 돌아가기
@@ -262,9 +315,9 @@
         </div>
     </div>
     <script type="text/javascript">
-        var problem = {
-            id: {{ chal.id | tojson | safe }},
-            example: {{ chal.example | tojson | safe }}
+        var challenge = {
+            id: {{chal.id | tojson | safe}},
+            example: {{chal.example | tojson | safe}}
         };
     </script>
     <script type="text/javascript" src="/static/js/codemirror.js"></script>
@@ -273,5 +326,5 @@
     <script type="text/javascript" src="/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/static/js/semantic.min.js"></script>
-    <script type="text/javascript" src="/static/js/problem.js"></script>
+    <script type="text/javascript" src="/static/js/challenge.js"></script>
 {% endblock %}

@@ -11,6 +11,6 @@ def admin_required(f):
         if current_user.is_authenticated and current_user.role == 'admin':
             return f(*args, **kwargs)
 
-        return redirect('/problems')
+        return redirect('/challenges')
 
     return func
