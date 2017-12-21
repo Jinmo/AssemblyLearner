@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import session, redirect
+from flask import redirect
 from flask_login import login_required, current_user
 
 login_required = login_required

@@ -12,7 +12,7 @@ from ..library.snippets import save_snippet
 def compiler(id):
     from ..db.models import History
     print id
-    history = History.get(id)
+    history = History.get(id, worker=True)
     code = history.code
     challenge = history.chal
 

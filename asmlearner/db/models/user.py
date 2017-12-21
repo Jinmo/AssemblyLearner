@@ -13,7 +13,7 @@ class User(Base, IdMixin):
             'pbkdf2_sha512'
         ]
     ))
-    role = Column(String(ROLE_LEN))
+    role = Column(String(ROLE_LEN), default='user')
     is_active = Column(Boolean, default=True)
 
     @property

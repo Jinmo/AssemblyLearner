@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 
-import os
+from asmlearner.tasks import app as celery_app
 
-os.system('celery -A asmlearner.tasks worker')
+celery_app.add_consumer()

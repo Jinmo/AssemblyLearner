@@ -5,6 +5,8 @@ from asmlearner.middleware import *
 from . import admin
 from ...db.models import User
 
+import traceback
+
 
 @admin.route('/')
 @admin_required
@@ -42,18 +44,19 @@ def user_form(user_id=None):
 @admin_required
 def add_user(user_id=None):
     name = request.form['name']
-    password = request.form['password']
+    password = request.form.get('password')
     role = request.form['role']
 
     try:
-        assert (user_id is None or user_id and user_id == name)
-
         if user_id:
             user = User.get(user_id)
+            values = dict(password=password,
+                role=role)
+            if values['password'] is None:
+                del values['password']
             user.update(
                 True,
-                password=password,
-                role=role
+                **values
             )
         else:
             user = User.create(
@@ -65,6 +68,7 @@ def add_user(user_id=None):
 
         return redirect('/admin/user/%d' % user.id)
     except Exception as e:
+        traceback.print_exc()
         return '''
             <script>
                 alert("Fail to add user");

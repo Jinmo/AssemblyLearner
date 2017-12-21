@@ -1,0 +1,4 @@
+#!/bin/bash
+cd /home/asmlearner
+pipenv shell
+uwsgi --stop /home/asmlearner/.pid

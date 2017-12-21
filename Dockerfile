@@ -1,19 +1,12 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
-MAINTAINER bunseokbot
+MAINTAINER Jinmo
 
-RUN apt-get update &&\
-	apt-get install -y python2.7 python-pip git &&\
-	rm -rf /var/lib/apt/lists/*
-
-RUN git clone https://github.com/Jinmo/AssemblyLearner.git asmlearner
-
-WORKDIR "/asmlearner"
-
-RUN pip install -r requirements.txt
-RUN pip install virtualenv virtualenvwrapper
-RUN adduser --quiet --disabled-password --shell=/bin/bash --home /home/asmlearner --gecos "" asmlearner
-RUN pip install
+ADD https://raw.githubusercontent.com/Jinmo/AssemblyLearner/master/install.sh /install.sh
+ADD https://raw.githubusercontent.com/Jinmo/AssemblyLearner/master/scripts/start /scripts/start
+ADD https://raw.githubusercontent.com/Jinmo/AssemblyLearner/master/scripts/stop /scripts/stop
+RUN chmod +x /install.sh /scripts/start /scripts/stop
+RUN /install.sh
 
 CMD ["./server.py"]
 

@@ -57,10 +57,10 @@ def run_challenge(prob_id):
         return jsonify(status='fail')
 
 
-@challenge.route('/answer/<int:as_id>/status', methods=['POST'])
+@challenge.route('/answer/<int:as_id>/status')
 @login_required
 def answer_status(as_id):
-    ans = History.get(as_id)
+    ans = History.get(as_id, current_user).first()
 
     if not ans:
         return abort(404)

@@ -18,9 +18,7 @@ def history_list():
 
 
 def get_history(history_id):
-    h = History.get(history_id)
-    if current_user.id != h.owner_id:
-        return None
+    h = History.get(history_id, current_user).first()
     return h
 
 

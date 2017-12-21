@@ -2,6 +2,8 @@
 
 
 {% block head %}
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/semantic.min.js"></script>
     <style type="text/css">
         .autocomplete-suggestions {
             border: 1px solid #999;
@@ -43,26 +45,31 @@
 
 
 {% block content %}
-<h1>{{ '사용자 수정' if user!=None else '사용자 추가' }}</h1>
-<form class="ui form" action="{{ action }}" method="POST">
-    <div class="field">
-        <label>ID</label>
-        <input type="text" name="name" value="{{ user['name'] if user!=None }}"/>
-    </div>
-    <div class="field">
-        <label>PW</label>
-        <input type="text" name="password" placeholder="{{ '{ dont modify }' if user!=None else '' }}"/>
-    </div>
-    <div class="field">
-        <label>Role</label>
-        <input type="text" name="role" value="{{ user['role'] if user!=None }}"/>
-    </div>
-    <button class="ui button" tabindex="0">{{ 'Modify User' if user!=None else 'Add User' }}</button>
-</form>
-<script>
-    {% autoescape false %}
-    var categories =
-    {{ categories }}
-    {% endautoescape %}
-</script>
+    <h1>{{ '사용자 수정' if user!=None else '사용자 추가' }}</h1>
+    <form class="ui form" action="{{ action }}" method="POST">
+        <div class="field">
+            <label>ID</label>
+            <input type="text" name="name" value="{{ user['name'] if user!=None }}"/>
+        </div>
+        <div class="field">
+            <label>PW</label>
+            <input type="text" name="password" placeholder="{{ '{ dont modify }' if user!=None else '' }}"/>
+        </div>
+        <div class="field">
+            <label>Role</label>
+            <div class="ui selection dropdown">
+                <input type="hidden" name="role" value="{{ user['role'] if user!=None }}"/>
+                <i class="dropdown icon"></i>
+                <div class="default text">Role</div>
+                <div class="menu">
+                    <div class="item" data-value="user">User</div>
+                    <div class="item" data-value="admin">Admin</div>
+                </div>
+            </div>
+        </div>
+        <button class="ui button" tabindex="0">{{ 'Modify User' if user!=None else 'Add User' }}</button>
+    </form>
+    <script>
+        $('.ui.dropdown').dropdown();
+    </script>
 {% endblock %}

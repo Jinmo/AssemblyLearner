@@ -8,7 +8,7 @@ user = Blueprint('user', __name__)
 
 @user.route('/login')
 def login(form=None):
-    return render_template('login.html', title='AL User Login', action='/login', submit='Login', next_link='/join',
+    return render_template('login.html', title='Asmlearner User Login', action='/login', submit='Login', next_link='/join',
                            next='Create User', form=form if form else LoginForm())
 
 
@@ -33,8 +33,8 @@ def logout():
 
 @user.route('/join')
 def join(form=None):
-    return render_template('login.html', title="AL User Create", action="/join", submit='Join', next_link='/login',
-                           next='Login As User', form=form if form else RegisterForm())
+    return render_template('login.html', title="Asmlearner User Create", action="/join", submit='Join', next_link='/login',
+                           next='Login As User', form=form if form else RegisterForm(), register=True)
 
 
 @user.route('/join', methods=['POST'])

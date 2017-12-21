@@ -9,7 +9,7 @@
 * ** [Jinmo] (https://github.com/Jinmo) **
 
   * 프로젝트 구상
-  * #1 커밋을 푸시함
+  * \#1 커밋을 푸시함
   * 여러 .md 파일 작성
 
 * ** [re4lfl0w] (https://github.com/re4lflow)

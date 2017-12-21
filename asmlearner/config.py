@@ -24,8 +24,8 @@ class Config(object):
         db=secrets.DATABASE_DB
     )
 
-    CELERY_URL = 'sqs://AKIAIAF2DQFANRDLBK3A:okBKZuXjCgBc8RqyaCt8vfBhsWk02peSWDzlvI%2FT@'
-    CELERY_QUEUE_NAME = 'asmlearner'
+    CELERY_URL = secrets.CELERY_URL
+    CELERY_QUEUE_NAME = secrets.CELERY_QUEUE_NAME
     SECRET_KEY = secrets.SECRET_KEY
 
 

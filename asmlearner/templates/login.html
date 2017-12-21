@@ -16,6 +16,17 @@
         .column {
             max-width: 450px;
         }
+
+        .ui.form .ui.input input {
+            transition: 0.2s;
+        }
+
+        .ui.form .ui.input.error input {
+            background-color: #fff6f6;
+            border-color: #e0b4b4;
+            color: #9f3a38;
+            box-shadow: none;
+        }
     </style>
 
 {% endblock %}
@@ -28,14 +39,14 @@
                     {{ title }}
                 </div>
             </h2>
-            <form class="ui large form login" action="{{ action }}" method="POST">
+            <form class="ui large form login" action="{{ action }}" method="POST" onsubmit="return check_password_match();">
                 {{ form.csrf_token }}
                 <div class="ui stacked segment">
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
                             {% for message in messages %}
                                 <div class="ui tiny message">
-                                {{ message }}
+                                    {{ message }}
                                 </div>
                             {% endfor %}
                         {% endif %}
@@ -49,9 +60,19 @@
                     <div class="field">
                         <div class="ui left icon input">
                             <i class="lock icon"></i>
-                            <input type="password" name="password" placeholder="Password">
+                            <input type="password" name="password" id="password" placeholder="Password">
                         </div>
                     </div>
+                    {% if register %}
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" name="password" id="password_confirm"
+                                       placeholder="Password confirmation"
+                                       oninput="check_password_match();">
+                            </div>
+                        </div>
+                    {% endif %}
                     <button type="submit" class="ui fluid large teal submit button">{{ submit }}</button>
                 </div>
 
@@ -63,5 +84,13 @@
             </div>
         </div>
     </div>
+    <script>
+        function check_password_match() {
+            var condition = password_confirm.value !== password.value;
+            password_confirm.parentNode.className =
+                'ui left icon input ' + ((password_confirm.value && condition) ? 'error' : '');
+            return condition;
+        }
+    </script>
 
 {% endblock %}

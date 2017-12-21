@@ -1,0 +1,6 @@
+[submodule "cmark"]
+	path = cmark
+	url = https://github.com/github/cmark.git
+[submodule "nsjail"]
+	path = nsjail
+	url = https://github.com/google/nsjail.git

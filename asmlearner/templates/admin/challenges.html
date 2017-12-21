@@ -33,7 +33,12 @@
         {% for chal in challenges %}
             <tr class="" data-id="{{chal.id}}">
                 <td>
-                    <a href="/admin/challenge/{{ chal.id }}">{{ chal.name }}</a>
+                    <a href="/admin/challenge/{{ chal.id }}">
+                    <div class="ui horizontal label">
+                        {{ chal.category }}
+                    </div>
+                        {{ chal.name }}
+                    </a>
                     <a href="/admin/challenge/{{ chal.id }}/delete"
                        onclick='return confirm_delete({{ chal.name|tojson|safe }});'>
                         <i class="remove icon tiny"></i>

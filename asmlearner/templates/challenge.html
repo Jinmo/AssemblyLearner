@@ -71,7 +71,6 @@
             left: 0;
             right: 0;
             top: 0px;
-            bottom: 250px;
             position: absolute;
         }
 
@@ -142,6 +141,11 @@
             color: #ccc;
             overflow-y: auto;
             white-space: pre-wrap;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
         }
 
         .CodeMirror-lines {
@@ -276,14 +280,14 @@
             </div>
             <textarea id="codeArea" class="code">{%- if saved_code != '' -%}
                 {{ saved_code.decode('utf-8') }}{%- else -%}{{ chal.example }}{%- endif -%}</textarea>
-            <div id="outputArea" class="ui inverted">
-                <div class="ui inverted content outputAreaTop">
-                    <div class="header outputTitle">
-                        Output
-                    </div>
+        </div>
+        <div id="outputArea" class="ui inverted">
+            <div class="ui inverted content outputAreaTop">
+                <div class="header outputTitle">
+                    Output
                 </div>
-                <pre class="ui code" id="outputContent">출력이 나옵니다.</pre>
             </div>
+            <pre class="ui code" id="outputContent">출력이 나옵니다.</pre>
         </div>
         <div id="solvedModal" class="ui modal small">
             <i class="close icon"></i>
@@ -324,7 +328,6 @@
     <script type="text/javascript" src="/static/js/codemirror_addon_simplescrollbars.js"></script>
     <script type="text/javascript" src="/static/js/mode/gas/gas.js"></script>
     <script type="text/javascript" src="/static/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/static/js/semantic.min.js"></script>
     <script type="text/javascript" src="/static/js/challenge.js"></script>
 {% endblock %}

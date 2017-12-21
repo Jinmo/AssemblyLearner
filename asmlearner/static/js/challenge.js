@@ -128,7 +128,7 @@ function compileCode() {
 
 function checkStatus(id, callback) {
     return function () {
-        $.post('/answer/' + encodeURIComponent(id) + '/status')
+        $.get('/answer/' + encodeURIComponent(id) + '/status')
             .done(function (response) {
                 try {
                     if (typeof response === 'string')
