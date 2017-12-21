@@ -1,18 +1,27 @@
 #!/usr/bin/env python2
 
-from asmlearner import app
+from flask.cli import FlaskGroup
+import click
 
 
-@app.cli.command
-def create_admin():
-    from asmlearner.db import db_session
+@click.group(cls=FlaskGroup)
+@click.pass_context
+def cli():
+    pass
+
+
+@cli.command()
+def admin():
+    '''Creates an editor account from the console.'''
     from asmlearner.db.models import User
     import getpass
 
     id_ = raw_input('ID: ')
     password_ = getpass.getpass('PW: ')
 
-    db_session.add(User.create(name=id_, password=password_, role='admin'))
-    db_session.commit()
+    user = User.create(name=id_, password=password_, role='admin').save(True)
+    print 'Created user %r with id %r' % (user.name, user.id)
 
 
+if __name__ == '__main__':
+    cli()
