@@ -5,7 +5,7 @@ Self-contained judge program for assembly language (supports x86). This runs [0e
 
 ```bash
 git clone https://github.com/Jinmo/AssemblyLearner.git asmlearner
-cd asmlearner; ./install.sh
+cd asmlearner; bash ./install.sh
 ```
 
 ### Adding a challenge
