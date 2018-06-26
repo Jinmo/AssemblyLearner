@@ -55,7 +55,7 @@ formatter = HtmlFormatter()
 for ext in extensions:
     ext = cmark.cmark_find_syntax_extension(c_char_p(ext))
     assert ext != 0
-    cmark.cmark_parser_attach_syntax_extension(parser, c_char_p(ext))
+    cmark.cmark_parser_attach_syntax_extension(c_void_p(parser), c_char_p(ext))
 
 
 def highlight_code(node):

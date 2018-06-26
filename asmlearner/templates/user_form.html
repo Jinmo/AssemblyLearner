@@ -1,0 +1,25 @@
+{% extends 'master.html' %}
+{% macro render_field(field) %}
+    <div class="field">
+        <label for="{{ field.name }}">{{ field.description }}</label>
+        {{ field }}
+    </div>
+{% endmacro %}
+{% block content %}
+    {{ nav() }}
+    <div class="ui main text container">
+        {% for message in get_flashed_messages() %}
+            <div class="ui message">
+            {{ message }}
+            </div>
+        {% endfor %}
+        <form action="" method="POST" class="ui form">
+            {{ render_field(form.name) }}
+            {{ render_field(form.password) }}
+            {{ render_field(form.new_password) }}
+            <button type="submit" class="ui primary button">
+                Submit
+            </button>
+        </form>
+    </div>
+{% endblock %}

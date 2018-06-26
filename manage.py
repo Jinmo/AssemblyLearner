@@ -2,11 +2,14 @@
 
 from flask.cli import FlaskGroup
 import click
+import os
+
+os.environ['FLASK_APP'] = 'asmlearner/__init__.py'
 
 
 @click.group(cls=FlaskGroup)
 @click.pass_context
-def cli():
+def cli(ctx):
     pass
 
 
@@ -21,6 +24,14 @@ def admin():
 
     user = User.create(name=id_, password=password_, role='admin').save(True)
     print 'Created user %r with id %r' % (user.name, user.id)
+
+
+@cli.command()
+def initdb():
+    '''Creates some tables for the database'''
+    from asmlearner import create_db
+    create_db()
+    print 'Initialized the database.'
 
 
 if __name__ == '__main__':

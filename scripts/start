@@ -1,4 +1,2 @@
 #!/bin/bash
-cd /home/asmlearner
-pipenv shell
-uwsgi --ini /home/asmlearner/uwsgi.ini
+uwsgi --ini /home/asmlearner/app/conf/uwsgi.ini

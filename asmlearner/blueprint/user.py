@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, session, redirect, request, flash
-from flask_login import login_user, logout_user
+from flask import Blueprint, render_template, redirect, flash
+from flask_login import login_user, logout_user, current_user
 from asmlearner.middleware import login_required
-from asmlearner.forms.user import LoginForm, RegisterForm
+from asmlearner.forms.user import LoginForm, RegisterForm, UserForm, UserFormSchema
 
 user = Blueprint('user', __name__)
 
@@ -53,3 +53,22 @@ def join_check():
                 ))
         flash('User with the specified name already exists!')
         return join()
+
+
+@user.route('/edituser')
+@login_required
+def edit_user_form():
+    return render_template('user_form.html', form=UserForm(obj=UserFormSchema(name=current_user.name)))
+
+
+@user.route('/edituser', methods=['POST'])
+@login_required
+def edit_user():
+    form = UserForm(obj=UserFormSchema(name=current_user.name))
+
+    if form.validate_on_submit():
+        flash('Successfully edited the user!')
+        return edit_user_form()
+    else:
+        flash('Password does not match!')
+        return edit_user_form()

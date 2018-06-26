@@ -30,6 +30,9 @@
         {%- else -%}
         <p class="empty">
             아직 문제가 추가되지 않았습니다.
+            {% if current_user.role == 'admin' %}
+                <a href="/admin/challenge">문제를 추가해보세요!</a>
+            {% endif %}
         </p>
         {%- endfor -%}
     </div>

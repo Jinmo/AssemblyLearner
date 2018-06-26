@@ -19,86 +19,71 @@
     <link href="/static/css/codemirror.css" rel="stylesheet"/>
     <link href="/static/css/theme/dracula.css" rel="stylesheet"/>
     <style type="text/css">
-        .autocomplete-suggestions {
-            border: 1px solid #999;
-            background: #FFF;
-            overflow: auto;
-        }
-
-        .autocomplete-suggestion {
-            padding: 5px 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            font-size: 1em;
-        }
-
-        .autocomplete-selected {
-            background: #F0F0F0;
-        }
-
-        .autocomplete-suggestions strong {
-            font-weight: normal;
-            color: #3399FF;
-        }
-
-        .autocomplete-group {
-            padding: 2px 5px;
-        }
-
-        .autocomplete-group strong {
-            display: block;
-            border-bottom: 1px solid #000;
-        }
-
-        .autocomplete-no-suggestion {
-            padding: 10px;
-        }
         textarea {
-            margin-top: 0px; margin-bottom: 0px; height: 168px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            height: 168px;
         }
     </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
 
 {% endblock %}
 
 
 {% block content %}
-<h1>
-    {{ '문제 수정' if challenge!=None else '문제 추가' }}
-    <a href="/challenge/{{ challenge['id'] }}"><i class="ui right angle icon"></i></a>
-</h1>
-<form class="ui form" action="{{ action }}" method="POST">
-    {{ render_field(form.name) }}
-    {{ render_field(form.category) }}
-    {{ render_field(form.instruction) }}
-    {{ render_field(form.suffix) }}
-    {{ render_field(form.example) }}
-    {{ render_field(form.hint) }}
-    {{ render_field(form.input) }}
-    {{ render_field(form.answer_regex) }}
-    {{ form.csrf_token }}
-    <button class="ui button" tabindex="0">{{ 'Modify Challenge' if challenge!=None else 'Add Challenge' }}</button>
-</form>
-<script type="text/javascript" src="/static/js/codemirror.js"></script>
-<script type="text/javascript" src="/static/js/codemirror_addon_simplescrollbars.js"></script>
-<script type="text/javascript" src="/static/js/mode/gas/gas.js"></script>
-<script>
-    {% autoescape false %}
-    var categories = {{ categories }};
-    {% endautoescape %}
-    var simplemde = new SimpleMDE({ element: instruction, spellChecker: false });
-    var editors = [example, suffix], editor = {};
-    for(var i = 0; i < editors.length; i++) {
-        var object = editors[i], name = i;
-        editor[name] = CodeMirror.fromTextArea(object, {
-            theme: 'dracula',
-            mode: {
-                'name': 'gas',
-                'architecture': 'x86'
+    <h1>
+        {{ '문제 수정' if challenge!=None else '문제 추가' }}
+        <a href="/challenge/{{ challenge['id'] }}"><i class="ui right angle icon"></i></a>
+    </h1>
+    <form class="ui form" action="{{ action }}" method="POST">
+        {{ render_field(form.name) }}
+        {{ render_field(form.category) }}
+        {{ render_field(form.instruction) }}
+        {{ render_field(form.suffix) }}
+        {{ render_field(form.example) }}
+        {{ render_field(form.hint) }}
+        {{ render_field(form.input) }}
+        {{ render_field(form.answer_regex) }}
+        {{ form.csrf_token }}
+        <button class="ui button" tabindex="0">{{ 'Modify Challenge' if challenge!=None else 'Add Challenge' }}</button>
+    </form>
+    <script type="text/javascript" src="/static/js/codemirror.js"></script>
+    <script type="text/javascript" src="/static/js/codemirror_addon_simplescrollbars.js"></script>
+    <script src="/static/js/codemirror-4.inline-attachment.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/static/js/mode/gas/gas.js"></script>
+    <script>
+        var simplemde = new SimpleMDE({element: instruction, spellChecker: false});
+        inlineAttachment.editors.codemirror4.attach(simplemde.codemirror, {
+            onFileUploadResponse: function (xhr) {
+                var result = JSON.parse(xhr.responseText),
+                    filename = result[this.settings.jsonFieldName];
+
+                if (result && filename) {
+                    var newValue;
+                    if (typeof this.settings.urlText === 'function') {
+                        newValue = this.settings.urlText.call(this, filename, result);
+                    } else {
+                        newValue = this.settings.urlText.replace(this.filenameTag, filename);
+                    }
+                    var text = this.editor.getValue().replace(this.lastValue, newValue);
+                    this.editor.setValue(text);
+                    this.settings.onFileUploaded.call(this, filename);
+                }
+                return false;
             }
         });
-    }
-</script>
+        var editors = ['example', 'suffix'];
+        editors = editors.map(function (name) {
+            var editor = document.getElementById(name);
+            return CodeMirror.fromTextArea(editor, {
+                theme: 'dracula',
+                mode: {
+                    'name': 'gas',
+                    'architecture': 'x86'
+                }
+            });
+        });
+    </script>
 {% endblock %}

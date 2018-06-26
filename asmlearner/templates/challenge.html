@@ -97,16 +97,46 @@
 
         #errorArea {
             position: absolute;
-            bottom: 5px;
-            left: 5px;
-            right: 7px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 10px;
+            width: 100%;
             z-index: 5;
             box-sizing: border-box;
             display: none;
+            color: #fff;
+            font-weight: bolder;
+        }
+
+        #errorArea.positive {
+            background: #22be34;
+        }
+
+        #errorArea.error {
+            background: yellow;
+            color: #000;
+        }
+
+        #errorArea.fail {
+            background: red;
         }
 
         #errorArea > p#content {
             white-space: pre-line;
+        }
+
+        #errorArea .progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: -1;
+            border-right: 50px solid transparent;
+            border-bottom: 50px solid #2c662d;
+            right: 0;
+            box-sizing: content-box;
+            transition: width 0.5s;
         }
 
         #outputArea {
@@ -145,7 +175,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            top: 0;
+            top: 10px;
         }
 
         .CodeMirror-lines {
@@ -268,10 +298,6 @@
             </div>
         </div>
         <div class="ui eight wide column codeAreaContainer">
-            <div class="ui floating message" id="errorArea">
-                <p id="content">Error message here</p>
-                <i class="icon close large" onclick="closeError();"></i>
-            </div>
             <div class="codeMenu">
                 <button class="ui label green top right attached" onclick="resetCode();">
                     <i class="ui icon refresh"></i>
@@ -280,14 +306,6 @@
             </div>
             <textarea id="codeArea" class="code">{%- if saved_code != '' -%}
                 {{ saved_code.decode('utf-8') }}{%- else -%}{{ chal.example }}{%- endif -%}</textarea>
-        </div>
-        <div id="outputArea" class="ui inverted">
-            <div class="ui inverted content outputAreaTop">
-                <div class="header outputTitle">
-                    Output
-                </div>
-            </div>
-            <pre class="ui code" id="outputContent">출력이 나옵니다.</pre>
         </div>
         <div id="solvedModal" class="ui modal small">
             <i class="close icon"></i>
@@ -317,6 +335,17 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div id="outputArea" class="ui inverted">
+        <div class="ui inverted content outputAreaTop">
+            <div class="header outputTitle">
+                Output
+            </div>
+        </div>
+        <pre class="ui code" id="outputContent">출력이 나옵니다.</pre>
+    </div>
+    <div class="ui floating message" id="errorArea">
+        <p id="content">Error message here</p>
     </div>
     <script type="text/javascript">
         var challenge = {

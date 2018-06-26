@@ -29,7 +29,7 @@ def history_api(history_id):
     if hist is None and hist.owner_id != current_user.id:
         return abort(404)
 
-    return jsonify(hist)
+    return jsonify(code=hist.code)
 
 
 @history.route('/history/<int:history_id>')

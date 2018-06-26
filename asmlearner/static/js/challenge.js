@@ -32,7 +32,7 @@ var editor = CodeMirror.fromTextArea($codeArea[0], {
     scrollbarStyle: "simple"
 });
 
-$allCodeAreas = $('#codeArea, .CodeMirror');
+$allCodeAreas = $('.ui.main');
 
 var usingSolvedModal = false;
 
@@ -41,13 +41,7 @@ function solvedModal() {
         $('#solvedModal')
             .modal('show');
     } else {
-        $errorArea
-            .stop()
-            .hide()
-            .attr('class', 'ui positive message')
-            .fadeIn('fast')
-            .children('#content')
-            .html('정답입니다!');
+        showError('positive', '정답입니다!');
     }
 }
 
@@ -55,10 +49,11 @@ function showError(type, message) {
     $errorArea
         .stop()
         .hide()
-        .attr('class', 'ui ' + type + ' message')
-        .fadeIn('fast')
+        .attr('class', type)
+        .slideDown('slow')
         .children('#content')
-        .html(message);
+        .text(message);
+    setTimeout(function() { $errorArea.slideUp(); }, 2000);
 }
 
 function hideError() {
@@ -239,9 +234,9 @@ resizer($outputArea[0], {
 var commands = {};
 
 commands['history'] = function loadHistory(id) {
-    var id = parseInt(id).toString();
+    id = parseInt(id).toString();
     $.get('/api/history/' + id, function (data) {
-        editor.getDoc().setValue(data.answer);
+        editor.getDoc().setValue(data.code);
     });
 };
 
@@ -252,20 +247,7 @@ function runCommand(cmd, params) {
 }
 
 function removeUrlHash() {
-    var scrollV, scrollH, loc = window.location;
-    if ("pushState" in history)
-        history.pushState("", document.title, loc.pathname + loc.search);
-    else {
-        // Prevent scrolling by storing the page's current scroll offset
-        scrollV = document.body.scrollTop;
-        scrollH = document.body.scrollLeft;
-
-        loc.hash = "";
-
-        // Restore the scroll offset, should be flicker free
-        document.body.scrollTop = scrollV;
-        document.body.scrollLeft = scrollH;
-    }
+    loc.hash = '';
 }
 
 var urlHash = location.hash[0] == '#' ? location.hash.substr(1) : location.hash;
@@ -275,6 +257,6 @@ if (urlHash != '') {
         var cmd = params.shift(0);
 
         runCommand(cmd, params);
-//        removeUrlHash();
+        removeUrlHash();
     }
 }

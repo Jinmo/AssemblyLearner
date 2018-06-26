@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "677e351d0da13c8b0549cb619cc561d40b0e1e1015929a9c8c4912adc3de5214"
+            "sha256": "6c266f3da4857acdf7c24744a6ead4ff90bef9169c4d49cb62aa8fde3176720d"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -11,7 +11,7 @@
             "platform_python_implementation": "CPython",
             "platform_release": "4.10.0-42-generic",
             "platform_system": "Linux",
-            "platform_version": "#46~16.04.1-Ubuntu SMP Mon Dec 4 15:57:59 UTC 2017",
+            "platform_version": "#46 SMP Tue Dec 26 21:00:17 KST 2017",
             "python_full_version": "2.7.12",
             "python_version": "2.7",
             "sys_platform": "linux2"
@@ -43,17 +43,17 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:9168bbcd287f214ab91a544074931fe827a40a0b3666baf0b2877c604600c4e3",
-                "sha256:1594cd443306f76397a8444f2e613d620df2d51b6e0c7033808964c94a29519e"
+                "sha256:00a384f703d7abdc9eb932e64404060b6287543afbd03cae0f811dc29aa2c129",
+                "sha256:c41540a1d74a4ef7c642d91cb47dae884eafe6665d76a1b9ce1032e3aabde56c"
             ],
-            "version": "==1.5.4"
+            "version": "==1.5.7"
         },
         "botocore": {
             "hashes": [
-                "sha256:db04e6fb4bc51fbaed2533e268e243b773b91970b18ca83193cb1999c9cfb28c",
-                "sha256:74dc754eaa81a581f8fb22ae3ca429c7281774fca5eae92716a5f65794afc42c"
+                "sha256:b15773f65e4fb2fd58709a7b8453f524ec0d04c86e2052b0dd3c938b4eb38be2",
+                "sha256:e4513a02f68e7efd7494ee56db201d87620218ca879aae361abbb71bcde3aa5f"
             ],
-            "version": "==1.8.18"
+            "version": "==1.8.21"
         },
         "celery": {
             "hashes": [
@@ -104,6 +104,12 @@
             ],
             "markers": "python_version == '2.6' or python_version == '2.7'",
             "version": "==3.2.0"
+        },
+        "inflection": {
+            "hashes": [
+                "sha256:18ea7fb7a7d152853386523def08736aa8c32636b047ade55f7578c4edeb16ca"
+            ],
+            "version": "==0.3.1"
         },
         "itsdangerous": {
             "hashes": [
@@ -225,9 +231,9 @@
         },
         "sqlalchemy": {
             "hashes": [
-                "sha256:8b79a5ed91cdcb5abe97b0045664c55c140aec09e5dd5c01303e23de5fe7a95a"
+                "sha256:7dda3e0b1b12215e3bb05368d1abbf7d747112a43738e0a4e6deb466b83fd88e"
             ],
-            "version": "==1.1.15"
+            "version": "==1.2.0"
         },
         "sqlalchemy-utils": {
             "hashes": [

@@ -71,3 +71,4 @@ data/snippet/
 # Build yourself - it's more reliable
 asmlearner/bin/tracer
 asmlearner/bin/tracer.o
+.vscode

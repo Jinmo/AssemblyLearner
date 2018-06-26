@@ -5,19 +5,34 @@ PSQL_DEPS="postgresql postgresql-contrib"
 CMARK_GFM_DEPS="cmake"
 TRACER_DEPS="gcc-multilib"
 INSTALL_DEPS="git python2.7 python-pip"
-
 APT_DEPS="$APT_DEPS $PSQL_DEPS $NSJAIL_DEPS $CMARK_GFM_DEPS $INSTALL_DEPS"
 
-sed -i "s/archive.ubuntu.com/ftp.daumkakao.com/" /etc/apt/sources.list
+# sed -i "s/archive.ubuntu.com/ftp.daumkakao.com/" /etc/apt/sources.list
 
 # Install all required packages
-apt-get update &&\
-	apt-get install -y $APT_DEPS &&\
-	rm -rf /var/lib/apt/lists/*
+# apt-get update
+
+sudo apt-get -f install -y$APT_DEPS
+# rm -rf /var/lib/apt/lists/*
+
+sudo -u postgres psql -U postgres <<EOF
+CREATE DATABASE asmlearner ENCODING utf8;
+CREATE ROLE asmlearner LOGIN ENCRYPTED PASSWORD 'dydgnldydgnljinmo123x';
+EOF
+
+python -c "import re,os;print(re.sub(r'\\$\{([^}]+)\}', lambda x: eval(x.group(1)), open('asmlearner/secrets.local.py', 'rb').read()).replace(' = ', '='))" > /tmp/secrets.py
+mv /tmp/secrets.py asmlearner/secrets.py
+
+# You know what?! It's even compatible with bash!!
+. asmlearner/secrets.py
+
+exit
 
 adduser --quiet --disabled-password --shell=/bin/bash --home /home/asmlearner --gecos "" asmlearner
+rm -rf /home/asmlearner/*
 cd "/home/asmlearner"
 
+su asmlearner -c "$(cat <<EOF
 git clone --depth 1 --recursive https://github.com/Jinmo/AssemblyLearner.git app
 cd "/home/asmlearner/app"
 
@@ -45,5 +60,6 @@ echo "[*] Building asmlearner/bin/tracer..."
 
 # Install python dependencies
 pipenv install
-
-su asmlearner -c /scripts/start
+pipenv shell "bash scripts/start"
+EOF
+)"

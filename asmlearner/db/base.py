@@ -3,6 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship
 from ..config import config
 
+import inflection
+
 
 class CRUDMixin(object):
     __table_args__ = {'extend_existing': True}
@@ -55,7 +57,7 @@ class IdMixin(object):
 
     @declared_attr
     def __tablename__(self):
-        return self.__name__.lower() + 's'
+        return inflection.pluralize(self.__name__.lower())
 
     @classmethod
     def get(cls, id):

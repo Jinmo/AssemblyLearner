@@ -218,8 +218,9 @@ int main(int argc, char **argv) {
                                     case __NR_setreuid:
                                     case __NR_setregid:
                                     case __NR_futex:
-                                        pass = true;
+                                        pass = false;
                                         break;
+                                    case __NR_mmap2:
                                     case __NR_brk:
                                         pass = true;
                                         break;

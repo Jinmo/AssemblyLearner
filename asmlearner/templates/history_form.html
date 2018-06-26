@@ -22,8 +22,8 @@
 {% endblock %}
 
 {% block footer %}
-    <button type="submit" class="ui primary tiny labeled icon button">
+    <a href="/challenge/{{ history.chal_id }}#!/history/{{ history.id }}" class="ui primary tiny labeled icon button">
         <i class="fire icon"></i>
         Re-submit
-    </button>
+    </a>
 {% endblock %}
